@@ -21,6 +21,7 @@ Application.configure({
 
 // resources
 //Application.registerModule("EMPTY");
+Application.registerModule("Discord");
 
 Application.run();
 
