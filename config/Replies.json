@@ -1,0 +1,36 @@
+{
+    "ans_forgive":"%s %s Oh all right. I forgive you.",
+    "ans_love":"%s I love you too! %s",
+
+    "ans_boop":"( ͡° ͜ʖ (\\  *BOOPS* %s",
+    "ans_self_boop": "%s My creator said I shouldn't do that. %s",
+
+    "ans_fanta_list":[
+        "There's no wrong way to Fanta size.",
+        "♪♫ Is this real life, is this just Fanta sea? ♫♪",
+        "I dreamt I was drowning in an ocean of orange soda. \nThank Celestia it was only a Fanta sea.",
+        "Soaking a twig in Coke is nice, but soaking a twig in Fanta? \n... Fanta stick.",
+        "What's so funny about Fanta?",
+        "Fanta is Canni Bot fuel.",
+        "Perry doesn't like Fanta jokes..."
+    ],
+
+    "ans_bizaam":"%s BIIZAAAAAMM!!!",
+    "ans_assfart":"Shut up %s, it's Ausfahrt!",
+    "ans_next_gala1":"%s Next Galacon is from August 1st to August 2nd 2020! Hype!!!",
+    "ans_next_gala2":"%s days, %s hours, %s minutes and %s seconds left! IT TAKES FOREVERHHH",
+
+    "ans_best_pony1":"%s %s I am, of course!",
+    "ans_best_pony2":"%s I sure am!",
+    "ans_best_pony3":"%s A bizaam isn't a pony, silly...",
+    "ans_best_pony4":"%s Rude!",
+    "ans_best_pony5":"%s Is this a GalaCon thing?",
+    "ans_best_pony_default":"%s Nu-uh. I am best pony!",
+
+    "ans_worst_pony1":"%s Why are you so mean to me?",
+    "ans_hug":"Hey <@%s>! %s hugged you %s",
+    "ans_still_learning":"I'm sorry, I don't understand what you're saying, I'm still learning. \nPlease don't be mad at me. %s",
+    "ans_cooldown_worst":"%s Fine, I'm not talking to you anymore for a while.",
+    "ans_cooldown_love":"I cannot handle this much love! %s",
+    "ans_cooldown_default":"Hello %s! My creator added a 1 minute cooldown to prevent my circuits from overheating. \nPlease let me rest for a moment! %s"
+}
