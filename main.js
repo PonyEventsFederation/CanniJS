@@ -23,6 +23,7 @@ Application.configure({
 //Application.registerModule("EMPTY");
 Application.registerModule("Discord");
 Application.registerModule("CanniTimeToHype");
+Application.registerModule("BestPony");
 
 Application.run();
 
