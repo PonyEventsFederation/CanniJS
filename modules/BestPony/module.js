@@ -6,7 +6,6 @@ const Module = require("../../lib/Module");
 const Promise = require("bluebird");
 const moment = require("moment");
 const Tools = require("../../lib/Tools");
-const Data = require("../../config/BestPony.json");
 
 module.exports = class BestPony extends Module {
     start() {
@@ -28,23 +27,23 @@ module.exports = class BestPony extends Module {
     whoIsBestPony(msg) {
         switch (msg.content.toLowerCase()) {
             case 'who is best pony':
-                msg.channel.send(`${msg.author} I am, of course!`);
+                msg.channel.send(Tools.parseReply('ans_best_pony1', [msg.author]));
                 break;
             case 'canni is best pony':
             case 'canni soda is best pony':
-                msg.channel.send(`${msg.author} I sure am!`);
+                msg.channel.send(Tools.parseReply('ans_best_pony2', [msg.author]));
                 break;
             case 'bizaam is best pony':
-                msg.channel.send(`${msg.author} A bizaam isn't a pony, silly...`);
+                msg.channel.send(Tools.parseReply('ans_best_pony3', [msg.author]));
                 break;
             case 'assfart is best pony':
-                msg.channel.send(`${msg.author} Rude!`);
+                msg.channel.send(Tools.parseReply('ans_best_pony4', [msg.author]));
                 break;
             case 'fanta is best pony':
-                msg.channel.send(`${msg.author} Is this a GalaCon thing?`);
+                msg.channel.send(Tools.parseReply('ans_best_pony5', [msg.author]));
                 break;
             default:
-                msg.channel.send(`${msg.author} Nu-uh. I am best pony!`);
+                msg.channel.send(Tools.parseReply('ans_best_pony_default', [msg.author]));
         }
     }
 
