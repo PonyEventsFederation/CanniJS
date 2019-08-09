@@ -1,3 +1,7 @@
 {
-	"token": "ENV"
+    "token": "ENV",
+    "cooldownTimeout": 60000,
+    "cooldownMessageDefault": "Hello %s! My creator added a 1 minute cooldown to prevent my circuits from overheating. \nPlease let me rest for a moment! %s",
+    "cooldownMessageWorst": "%s Fine, I'm not talking to you anymore for a while.",
+    "cooldownMessageLove": "I cannot handle this much love! %s"
 }
