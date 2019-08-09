@@ -11,9 +11,11 @@ module.exports = class BestPony extends Module {
         return new Promise((resolve, reject) => {
             this.log.debug("Starting...");
 
-            console.log();
-
             Application.modules.Discord.client.on('message', (msg) => {
+                if (msg.author.bot) {
+                    return;
+                }
+
                 if (msg.content.toLowerCase().includes(' is best pony')) {
                     return this.whoIsBestPony(msg);
                 }
