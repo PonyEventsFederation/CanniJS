@@ -5,6 +5,7 @@ const Application = require("../../lib/Application");
 const Module = require("../../lib/Module");
 const Promise = require("bluebird");
 const DiscordJS = require('discord.js');
+const Tools = require("../../lib/Tools");
 
 module.exports = class Discord extends Module {
     init() {
@@ -13,6 +14,8 @@ module.exports = class Discord extends Module {
 
             this.commands = [];
             this.reactions = [];
+            this.channelMessaged = new Set();
+            this.talkedRecently = new Set();
 
             this.client = new DiscordJS.Client();
             this.client.on('ready', () => {
@@ -92,5 +95,60 @@ module.exports = class Discord extends Module {
 
         Application.log.error(`Emoji ${type} not found`);
         return "";
+    }
+
+    controlTalkedRecently(msg, type, cooldownmessage = true, target = 'channel') {
+        switch (target) {
+            case 'channel':
+                var cooldownTarget = msg.channel.id + type;
+                break;
+            case 'individual':
+                var cooldownTarget = msg.author.id;
+                break;
+        }
+
+        if (this.talkedRecently.has(cooldownTarget)) {
+            if (cooldownmessage) {
+                this.sendCooldownMessage(msg, type, cooldownTarget);
+            }
+
+            return false;
+        } else {
+            this.talkedRecently.add(cooldownTarget);
+
+            setTimeout(() => {
+                this.talkedRecently.delete(cooldownTarget);
+            }, this.config.cooldownTimeout);
+
+            this.log.info(`User ${msg.author} added to cooldown`);
+            return true;
+        }
+    }
+
+    sendCooldownMessage(msg, type, cooldownTarget) {
+        switch (type) {
+            case 'canniWorstPony':
+                var cooldownMessage = Tools.parseReply(this.config.cooldownMessageWorst, [msg.author]);
+                cooldownTarget = msg.author.id;
+                blockUser(msg, 300000);
+                break;
+            case 'loveCanni':
+                var cooldownMessage = Tools.parseReply(this.config.cooldownMessageLove, [this.getEmoji('error')]);
+                break;
+            default:
+                var cooldownMessage = Tools.parseReply(this.config.cooldownMessageDefault, [msg.author, this.getEmoji('error')]);
+        }
+
+        if (this.channelMessaged.has(cooldownTarget)) {
+            // Do nothing. We don't want to spam everyone all the time.
+        } else {
+            msg.channel.send(cooldownMessage)
+
+            this.channelMessaged.add(cooldownTarget);
+            setTimeout(() => {
+                this.channelMessaged.delete(cooldownTarget);
+            }, this.config.cooldownTimeout);
+
+        }
     }
 }
