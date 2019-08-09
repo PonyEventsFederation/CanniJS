@@ -14,7 +14,7 @@ module.exports = class BestPony extends Module {
             console.log();
 
             Application.modules.Discord.client.on('message', (msg) => {
-                if (msg.content.includes(' is best pony')) {
+                if (msg.content.toLowerCase().includes(' is best pony')) {
                     return this.whoIsBestPony(msg);
                 }
             })
