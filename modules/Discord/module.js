@@ -82,4 +82,15 @@ module.exports = class Discord extends Module {
     addReaction(text, type, cb) {
         this.reactions.push({text, type, cb});
     }
+
+    getEmoji(type) {
+        var emoji = this.client.emojis.find(emoji => emoji.name.toLowerCase() === type.toLowerCase());
+
+        if (emoji) {
+            return emoji;
+        }
+
+        Application.log.error(`Emoji ${type} not found`);
+        return "";
+    }
 }

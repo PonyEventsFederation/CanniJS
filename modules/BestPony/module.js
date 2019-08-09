@@ -27,7 +27,7 @@ module.exports = class BestPony extends Module {
     whoIsBestPony(msg) {
         switch (msg.content.toLowerCase()) {
             case 'who is best pony':
-                msg.channel.send(Tools.parseReply('ans_best_pony1', [msg.author]));
+                msg.channel.send(Tools.parseReply('ans_best_pony1', [msg.author, Application.modules.Discord.getEmoji('bizaam')]));
                 break;
             case 'canni is best pony':
             case 'canni soda is best pony':
