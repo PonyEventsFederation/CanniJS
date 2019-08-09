@@ -120,7 +120,6 @@ module.exports = class Discord extends Module {
                 this.talkedRecently.delete(cooldownTarget);
             }, this.config.cooldownTimeout);
 
-            this.log.info(`User ${msg.author} added to cooldown`);
             return true;
         }
     }
