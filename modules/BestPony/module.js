@@ -4,7 +4,6 @@
 const Application = require("../../lib/Application");
 const Module = require("../../lib/Module");
 const Promise = require("bluebird");
-const moment = require("moment");
 const Tools = require("../../lib/Tools");
 
 module.exports = class BestPony extends Module {
