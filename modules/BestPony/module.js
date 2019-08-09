@@ -52,7 +52,7 @@ module.exports = class BestPony extends Module {
                 }
                 break;
             default:
-                if (Application.modules.Discord.controlTalkedRecently(msg, this.config.interjectType)) {
+                if (Application.modules.Discord.controlTalkedRecently(msg, this.config.interjectType, false)) {
                     msg.channel.send(Tools.parseReply(this.config.bestPonyAnswerDefault, [msg.author]));
                 }
         }
