@@ -22,6 +22,10 @@ module.exports = class BestPony extends Module {
                     return;
                 }
 
+                if (Application.modules.Discord.isMessageSent()) {
+                    return;
+                }
+
                 if (msg.content.toLowerCase().includes('bizaam') && !msg.content.toLowerCase().includes('is best pony')) {
                     return this.bizaam(msg);
                 }
@@ -36,6 +40,8 @@ module.exports = class BestPony extends Module {
             msg.channel.send(Tools.parseReply(this.config.bizaamAnswer, [msg.author, this.bizaamEmoji])).then(sentEmbed => {
                 sentEmbed.react(this.bizaamEmoji)
             });
+
+            Application.modules.Discord.setMessageSent();
         }
     }
 

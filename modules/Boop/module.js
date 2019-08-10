@@ -20,6 +20,10 @@ module.exports = class BestPony extends Module {
                     return;
                 }
 
+                if (Application.modules.Discord.isMessageSent()) {
+                    return;
+                }
+
                 if (msg.content.toLowerCase().startsWith('boop')) {
                     if (msg.mentions !== null && !msg.mentions.everyone && msg.mentions.users.array().length > 0) {
                         let users = msg.mentions.users.array();
@@ -42,10 +46,14 @@ module.exports = class BestPony extends Module {
 
     boop(msg) {
         msg.channel.send(Tools.parseReply(this.config.boopAnswer, [msg.author]));
+
+        Application.modules.Discord.setMessageSent();
     }
 
     selfBoop(msg) {
         msg.channel.send(Tools.parseReply(this.config.selfBoopAnswer, [msg.author, Application.modules.Discord.getEmoji('shy')]));
+
+        Application.modules.Discord.setMessageSent();
     }
 
     stop() {

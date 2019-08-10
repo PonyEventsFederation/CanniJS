@@ -22,6 +22,10 @@ module.exports = class BestPony extends Module {
                     return;
                 }
 
+                if (Application.modules.Discord.isMessageSent()) {
+                    return;
+                }
+
                 // Politely asking for a hug from Canni.
                 if (msg.isMemberMentioned(Application.modules.Discord.client.user)) {
                     if (msg.content.toLowerCase().includes('can i have a hug')) {
@@ -58,18 +62,26 @@ module.exports = class BestPony extends Module {
 
     requestHug(msg) {
         msg.channel.send(Tools.parseReply(this.config.requestHugAnswer, [msg.author, msg.author, this.hugEmoji]));
+
+        Application.modules.Discord.setMessageSent();
     }
 
     botHug(msg) {
         msg.channel.send(Tools.parseReply(this.config.botHugAnswer, [msg.author, this.hugEmoji]));
+
+        Application.modules.Discord.setMessageSent();
     }
 
     selfHug(msg) {
         msg.channel.send(Tools.parseReply(this.config.selfHugAnswer, [msg.author, this.hugEmoji]));
+
+        Application.modules.Discord.setMessageSent();
     }
 
     hug(target, msg) {
         msg.channel.send(Tools.parseReply(this.config.hugAnswer, [target, msg.author, this.hugEmoji]));
+
+        Application.modules.Discord.setMessageSent();
     }
 
     stop() {

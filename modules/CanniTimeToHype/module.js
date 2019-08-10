@@ -17,6 +17,10 @@ module.exports = class CanniTimeToHype extends Module {
                     return;
                 }
 
+                if (Application.modules.Discord.isMessageSent()) {
+                    return;
+                }
+
                 return this.tellMeWhen(msg);
             });
 
@@ -54,6 +58,8 @@ module.exports = class CanniTimeToHype extends Module {
         const duration = this.getHypeDuration();
 
         msg.channel.send(`Time to Galacon: ${duration.days} days, ${duration.hrs}:${duration.minutes} left! Hype!`);
+
+        Application.modules.Discord.setMessageSent();
     }
 
     updateHype() {

@@ -17,6 +17,7 @@ module.exports = class Discord extends Module {
             this.channelMessaged = new Set();
             this.talkedRecently = new Set();
             this.userBlocked = new Set();
+            this.messageSent = false;
 
             this.client = new DiscordJS.Client();
             this.client.on('ready', () => {
@@ -24,6 +25,7 @@ module.exports = class Discord extends Module {
             });
 
             this.client.on('message', (msg) => {
+                this.messageSent = false;
                 return this.processMessage(msg);
             })
 
@@ -156,5 +158,13 @@ module.exports = class Discord extends Module {
 
     isUserBlocked(userId) {
         return this.userBlocked.has(userId);
+    }
+
+    setMessageSent() {
+        this.messageSent = true;
+    }
+
+    isMessageSent() {
+        return this.messageSent;
     }
 }

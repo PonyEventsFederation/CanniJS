@@ -20,6 +20,10 @@ module.exports = class BestPony extends Module {
                     return;
                 }
 
+                if (Application.modules.Discord.isMessageSent()) {
+                    return;
+                }
+
                 if (msg.content.toLowerCase().includes(' is best pony')) {
                     return this.whoIsBestPony(msg);
                 }
@@ -34,32 +38,44 @@ module.exports = class BestPony extends Module {
             case 'who is best pony':
                 if (Application.modules.Discord.controlTalkedRecently(msg, this.config.bestPonyType)) {
                     msg.channel.send(Tools.parseReply(this.config.bestPonyAnswer1, [msg.author, Application.modules.Discord.getEmoji('bizaam')]));
+
+                    Application.modules.Discord.setMessageSent();
                 }
                 break;
             case 'canni is best pony':
             case 'canni soda is best pony':
                 if (Application.modules.Discord.controlTalkedRecently(msg, this.config.canniBestPonyType)) {
                     msg.channel.send(Tools.parseReply(this.config.bestPonyAnswer2, [msg.author]));
+
+                    Application.modules.Discord.setMessageSent();
                 }
                 break;
             case 'bizaam is best pony':
                 if (Application.modules.Discord.controlTalkedRecently(msg, this.config.bizaamBestPonyType)) {
                     msg.channel.send(Tools.parseReply(this.config.bestPonyAnswer3, [msg.author]));
+
+                    Application.modules.Discord.setMessageSent();
                 }
                 break;
             case 'assfart is best pony':
                 if (Application.modules.Discord.controlTalkedRecently(msg, this.config.assFartBestPonyType)) {
                     msg.channel.send(Tools.parseReply(this.config.bestPonyAnswer4, [msg.author]));
+
+                    Application.modules.Discord.setMessageSent();
                 }
                 break;
             case 'fanta is best pony':
                 if (Application.modules.Discord.controlTalkedRecently(msg, this.config.fantaBestPony)) {
                     msg.channel.send(Tools.parseReply(this.config.bestPonyAnswer5, [msg.author]));
+
+                    Application.modules.Discord.setMessageSent();
                 }
                 break;
             default:
                 if (Application.modules.Discord.controlTalkedRecently(msg, this.config.interjectType, false)) {
                     msg.channel.send(Tools.parseReply(this.config.bestPonyAnswerDefault, [msg.author]));
+
+                    Application.modules.Discord.setMessageSent();
                 }
         }
     }

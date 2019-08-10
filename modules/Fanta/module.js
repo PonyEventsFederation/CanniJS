@@ -20,6 +20,10 @@ module.exports = class BestPony extends Module {
                     return;
                 }
 
+                if (Application.modules.Discord.isMessageSent()) {
+                    return;
+                }
+
                 if (Tools.strContainsWord(msg.content, 'fanta') && !msg.content.toLowerCase().includes('is best pony')) {
                     return this.fanta(msg);
                 }
@@ -33,6 +37,8 @@ module.exports = class BestPony extends Module {
         if (Application.modules.Discord.controlTalkedRecently(msg, this.config.fantaType)) {
             let random = Tools.getRandomIntFromInterval(0, this.config.fantaAnswers.length - 1);
             msg.channel.send(Tools.parseReply(this.config.fantaAnswers[random]));
+
+            Application.modules.Discord.setMessageSent();
         }
     }
 
