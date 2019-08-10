@@ -25,6 +25,7 @@ Application.registerModule("Discord");
 Application.registerModule("CanniTimeToHype");
 Application.registerModule("Boop");
 Application.registerModule("Hug");
+Application.registerModule("Fanta");
 Application.registerModule("Bizaam");
 Application.registerModule("BestPony");
 
