@@ -1,0 +1,6 @@
+{
+    "requestHugAnswer": "%s Of course you can! \n*HUGS* %s %s",
+    "botHugAnswer": "Awwww. That's very sweet of you. \nThank you %s. %s",
+    "selfHugAnswer": "*HUGS* %s %s",
+    "hugAnswer": "Hey %s! %s hugged you %s"
+}
