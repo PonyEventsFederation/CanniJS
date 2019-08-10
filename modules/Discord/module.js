@@ -5,6 +5,7 @@ const Application = require("../../lib/Application");
 const Module = require("../../lib/Module");
 const Promise = require("bluebird");
 const DiscordJS = require('discord.js');
+const Tools = require("../../lib/Tools");
 
 module.exports = class Discord extends Module {
     init() {
@@ -13,6 +14,8 @@ module.exports = class Discord extends Module {
 
             this.commands = [];
             this.reactions = [];
+            this.channelMessaged = new Set();
+            this.talkedRecently = new Set();
 
             this.client = new DiscordJS.Client();
             this.client.on('ready', () => {
@@ -81,5 +84,61 @@ module.exports = class Discord extends Module {
 
     addReaction(text, type, cb) {
         this.reactions.push({text, type, cb});
+    }
+
+    getEmoji(type) {
+        var emoji = this.client.emojis.find(emoji => emoji.name.toLowerCase() === type.toLowerCase());
+
+        if (emoji) {
+            return emoji;
+        }
+
+        Application.log.error(`Emoji ${type} not found`);
+        return "";
+    }
+
+    controlTalkedRecently(msg, type, sendMessage = true, target = 'channel', cooldownMessage = null) {
+        switch (target) {
+            case 'channel':
+                var cooldownTarget = msg.channel.id + type;
+                break;
+            case 'individual':
+                var cooldownTarget = msg.author.id;
+                break;
+        }
+
+        // Set the default cooldown message if none is passed from another module.
+        if (cooldownMessage == null) {
+            cooldownMessage = Tools.parseReply(this.config.cooldownMessageDefault, [msg.author, this.getEmoji('error')]);
+        }
+
+        if (this.talkedRecently.has(cooldownTarget)) {
+            if (sendMessage) {
+                this.sendCooldownMessage(msg, cooldownTarget, cooldownMessage);
+            }
+
+            return false;
+        } else {
+            this.talkedRecently.add(cooldownTarget);
+
+            setTimeout(() => {
+                this.talkedRecently.delete(cooldownTarget);
+            }, this.config.cooldownTimeout);
+
+            return true;
+        }
+    }
+
+    sendCooldownMessage(msg, cooldownTarget, cooldownMessage) {
+        if (this.channelMessaged.has(cooldownTarget)) {
+            // Do nothing. We don't want to spam everyone all the time.
+        } else {
+            msg.channel.send(cooldownMessage)
+
+            this.channelMessaged.add(cooldownTarget);
+            setTimeout(() => {
+                this.channelMessaged.delete(cooldownTarget);
+            }, this.config.cooldownTimeout);
+        }
     }
 }
