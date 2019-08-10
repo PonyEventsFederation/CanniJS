@@ -16,6 +16,10 @@ module.exports = class BestPony extends Module {
                     return;
                 }
 
+                if (Application.modules.Discord.isUserBlocked(msg.author.id)) {
+                    return;
+                }
+
                 if (msg.content.toLowerCase().includes(' is best pony')) {
                     return this.whoIsBestPony(msg);
                 }
@@ -63,9 +67,6 @@ module.exports = class BestPony extends Module {
     stop() {
         return new Promise((resolve, reject) => {
             this.log.debug("Stopping...");
-
-            clearInterval(this.hypeInterval);
-
             return resolve(this);
         })
     }

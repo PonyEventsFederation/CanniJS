@@ -13,6 +13,10 @@ module.exports = class CanniTimeToHype extends Module {
             this.log.debug("Starting...");
 
             Application.modules.Discord.addCommand('when', (msg) => {
+                if (Application.modules.Discord.isUserBlocked(msg.author.id)) {
+                    return;
+                }
+
                 return this.tellMeWhen(msg);
             });
 
