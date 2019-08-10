@@ -11,6 +11,8 @@ module.exports = class BestPony extends Module {
         return new Promise((resolve, reject) => {
             this.log.debug("Starting...");
 
+            this.bizaamEmoji = Application.modules.Discord.getEmoji('bizaam');
+
             Application.modules.Discord.client.on('message', (msg) => {
                 if (msg.author.bot) {
                     return;
@@ -31,7 +33,9 @@ module.exports = class BestPony extends Module {
 
     bizaam(msg) {
         if (Application.modules.Discord.controlTalkedRecently(msg, this.config.bestPonyType)) {
-            msg.channel.send(Tools.parseReply(this.config.bizaamAnswer, [msg.author, Application.modules.Discord.getEmoji('bizaam')]));
+            msg.channel.send(Tools.parseReply(this.config.bizaamAnswer, [msg.author, this.bizaamEmoji])).then(sentEmbed => {
+                sentEmbed.react(this.bizaamEmoji)
+            });
         }
     }
 
