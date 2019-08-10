@@ -16,6 +16,7 @@ module.exports = class Discord extends Module {
             this.reactions = [];
             this.channelMessaged = new Set();
             this.talkedRecently = new Set();
+            this.userBlocked = new Set();
 
             this.client = new DiscordJS.Client();
             this.client.on('ready', () => {
@@ -140,5 +141,20 @@ module.exports = class Discord extends Module {
                 this.channelMessaged.delete(cooldownTarget);
             }, this.config.cooldownTimeout);
         }
+    }
+
+    blockUser(userId, blockTimeout) {
+        this.userBlocked.add(userId);
+        setTimeout(() => {
+            this.userBlocked.delete(userId);
+        }, blockTimeout);
+    }
+
+    unblockUser(userId) {
+        this.userBlocked.delete(userId);
+    }
+
+    isUserBlocked(userId) {
+        return this.userBlocked.has(userId);
     }
 }
