@@ -107,12 +107,12 @@ module.exports = class Discord extends Module {
                 break;
         }
 
-        // Set the default cooldown message if none is passed from another module.
-        if (cooldownMessage == null) {
-            cooldownMessage = Tools.parseReply(this.config.cooldownMessageDefault, [msg.author, this.getEmoji('error')]);
-        }
-
         if (this.talkedRecently.has(cooldownTarget)) {
+            // Set the default cooldown message if none is passed from another module.
+            if (cooldownMessage == null) {
+                cooldownMessage = Tools.parseReply(this.config.cooldownMessageDefault, [msg.author, this.getEmoji('error')]);
+            }
+
             if (sendMessage) {
                 this.sendCooldownMessage(msg, cooldownTarget, cooldownMessage);
             }
