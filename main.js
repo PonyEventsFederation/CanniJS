@@ -29,6 +29,8 @@ Application.registerModule("Fanta");
 Application.registerModule("Bizaam");
 Application.registerModule("Assfart");
 Application.registerModule("BestPony");
+Application.registerModule("WorstPony");
+
 
 Application.run();
 

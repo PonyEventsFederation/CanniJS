@@ -100,7 +100,7 @@ module.exports = class Discord extends Module {
         return "";
     }
 
-    controlTalkedRecently(msg, type, sendMessage = true, target = 'channel', cooldownMessage = null) {
+    controlTalkedRecently(msg, type, sendMessage = true, target = 'channel', cooldownMessage = null, blockUser = false) {
         switch (target) {
             case 'channel':
                 var cooldownTarget = msg.channel.id + type;
@@ -117,7 +117,7 @@ module.exports = class Discord extends Module {
             }
 
             if (sendMessage) {
-                this.sendCooldownMessage(msg, cooldownTarget, cooldownMessage);
+                this.sendCooldownMessage(msg, cooldownTarget, cooldownMessage, blockUser);
             }
 
             return false;
@@ -132,7 +132,11 @@ module.exports = class Discord extends Module {
         }
     }
 
-    sendCooldownMessage(msg, cooldownTarget, cooldownMessage) {
+    sendCooldownMessage(msg, cooldownTarget, cooldownMessage, blockUser) {
+        if (blockUser) {
+            this.blockUser(msg.author.id, this.config.blockUserTimeout);
+        }
+
         if (this.channelMessaged.has(cooldownTarget)) {
             // Do nothing. We don't want to spam everyone all the time.
         } else {
@@ -153,6 +157,14 @@ module.exports = class Discord extends Module {
     }
 
     unblockUser(userId) {
+        if (this.talkedRecently.has(userId)) {
+            this.talkedRecently.delete(userId);
+        }
+
+        if (this.channelMessaged.has(userId)) {
+            this.channelMessaged.delete(userId);
+        }
+
         this.userBlocked.delete(userId);
     }
 
