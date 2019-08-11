@@ -24,6 +24,22 @@ module.exports = class CanniTimeToHype extends Module {
                 return this.tellMeWhen(msg);
             });
 
+            Application.modules.Discord.client.on('message', (msg) => {
+                if (Application.modules.Discord.isUserBlocked(msg.author.id)) {
+                    return;
+                }
+
+                if (Application.modules.Discord.isMessageSent()) {
+                    return;
+                }
+
+                if (msg.isMemberMentioned(Application.modules.Discord.client.user)) {
+                    if (msg.content.toLowerCase().includes('when is galacon')) {
+                        return this.tellMeWhen();
+                    }
+                }
+            });
+
             if (!this.config.hypeDate) {
                 this.hypeDate = moment();
             } else {
