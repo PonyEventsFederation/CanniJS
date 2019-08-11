@@ -101,12 +101,14 @@ module.exports = class Discord extends Module {
     }
 
     controlTalkedRecently(msg, type, sendMessage = true, target = 'channel', cooldownMessage = null, blockUser = false) {
+        var cooldownTarget;
+
         switch (target) {
             case 'channel':
-                var cooldownTarget = msg.channel.id + type;
+                cooldownTarget = msg.channel.id + type;
                 break;
             case 'individual':
-                var cooldownTarget = msg.author.id;
+                cooldownTarget = msg.author.id;
                 break;
         }
 
