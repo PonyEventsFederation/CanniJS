@@ -27,7 +27,7 @@ module.exports = class Discord extends Module {
             this.client.on('message', (msg) => {
                 this.messageSent = false;
                 return this.processMessage(msg);
-            })
+            });
 
             this.authToken = this.config.token;
             if (this.authToken.toLowerCase() === 'env') {
@@ -73,6 +73,18 @@ module.exports = class Discord extends Module {
             const command = this.commands[i];
             if ((msg.isMemberMentioned(this.client.user) && msg.content.toLowerCase().includes(command.cmd)) || msg.content.toLowerCase().startsWith("!" + command.cmd)) {
                 return command.cb(msg);
+            }
+        }
+
+        // When no message was sent, Canni either says she doesn't understand, or boops someone at random if she's not mentioned.
+        if (!this.messageSent) {
+            if (msg.isMemberMentioned(this.client.user)) {
+                msg.channel.send(Tools.parseReply(this.config.stillLearningAnswer, [this.getEmoji('shy')]));
+            } else {
+                let random = Tools.getRandomIntFromInterval(0, 200);
+                if (random === 10) {
+                    msg.channel.send(Tools.parseReply(this.config.randomBoopAnswer, [msg.author]));
+                }
             }
         }
     }
