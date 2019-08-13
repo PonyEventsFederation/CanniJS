@@ -35,7 +35,8 @@ module.exports = class BestPony extends Module {
 
     assFart(msg) {
         if (Application.modules.Discord.controlTalkedRecently(msg, this.config.assfartType)) {
-            msg.channel.send(Tools.parseReply(this.config.assfartAnswer, [msg.author]));
+            let random = Tools.getRandomIntFromInterval(0, this.config.assfartAnswer.length - 1);
+            msg.channel.send(Tools.parseReply(this.config.assfartAnswer[random], [msg.author]));
 
             Application.modules.Discord.setMessageSent();
         }

@@ -45,13 +45,15 @@ module.exports = class BestPony extends Module {
     }
 
     boop(msg) {
-        msg.channel.send(Tools.parseReply(this.config.boopAnswer, [msg.author]));
+        let random = Tools.getRandomIntFromInterval(0, this.config.boopAnswer.length - 1);
+        msg.channel.send(Tools.parseReply(this.config.boopAnswer[random], [msg.author]));
 
         Application.modules.Discord.setMessageSent();
     }
 
     selfBoop(msg) {
-        msg.channel.send(Tools.parseReply(this.config.selfBoopAnswer, [msg.author, Application.modules.Discord.getEmoji('shy')]));
+        let random = Tools.getRandomIntFromInterval(0, this.config.selfBoopAnswer.length - 1);
+        msg.channel.send(Tools.parseReply(this.config.selfBoopAnswer[random], [msg.author, Application.modules.Discord.getEmoji('shy')]));
 
         Application.modules.Discord.setMessageSent();
     }

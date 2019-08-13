@@ -61,25 +61,29 @@ module.exports = class BestPony extends Module {
     }
 
     requestHug(msg) {
-        msg.channel.send(Tools.parseReply(this.config.requestHugAnswer, [msg.author, msg.author, this.hugEmoji]));
+        let random = Tools.getRandomIntFromInterval(0, this.config.requestHugAnswer.length - 1);
+        msg.channel.send(Tools.parseReply(this.config.requestHugAnswer[random], [msg.author, msg.author, this.hugEmoji]));
 
         Application.modules.Discord.setMessageSent();
     }
 
     botHug(msg) {
-        msg.channel.send(Tools.parseReply(this.config.botHugAnswer, [msg.author, this.hugEmoji]));
+        let random = Tools.getRandomIntFromInterval(0, this.config.botHugAnswer.length - 1);
+        msg.channel.send(Tools.parseReply(this.config.botHugAnswer[random], [msg.author, this.hugEmoji]));
 
         Application.modules.Discord.setMessageSent();
     }
 
     selfHug(msg) {
-        msg.channel.send(Tools.parseReply(this.config.selfHugAnswer, [msg.author, this.hugEmoji]));
+        let random = Tools.getRandomIntFromInterval(0, this.config.selfHugAnswer.length - 1);
+        msg.channel.send(Tools.parseReply(this.config.selfHugAnswer[random], [msg.author, this.hugEmoji]));
 
         Application.modules.Discord.setMessageSent();
     }
 
     hug(target, msg) {
-        msg.channel.send(Tools.parseReply(this.config.hugAnswer, [target, msg.author, this.hugEmoji]));
+        let random = Tools.getRandomIntFromInterval(0, this.config.hugAnswer.length - 1);
+        msg.channel.send(Tools.parseReply(this.config.hugAnswer[random], [target, msg.author, this.hugEmoji]));
 
         Application.modules.Discord.setMessageSent();
     }

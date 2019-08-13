@@ -37,7 +37,8 @@ module.exports = class BestPony extends Module {
 
     bizaam(msg) {
         if (Application.modules.Discord.controlTalkedRecently(msg, this.config.bestPonyType)) {
-            msg.channel.send(Tools.parseReply(this.config.bizaamAnswer, [msg.author, this.bizaamEmoji])).then(sentEmbed => {
+            let random = Tools.getRandomIntFromInterval(0, this.config.bizaamAnswer.length - 1);
+            msg.channel.send(Tools.parseReply(this.config.bizaamAnswer[random], [msg.author, this.bizaamEmoji])).then(sentEmbed => {
                 sentEmbed.react(this.bizaamEmoji)
             });
 

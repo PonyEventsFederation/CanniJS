@@ -39,7 +39,8 @@ module.exports = class WorstPony extends Module {
         var cooldownMessage = Tools.parseReply(this.config.cooldownMessageLove, [msg.author, Application.modules.Discord.getEmoji('error')]);
 
         if (Application.modules.Discord.controlTalkedRecently(msg, this.config.loveCanniType, true, 'channel', cooldownMessage)) {
-            msg.channel.send(Tools.parseReply(this.config.loveAnswer, [msg.author, Application.modules.Discord.getEmoji('love')]));
+            let random = Tools.getRandomIntFromInterval(0, this.config.loveAnswer.length - 1);
+            msg.channel.send(Tools.parseReply(this.config.loveAnswer[random], [msg.author, Application.modules.Discord.getEmoji('love')]));
 
             Application.modules.Discord.setMessageSent();
         }

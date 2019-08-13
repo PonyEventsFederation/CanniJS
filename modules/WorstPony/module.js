@@ -41,7 +41,8 @@ module.exports = class WorstPony extends Module {
 
     forgiveUser(msg) {
         if (Application.modules.Discord.isUserBlocked(msg.author.id)) {
-            msg.channel.send(Tools.parseReply(this.config.forgiveUserAnswer, [msg.author, Application.modules.Discord.getEmoji('love')]));
+            let random = Tools.getRandomIntFromInterval(0, this.config.forgiveUserAnswer.length - 1);
+            msg.channel.send(Tools.parseReply(this.config.forgiveUserAnswer[random], [msg.author, Application.modules.Discord.getEmoji('love')]));
 
             Application.modules.Discord.unblockUser(msg.author.id);
         }
@@ -54,7 +55,8 @@ module.exports = class WorstPony extends Module {
                 var cooldownMessage = Tools.parseReply(this.config.cooldownMessageWorstPony, [msg.author]);
 
                 if (Application.modules.Discord.controlTalkedRecently(msg, this.config.canniWorstPonyType, true, 'individual', cooldownMessage, true)) {
-                    msg.channel.send(Tools.parseReply(this.config.canniWorstPonyAnswer, [msg.author]));
+                    let random = Tools.getRandomIntFromInterval(0, this.config.canniWorstPonyAnswer.length - 1);
+                    msg.channel.send(Tools.parseReply(this.config.canniWorstPonyAnswer[random], [msg.author]));
 
                     Application.modules.Discord.setMessageSent();
                 }
