@@ -2,7 +2,5 @@
     "token": "ENV",
     "blockUserTimeout": 300000,
     "cooldownTimeout": 60000,
-    "cooldownMessageDefault": "Hello %s! My creator added a 1 minute cooldown to prevent my circuits from overheating. \nPlease let me rest for a moment! %s",
-    "stillLearningAnswer": "I'm sorry, I don't understand what you're saying, I'm still learning. \nPlease don't be mad at me. %s",
-    "randomBoopAnswer": "( ͡° ͜ʖ (\\  *BOOPS* %s. I'm bored!"
+    "cooldownMessageDefault": "Hello %s! My creator added a 1 minute cooldown to prevent my circuits from overheating. \nPlease let me rest for a moment! %s"
 }

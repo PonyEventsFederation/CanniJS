@@ -75,18 +75,6 @@ module.exports = class Discord extends Module {
                 return command.cb(msg);
             }
         }
-
-        // When no message was sent, Canni either says she doesn't understand, or boops someone at random if she's not mentioned.
-        if (!this.messageSent) {
-            if (msg.isMemberMentioned(this.client.user)) {
-                msg.channel.send(Tools.parseReply(this.config.stillLearningAnswer, [this.getEmoji('shy')]));
-            } else {
-                let random = Tools.getRandomIntFromInterval(0, 200);
-                if (random === 10) {
-                    msg.channel.send(Tools.parseReply(this.config.randomBoopAnswer, [msg.author]));
-                }
-            }
-        }
     }
 
     isReady() {
