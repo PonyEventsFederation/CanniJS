@@ -72,8 +72,10 @@ module.exports = class CanniTimeToHype extends Module {
 
     tellMeWhen(msg) {
         const duration = this.getHypeDuration();
+        let random = Tools.getRandomIntFromInterval(0, this.config.hypeAnswer.length - 1)
 
-        msg.channel.send(`Time to Galacon: ${duration.days} days, ${duration.hrs}:${duration.minutes} left! Hype!`);
+        msg.channel.send(Tools.parseReply(this.config.timeAnswer, [duration.days, duration.hrs, duration.minutes]));
+        msg.channel.send(this.config.hypeAnswer[random]);
 
         Application.modules.Discord.setMessageSent();
     }

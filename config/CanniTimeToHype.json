@@ -1,4 +1,8 @@
 {
-	"hypeDate": "2020-08-01",
-	"updateInterval": 10 // in seconds
+    "timeAnswer": "There are %s days, %s hours, and %s minutes left until the next GalaCon!",
+    "hypeAnswer": [
+        "This is taking forever!"
+    ],
+    "hypeDate": "2020-08-01",
+    "updateInterval": 10 // in seconds
 }
