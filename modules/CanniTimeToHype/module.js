@@ -74,8 +74,8 @@ module.exports = class CanniTimeToHype extends Module {
         const duration = this.getHypeDuration();
         let random = Tools.getRandomIntFromInterval(0, this.config.hypeAnswer.length - 1)
 
-        msg.channel.send(Tools.parseReply(this.config.timeAnswer, [duration.days, duration.hrs, duration.minutes]));
-        msg.channel.send(this.config.hypeAnswer[random]);
+        let message = Tools.parseReply(this.config.timeAnswer, [duration.days, duration.hrs, duration.minutes]) + "\n" + this.config.hypeAnswer[random];
+        msg.channel.send(message);
 
         Application.modules.Discord.setMessageSent();
     }
