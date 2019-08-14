@@ -13,7 +13,31 @@ module.exports = class CanniTimeToHype extends Module {
             this.log.debug("Starting...");
 
             Application.modules.Discord.addCommand('when', (msg) => {
+                if (Application.modules.Discord.isUserBlocked(msg.author.id)) {
+                    return;
+                }
+
+                if (Application.modules.Discord.isMessageSent()) {
+                    return;
+                }
+
                 return this.tellMeWhen(msg);
+            });
+
+            Application.modules.Discord.client.on('message', (msg) => {
+                if (Application.modules.Discord.isUserBlocked(msg.author.id)) {
+                    return;
+                }
+
+                if (Application.modules.Discord.isMessageSent()) {
+                    return;
+                }
+
+                if (msg.isMemberMentioned(Application.modules.Discord.client.user)) {
+                    if (msg.content.toLowerCase().includes('when is galacon')) {
+                        return this.tellMeWhen();
+                    }
+                }
             });
 
             if (!this.config.hypeDate) {
@@ -48,8 +72,12 @@ module.exports = class CanniTimeToHype extends Module {
 
     tellMeWhen(msg) {
         const duration = this.getHypeDuration();
+        let random = Tools.getRandomIntFromInterval(0, this.config.hypeAnswer.length - 1)
 
-        msg.channel.send(`Time to Galacon: ${duration.days} days, ${duration.hrs}:${duration.minutes} left! Hype!`);
+        let message = Tools.parseReply(this.config.timeAnswer, [duration.days, duration.hrs, duration.minutes]) + "\n" + this.config.hypeAnswer[random];
+        msg.channel.send(message);
+
+        Application.modules.Discord.setMessageSent();
     }
 
     updateHype() {
