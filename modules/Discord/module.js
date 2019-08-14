@@ -16,6 +16,8 @@ module.exports = class Discord extends Module {
             this.reactions = [];
             this.channelMessaged = new Set();
             this.talkedRecently = new Set();
+            this.userBlocked = new Set();
+            this.messageSent = false;
 
             this.client = new DiscordJS.Client();
             this.client.on('ready', () => {
@@ -23,8 +25,9 @@ module.exports = class Discord extends Module {
             });
 
             this.client.on('message', (msg) => {
+                this.messageSent = false;
                 return this.processMessage(msg);
-            })
+            });
 
             this.authToken = this.config.token;
             if (this.authToken.toLowerCase() === 'env') {
@@ -97,24 +100,26 @@ module.exports = class Discord extends Module {
         return "";
     }
 
-    controlTalkedRecently(msg, type, sendMessage = true, target = 'channel', cooldownMessage = null) {
+    controlTalkedRecently(msg, type, sendMessage = true, target = 'channel', cooldownMessage = null, blockUser = false) {
+        var cooldownTarget;
+
         switch (target) {
             case 'channel':
-                var cooldownTarget = msg.channel.id + type;
+                cooldownTarget = msg.channel.id + type;
                 break;
             case 'individual':
-                var cooldownTarget = msg.author.id;
+                cooldownTarget = msg.author.id;
                 break;
-        }
-
-        // Set the default cooldown message if none is passed from another module.
-        if (cooldownMessage == null) {
-            cooldownMessage = Tools.parseReply(this.config.cooldownMessageDefault, [msg.author, this.getEmoji('error')]);
         }
 
         if (this.talkedRecently.has(cooldownTarget)) {
+            // Set the default cooldown message if none is passed from another module.
+            if (cooldownMessage == null) {
+                cooldownMessage = Tools.parseReply(this.config.cooldownMessageDefault, [msg.author, this.getEmoji('error')]);
+            }
+
             if (sendMessage) {
-                this.sendCooldownMessage(msg, cooldownTarget, cooldownMessage);
+                this.sendCooldownMessage(msg, cooldownTarget, cooldownMessage, blockUser);
             }
 
             return false;
@@ -129,7 +134,11 @@ module.exports = class Discord extends Module {
         }
     }
 
-    sendCooldownMessage(msg, cooldownTarget, cooldownMessage) {
+    sendCooldownMessage(msg, cooldownTarget, cooldownMessage, blockUser) {
+        if (blockUser) {
+            this.blockUser(msg.author.id, this.config.blockUserTimeout);
+        }
+
         if (this.channelMessaged.has(cooldownTarget)) {
             // Do nothing. We don't want to spam everyone all the time.
         } else {
@@ -140,5 +149,36 @@ module.exports = class Discord extends Module {
                 this.channelMessaged.delete(cooldownTarget);
             }, this.config.cooldownTimeout);
         }
+    }
+
+    blockUser(userId, blockTimeout) {
+        this.userBlocked.add(userId);
+        setTimeout(() => {
+            this.userBlocked.delete(userId);
+        }, blockTimeout);
+    }
+
+    unblockUser(userId) {
+        if (this.talkedRecently.has(userId)) {
+            this.talkedRecently.delete(userId);
+        }
+
+        if (this.channelMessaged.has(userId)) {
+            this.channelMessaged.delete(userId);
+        }
+
+        this.userBlocked.delete(userId);
+    }
+
+    isUserBlocked(userId) {
+        return this.userBlocked.has(userId);
+    }
+
+    setMessageSent() {
+        this.messageSent = true;
+    }
+
+    isMessageSent() {
+        return this.messageSent;
     }
 }

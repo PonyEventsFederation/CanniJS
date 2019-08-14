@@ -1,0 +1,10 @@
+{
+    "canniWorstPonyAnswer": [
+        "%s Why are you so mean to me?"
+    ],
+    "canniWorstPonyType": "canniWorstPony",
+    "cooldownMessageWorstPony": "%s Fine, I'm not talking to you anymore for a while.",
+    "forgiveUserAnswer": [
+        "%s %s Oh all right. I forgive you."
+    ]
+}
