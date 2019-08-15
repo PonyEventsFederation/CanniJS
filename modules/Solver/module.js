@@ -51,11 +51,12 @@ module.exports = class BestPony extends Module {
     simple_parse(msg) {
         var res;
         var alg = msg.content.split("solve");
-        if (alg.length > 1 || alg[0][0] !== "<") {
-
-            res = Algebrite.run(alg[1]).toString();
+        if (alg.length > 1 && alg[1] !== "") {
+            res = this.do_clac(alg[1]);
             msg.channel.send(Tools.parseReply(this.config.simple_solve, [msg.author, res]));
             Algebrite.clearall();
+        } else {
+            msg.channel.send(Tools.parseReply(this.config.solver_nothing, [msg.author]));
         }
         Application.modules.Discord.setMessageSent();
     }
@@ -63,11 +64,12 @@ module.exports = class BestPony extends Module {
     simple_multi_parse(msg) {
         var res = "";
         var alg = msg.content.split("multi");
-        if (alg.length > 1 || alg[0][0] !== "<") {
-            alg = alg[1].split(",");
-            alg.forEach(item => res = this.do_clac(item));
+        if (alg.length > 1 && alg[1] !== "") {
+            alg[1].split(",").forEach(item => res = this.do_clac(item));
             msg.channel.send(Tools.parseReply(this.config.simple_multi_solve, [msg.author, res]));
             Algebrite.clearall();
+        } else {
+            msg.channel.send(Tools.parseReply(this.config.solver_nothing, [msg.author]));
         }
         Application.modules.Discord.setMessageSent();
     }
