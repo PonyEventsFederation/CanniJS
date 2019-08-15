@@ -24,29 +24,29 @@ module.exports = class BestPony extends Module {
                     return;
                 }
 
-                if (msg.content.toLowerCase().startsWith('boop')) {
+                if (Tools.msg_starts(msg,'boop')) {
                     if (msg.mentions !== null && !msg.mentions.everyone && msg.mentions.users.array().length > 0) {
                         let users = msg.mentions.users.array();
 
                         for (let i = 0; i < users.length; i++) {
-                            if (users[i].id == Application.modules.Discord.client.user.id) {
+                            if (Application.checkSelf(users[i].id)) {
                                 this.selfBoop(msg);
                                 continue;
                             }
 
-                            this.boop(msg);
+                            this.boop(msg,users[i]);
                         }
                     }
                 }
-            })
+            });
 
             return resolve(this);
         });
     }
 
-    boop(msg) {
+    boop(msg, user) {
         let random = Tools.getRandomIntFromInterval(0, this.config.boopAnswer.length - 1);
-        msg.channel.send(Tools.parseReply(this.config.boopAnswer[random], [msg.author]));
+        msg.channel.send(Tools.parseReply(this.config.boopAnswer[random], [user]));
 
         Application.modules.Discord.setMessageSent();
     }
@@ -64,4 +64,4 @@ module.exports = class BestPony extends Module {
             return resolve(this);
         })
     }
-}
+};

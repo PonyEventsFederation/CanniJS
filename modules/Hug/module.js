@@ -28,24 +28,24 @@ module.exports = class BestPony extends Module {
 
                 // Politely asking for a hug from Canni.
                 if (msg.isMemberMentioned(Application.modules.Discord.client.user)) {
-                    if (msg.content.toLowerCase().includes('can i have a hug')) {
+                    if (Tools.msg_contains(msg,'can i have a hug')) {
                         return this.requestHug(msg);
                     }
                 }
 
-                if (msg.content.toLowerCase().startsWith('hug')) {
+                if (Tools.msg_starts(msg,'hug')) {
                     if (msg.mentions !== null && !msg.mentions.everyone && msg.mentions.users.array().length > 0) {
                         let users = msg.mentions.users.array();
 
                         for (let i = 0; i < users.length; i++) {
                             // Hug targeted at Canni.
-                            if (users[i].id == Application.modules.Discord.client.user.id) {
+                            if (Application.checkSelf(users[i].id)) {
                                 this.botHug(msg);
                                 continue;
                             }
 
                             // Hugs targeted at self.
-                            if (users[i].id == msg.author.id) {
+                            if (users[i].id === msg.author.id) {
                                 this.selfHug(msg);
                                 continue;
                             }
@@ -54,7 +54,7 @@ module.exports = class BestPony extends Module {
                         }
                     }
                 }
-            })
+            });
 
             return resolve(this);
         });
@@ -94,4 +94,4 @@ module.exports = class BestPony extends Module {
             return resolve(this);
         })
     }
-}
+};
