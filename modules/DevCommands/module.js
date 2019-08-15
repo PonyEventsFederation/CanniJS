@@ -20,6 +20,13 @@ module.exports = class DevC extends Module {
         return new Promise((resolve, reject) => {
             this.log.debug("Starting...");
 
+            this.auth_dev_master = function(id) {
+                return dev_master_ids.includes(id);
+            };
+            this.auth_dev = function(id) {
+                return dev_ids.includes(id);
+            };
+
             this.load_ids();
 
             Application.modules.Discord.client.on('message', (msg) => {
@@ -36,7 +43,7 @@ module.exports = class DevC extends Module {
                 }
                 if (msg.isMemberMentioned(Application.getClient().user)) {
                     var user;
-                    if (DevC.auth_dev_master(msg.author.id)) {
+                    if (this.auth_dev_master(msg.author.id)) {
                         if (Tools.msg_contains(msg, "add dev")) {
                             return this.addDev(msg);
                         }
@@ -46,7 +53,7 @@ module.exports = class DevC extends Module {
                         }
                     }
 
-                    if (DevC.auth_dev_master(msg.author.id) || DevC.auth_dev(msg.author.id)) {
+                    if (this.auth_dev_master(msg.author.id) || this.auth_dev(msg.author.id)) {
                         if (Tools.msg_contains(msg,"status report")) {
                             return this.sReport(msg);
                         }
@@ -72,9 +79,6 @@ module.exports = class DevC extends Module {
             return resolve(this);
         });
     }
-
-
-
 
     addDev(msg) {
             if (msg.mentions !== null && !msg.mentions.everyone && msg.mentions.users.array().length === 2) {
@@ -198,13 +202,5 @@ module.exports = class DevC extends Module {
             return true;
         }
         return false;
-    }
-
-    static auth_dev_master(id) {
-        return dev_master_ids.includes(id);
-    }
-
-    static auth_dev(id) {
-        return dev_ids.includes(id);
     }
 };
