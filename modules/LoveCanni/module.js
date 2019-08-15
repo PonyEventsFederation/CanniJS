@@ -25,7 +25,7 @@ module.exports = class LoveCanni extends Module {
                 }
 
                 if (msg.isMemberMentioned(Application.modules.Discord.client.user)) {
-                    if (Tools.msg_contains(msg,'i love you')) {
+                    if (Tools.msg_contains(msg,'i love you') || Tools.msg_contains(msg,'we love you')) {
                         return this.love(msg);
                     }
                 }
