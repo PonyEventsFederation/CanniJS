@@ -1,0 +1,10 @@
+{
+  "ans_add_dev": "%s You are now a developer of me.\nDon´t mess it up...",
+  "ans_remove_dev": "%s You have been sucessfully removed as dev. Still thank you for your work.",
+  "ans_debug_author_id": "Your id is: %s",
+  "ans_status_report": "All seems to be fine.\nThere are currently: %s server members.",
+  "ans_list_dev": "The developers are:\n%s",
+  "ans_list_master_devs": "The developer masters are:\n%s",
+  "ans_member_id" : "The id of %s is: %s",
+  "ans_channel_id": "The channel id is : %s"
+}
