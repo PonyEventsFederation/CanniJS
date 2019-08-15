@@ -42,7 +42,6 @@ module.exports = class DevC extends Module {
                     return;
                 }
                 if (msg.isMemberMentioned(Application.getClient().user)) {
-                    var user;
                     if (this.auth_dev_master(msg.author.id)) {
                         if (Tools.msg_contains(msg, "add dev")) {
                             return this.addDev(msg);
