@@ -8,5 +8,7 @@
     "selfHugAnswer": [
         "*HUGS* %s %s"
     ],
-    "hugAnswer": "Hey %s! %s hugged you %s"
+    "hugAnswer": [
+        "Hey %s! %s hugged you %s"
+    ]
 }
