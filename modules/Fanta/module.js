@@ -24,10 +24,10 @@ module.exports = class BestPony extends Module {
                     return;
                 }
 
-                if (Tools.strContainsWord(msg.content, 'fanta') && !msg.content.toLowerCase().includes('is best pony')) {
+                if (Tools.strContainsWord(msg.content, 'fanta') && !Tools.msg_contains(msg,'is best pony')) {
                     return this.fanta(msg);
                 }
-            })
+            });
 
             return resolve(this);
         });
@@ -48,4 +48,4 @@ module.exports = class BestPony extends Module {
             return resolve(this);
         })
     }
-}
+};

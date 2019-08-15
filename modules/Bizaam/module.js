@@ -26,10 +26,10 @@ module.exports = class BestPony extends Module {
                     return;
                 }
 
-                if (msg.content.toLowerCase().includes('bizaam') && !msg.content.toLowerCase().includes('is best pony')) {
+                if (Tools.msg_contains(msg,'bizaam') && !Tools.msg_contains(msg,'is best pony')) {
                     return this.bizaam(msg);
                 }
-            })
+            });
 
             return resolve(this);
         });
@@ -52,4 +52,4 @@ module.exports = class BestPony extends Module {
             return resolve(this);
         })
     }
-}
+};

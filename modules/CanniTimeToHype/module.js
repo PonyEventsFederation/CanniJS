@@ -34,7 +34,7 @@ module.exports = class CanniTimeToHype extends Module {
                 }
 
                 if (msg.isMemberMentioned(Application.modules.Discord.client.user)) {
-                    if (msg.content.toLowerCase().includes('when is galacon')) {
+                    if (Tools.msg_contains(msg,'when is galacon')) {
                         return this.tellMeWhen();
                     }
                 }
@@ -72,7 +72,7 @@ module.exports = class CanniTimeToHype extends Module {
 
     tellMeWhen(msg) {
         const duration = this.getHypeDuration();
-        let random = Tools.getRandomIntFromInterval(0, this.config.hypeAnswer.length - 1)
+        let random = Tools.getRandomIntFromInterval(0, this.config.hypeAnswer.length - 1);
 
         let message = Tools.parseReply(this.config.timeAnswer, [duration.days, duration.hrs, duration.minutes]) + "\n" + this.config.hypeAnswer[random];
         msg.channel.send(message);
@@ -99,4 +99,4 @@ module.exports = class CanniTimeToHype extends Module {
             return resolve(this);
         })
     }
-}
+};
