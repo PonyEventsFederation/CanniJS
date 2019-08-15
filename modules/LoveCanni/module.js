@@ -25,11 +25,11 @@ module.exports = class WorstPony extends Module {
                 }
 
                 if (msg.isMemberMentioned(Application.modules.Discord.client.user)) {
-                    if (msg.content.toLowerCase().includes('i love you')) {
+                    if (Tools.msg_contains(msg,'i love you')) {
                         return this.love(msg);
                     }
                 }
-            })
+            });
 
             return resolve(this);
         });
@@ -52,4 +52,4 @@ module.exports = class WorstPony extends Module {
             return resolve(this);
         })
     }
-}
+};

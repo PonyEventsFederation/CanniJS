@@ -181,4 +181,4 @@ module.exports = class Discord extends Module {
     isMessageSent() {
         return this.messageSent;
     }
-}
+};

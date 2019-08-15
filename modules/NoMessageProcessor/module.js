@@ -33,7 +33,7 @@ module.exports = class BestPony extends Module {
                         msg.channel.send(Tools.parseReply(this.config.randomBoopAnswer, [msg.author]));
                     }
                 }
-            })
+            });
 
             return resolve(this);
         });
@@ -45,4 +45,4 @@ module.exports = class BestPony extends Module {
             return resolve(this);
         })
     }
-}
+};
