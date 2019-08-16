@@ -154,6 +154,8 @@ module.exports = class Discord extends Module {
                 this.channelMessaged.delete(cooldownTarget);
             }, this.config.cooldownTimeout);
         }
+
+        Application.modules.Discord.setMessageSent();
     }
 
     blockUser(userId, blockTimeout) {
