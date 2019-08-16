@@ -31,7 +31,7 @@ Application.registerModule("Bizaam");
 Application.registerModule("Assfart");
 Application.registerModule("BestPony");
 Application.registerModule("WorstPony");
-Application.registerModule("LoveCanni");
+Application.registerModule("MentionCanni");
 Application.registerModule("DevCommands");
 Application.registerModule("NoMessageProcessor");
 
