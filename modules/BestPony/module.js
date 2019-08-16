@@ -34,55 +34,48 @@ module.exports = class BestPony extends Module {
     }
 
     whoIsBestPony(msg) {
-        switch (msg.content.toLowerCase()) {
-            case 'who is best pony':
-                if (Application.modules.Discord.controlTalkedRecently(msg, this.config.bestPonyType)) {
-                    let random = Tools.getRandomIntFromInterval(0, this.config.bestPonyAnswer1.length - 1);
-                    msg.channel.send(Tools.parseReply(this.config.bestPonyAnswer1[random], [msg.author, Application.modules.Discord.getEmoji('bizaam')]));
+        if (Tools.msg_contains(msg, 'who is best pony')) {
+            if (Application.modules.Discord.controlTalkedRecently(msg, this.config.bestPonyType)) {
+                let random = Tools.getRandomIntFromInterval(0, this.config.bestPonyAnswer1.length - 1);
+                msg.channel.send(Tools.parseReply(this.config.bestPonyAnswer1[random], [msg.author, Application.modules.Discord.getEmoji('bizaam')]));
 
-                    Application.modules.Discord.setMessageSent();
-                }
-                break;
-            case 'canni is best pony':
-            case 'canni soda is best pony':
-                if (Application.modules.Discord.controlTalkedRecently(msg, this.config.canniBestPonyType)) {
-                    let random = Tools.getRandomIntFromInterval(0, this.config.bestPonyAnswer2.length - 1);
-                    msg.channel.send(Tools.parseReply(this.config.bestPonyAnswer2[random], [msg.author]));
+                Application.modules.Discord.setMessageSent();
+            }
+        } else if (Tools.msg_contains(msg, 'canni is best pony') || Tools.msg_contains(msg, 'canni soda is best pony')) {
+            if (Application.modules.Discord.controlTalkedRecently(msg, this.config.canniBestPonyType)) {
+                let random = Tools.getRandomIntFromInterval(0, this.config.bestPonyAnswer2.length - 1);
+                msg.channel.send(Tools.parseReply(this.config.bestPonyAnswer2[random], [msg.author]));
 
-                    Application.modules.Discord.setMessageSent();
-                }
-                break;
-            case 'bizaam is best pony':
-                if (Application.modules.Discord.controlTalkedRecently(msg, this.config.bizaamBestPonyType)) {
-                    let random = Tools.getRandomIntFromInterval(0, this.config.bestPonyAnswer3.length - 1);
-                    msg.channel.send(Tools.parseReply(this.config.bestPonyAnswer3[random], [msg.author]));
+                Application.modules.Discord.setMessageSent();
+            }
+        } else if (Tools.msg_contains(msg, 'bizaam is best pony')) {
+            if (Application.modules.Discord.controlTalkedRecently(msg, this.config.bizaamBestPonyType)) {
+                let random = Tools.getRandomIntFromInterval(0, this.config.bestPonyAnswer3.length - 1);
+                msg.channel.send(Tools.parseReply(this.config.bestPonyAnswer3[random], [msg.author]));
 
-                    Application.modules.Discord.setMessageSent();
-                }
-                break;
-            case 'assfart is best pony':
-                if (Application.modules.Discord.controlTalkedRecently(msg, this.config.assFartBestPonyType)) {
-                    let random = Tools.getRandomIntFromInterval(0, this.config.bestPonyAnswer4.length - 1);
-                    msg.channel.send(Tools.parseReply(this.config.bestPonyAnswer4[random], [msg.author]));
+                Application.modules.Discord.setMessageSent();
+            }
+        } else if (Tools.msg_contains(msg, 'assfart is best pony')) {
+            if (Application.modules.Discord.controlTalkedRecently(msg, this.config.assFartBestPonyType)) {
+                let random = Tools.getRandomIntFromInterval(0, this.config.bestPonyAnswer4.length - 1);
+                msg.channel.send(Tools.parseReply(this.config.bestPonyAnswer4[random], [msg.author]));
 
-                    Application.modules.Discord.setMessageSent();
-                }
-                break;
-            case 'fanta is best pony':
-                if (Application.modules.Discord.controlTalkedRecently(msg, this.config.fantaBestPony)) {
-                    let random = Tools.getRandomIntFromInterval(0, this.config.bestPonyAnswer5.length - 1);
-                    msg.channel.send(Tools.parseReply(this.config.bestPonyAnswer5[random], [msg.author]));
+                Application.modules.Discord.setMessageSent();
+            }
+        } else if (Tools.msg_contains(msg, 'fanta is best pony')) {
+            if (Application.modules.Discord.controlTalkedRecently(msg, this.config.fantaBestPony)) {
+                let random = Tools.getRandomIntFromInterval(0, this.config.bestPonyAnswer5.length - 1);
+                msg.channel.send(Tools.parseReply(this.config.bestPonyAnswer5[random], [msg.author]));
 
-                    Application.modules.Discord.setMessageSent();
-                }
-                break;
-            default:
-                if (Application.modules.Discord.controlTalkedRecently(msg, this.config.interjectType, false)) {
-                    let random = Tools.getRandomIntFromInterval(0, this.config.bestPonyAnswerDefault.length - 1);
-                    msg.channel.send(Tools.parseReply(this.config.bestPonyAnswerDefault[random], [msg.author]));
+                Application.modules.Discord.setMessageSent();
+            }
+        } else {
+            if (Application.modules.Discord.controlTalkedRecently(msg, this.config.interjectType, false)) {
+                let random = Tools.getRandomIntFromInterval(0, this.config.bestPonyAnswerDefault.length - 1);
+                msg.channel.send(Tools.parseReply(this.config.bestPonyAnswerDefault[random], [msg.author]));
 
-                    Application.modules.Discord.setMessageSent();
-                }
+                Application.modules.Discord.setMessageSent();
+            }
         }
     }
 

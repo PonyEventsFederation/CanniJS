@@ -33,6 +33,7 @@ Application.registerModule("BestPony");
 Application.registerModule("WorstPony");
 Application.registerModule("LoveCanni");
 Application.registerModule("DevCommands");
+Application.registerModule("Solver");
 Application.registerModule("NoMessageProcessor");
 
 

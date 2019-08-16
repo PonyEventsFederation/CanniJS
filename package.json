@@ -6,6 +6,7 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
+        "algebrite": "^1.2.1",
         "bluebird": "^3.5.5",
         "deepmerge": "^0.2.10",
         "discord.js": "^11.5.1",

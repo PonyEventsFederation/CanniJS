@@ -42,7 +42,6 @@ module.exports = class DevC extends Module {
                     return;
                 }
                 if (msg.isMemberMentioned(Application.getClient().user)) {
-                    var user;
                     if (this.auth_dev_master(msg.author.id)) {
                         if (Tools.msg_contains(msg, "add dev")) {
                             return this.addDev(msg);
@@ -129,7 +128,7 @@ module.exports = class DevC extends Module {
 
     channelId(msg) {
         msg.delete();
-        sg.channel.send(Tools.parseReply(this.config.ans_channel_id, [msg.channel.id])).then(message => {message.delete(8000)});
+        msg.channel.send(Tools.parseReply(this.config.ans_channel_id, [msg.channel.id])).then(message => {message.delete(8000)});
         Application.modules.Discord.setMessageSent();
     }
 

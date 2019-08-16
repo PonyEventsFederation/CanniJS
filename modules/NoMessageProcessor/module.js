@@ -6,7 +6,7 @@ const Module = require("../../lib/Module");
 const Promise = require("bluebird");
 const Tools = require("../../lib/Tools");
 
-module.exports = class BestPony extends Module {
+module.exports = class NoMessageProcessor extends Module {
     start() {
         return new Promise((resolve, reject) => {
             this.log.debug("Starting...");
