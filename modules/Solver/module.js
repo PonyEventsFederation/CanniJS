@@ -7,7 +7,7 @@ const Promise = require("bluebird");
 const Tools = require("../../lib/Tools");
 var Algebrite = require('algebrite');
 
-module.exports = class BestPony extends Module {
+module.exports = class Solver extends Module {
     start() {
         return new Promise((resolve, reject) => {
             this.log.debug("Starting...");
