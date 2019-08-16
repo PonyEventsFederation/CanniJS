@@ -36,7 +36,7 @@ module.exports = class LoveCanni extends Module {
     }
 
     love(msg) {
-        var cooldownMessage = Tools.parseReply(this.config.cooldownMessageLove, [msg.author, Application.modules.Discord.getEmoji('error')]);
+        var cooldownMessage = Tools.parseReply(this.config.cooldownMessageLove, [Application.modules.Discord.getEmoji('error')]);
 
         if (Application.modules.Discord.controlTalkedRecently(msg, this.config.loveCanniType, true, 'channel', cooldownMessage)) {
             let random = Tools.getRandomIntFromInterval(0, this.config.loveAnswer.length - 1);
