@@ -128,7 +128,7 @@ module.exports = class DevC extends Module {
 
     channelId(msg) {
         msg.delete();
-        sg.channel.send(Tools.parseReply(this.config.ans_channel_id, [msg.channel.id])).then(message => {message.delete(8000)});
+        msg.channel.send(Tools.parseReply(this.config.ans_channel_id, [msg.channel.id])).then(message => {message.delete(8000)});
         Application.modules.Discord.setMessageSent();
     }
 
