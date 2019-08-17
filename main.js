@@ -22,6 +22,7 @@ Application.configure({
 // resources
 //Application.registerModule("EMPTY");
 Application.registerModule("Discord");
+Application.registerModule("UserJoined");
 Application.registerModule("Help");
 Application.registerModule("CanniTimeToHype");
 Application.registerModule("Boop");
