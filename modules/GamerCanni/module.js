@@ -26,7 +26,9 @@ module.exports = class RockPaperScissors extends Module {
 
                 if (msg.isMemberMentioned(Application.modules.Discord.client.user)) {
                     if (Tools.msg_contains(msg, 'let\'s play a game')) {
-                        return this.letsPlay(msg);
+                        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.playGameType)) {
+                            return this.letsPlay(msg);
+                        }
                     }
                 }
             });
