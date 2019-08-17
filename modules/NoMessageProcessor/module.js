@@ -32,6 +32,11 @@ module.exports = class NoMessageProcessor extends Module {
                     if (random === 10) {
                         msg.channel.send(Tools.parseReply(this.config.randomBoopAnswer, [msg.author]));
                     }
+
+                    if (random === 42) {
+                        Application.modules.GamerCanni.letsPlay(msg, this.config.playGameAnswer);
+                    }
+
                 }
             });
 
