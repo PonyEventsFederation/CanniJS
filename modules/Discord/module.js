@@ -116,10 +116,10 @@ module.exports = class Discord extends Module {
             // Set the default cooldown message if none is passed from another module.
             if (cooldownMessage == null) {
                 if (Application.modules.DevCommands.auth_dev(msg.author.id)) {
-                    cooldownMessage = Tools.parseReply(this.config.cooldownMessageDev, [msg.author, this.getEmoji('error')]);
+                    cooldownMessage = Tools.parseReply(this.config.cooldownMessageDev, [msg.author, this.getEmoji('shy')]);
                 }
                 else {
-                    cooldownMessage = Tools.parseReply(this.config.cooldownMessageDefault, [msg.author]);
+                    cooldownMessage = Tools.parseReply(this.config.cooldownMessageDefault, [msg.author, this.getEmoji('error')]);
                 }
             }
 
