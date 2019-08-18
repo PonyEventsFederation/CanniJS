@@ -2,10 +2,11 @@
 
 // @IMPORTS
 const Application = require("../../lib/Application");
+
+const worker = require('worker');
 const Module = require("../../lib/Module");
 const Promise = require("bluebird");
 const Tools = require("../../lib/Tools");
-var Algebrite = require('algebrite');
 
 module.exports = class Solver extends Module {
     start() {
@@ -49,12 +50,18 @@ module.exports = class Solver extends Module {
     }
 
     simple_parse(msg) {
-        var res;
+        let config = this.config;
         var alg = msg.content.split("solve");
         if (alg.length > 1 && alg[1] !== "") {
-            res = this.do_clac(alg[1]);
-            msg.channel.send(Tools.parseReply(this.config.simple_solve, [msg.author, res]));
-            Algebrite.clearall();
+            this.single(alg[1]).then(function(value) {
+                msg.channel.send(Tools.parseReply(config.simple_solve, [msg.author, value])).catch(function (error) {
+                    if (error.toString().toLowerCase().includes('must be 2000 or fewer in length')) {
+                        msg.channel.send('I\'m sorry. The result of your calculation is too long to be printed in Discord.');
+                    }
+
+                    Application.log.error(error);
+               });
+            });
         } else {
             msg.channel.send(Tools.parseReply(this.config.solver_nothing, [msg.author]));
         }
@@ -62,12 +69,23 @@ module.exports = class Solver extends Module {
     }
 
     simple_multi_parse(msg) {
+        let config = this.config;
         var res = "";
         var alg = msg.content.split("multi");
         if (alg.length > 1 && alg[1] !== "") {
-            alg = this.prepareMulti(alg[1].split(",")).forEach(item => res = this.do_clac(item));
-            msg.channel.send(Tools.parseReply(this.config.simple_multi_solve, [msg.author, res]));
-            Algebrite.clearall();
+            this.multi(this.prepareMulti(alg[1].split(","))).then(function(value) {
+                if (value === "") {
+                    msg.channel.send(Tools.parseReply(config.solver_no_output, [msg.author]));
+                } else {
+                    msg.channel.send(Tools.parseReply(config.simple_multi_solve, [msg.author, value])).catch(function (error) {
+                        if (Tools.msg_contains(error, 'must be 2000 or fewer in length')) {
+                            msg.channel.send('I\'m sorry. The result of your calculation is too long to be printed in Discord.');
+                        }
+
+                        Application.log.error(error);
+                   });
+                }
+            });
         } else {
             msg.channel.send(Tools.parseReply(this.config.solver_nothing, [msg.author]));
         }
@@ -105,8 +123,22 @@ module.exports = class Solver extends Module {
         return data;
     }
 
-    do_clac(item) {
-        return Algebrite.run(item).toString();
+    async single(data) {
+        var wor = worker.spawn('solve_worker.js');
+        setTimeout(function(){
+            wor.kill();
+            Application.log.info(`Killed single worker after reaching its timeout of ${Application.modules.Solver.config.single_timeout / 1000} seconds.`);
+        }, this.config.single_timeout);
+        return await wor.run('do_calc', [data]);
+    }
+
+    async multi(data) {
+        var wor = worker.spawn('solve_worker.js');
+        setTimeout(function(){
+            wor.kill();
+            Application.log.info(`Killed multi worker after reaching its timeout of ${Application.modules.Solver.multi_timeout / 1000} seconds.`);
+        }, this.config.multi_timeout);
+        return await wor.run('do_multi_calc', [data]);
     }
 
     stop() {
