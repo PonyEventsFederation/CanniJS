@@ -8,9 +8,6 @@ const Module = require("../../lib/Module");
 const Promise = require("bluebird");
 const Tools = require("../../lib/Tools");
 
-var single_timeout = 60000;
-var multi_timeout = 90000;
-
 module.exports = class Solver extends Module {
     start() {
         return new Promise((resolve, reject) => {
@@ -57,7 +54,13 @@ module.exports = class Solver extends Module {
         var alg = msg.content.split("solve");
         if (alg.length > 1 && alg[1] !== "") {
             this.single(alg[1]).then(function(value) {
-                msg.channel.send(Tools.parseReply(config.simple_solve, [msg.author, value]));
+                msg.channel.send(Tools.parseReply(config.simple_solve, [msg.author, value])).catch(function (error) {
+                    if (error.toString().toLowerCase().includes('must be 2000 or fewer in length')) {
+                        msg.channel.send('I\'m sorry. The result of your calculation is too long to be printed in Discord.');
+                    }
+
+                    Application.log.error(error);
+               });
             });
         } else {
             msg.channel.send(Tools.parseReply(this.config.solver_nothing, [msg.author]));
@@ -74,7 +77,13 @@ module.exports = class Solver extends Module {
                 if (value === "") {
                     msg.channel.send(Tools.parseReply(config.solver_no_output, [msg.author]));
                 } else {
-                    msg.channel.send(Tools.parseReply(config.simple_multi_solve, [msg.author, value]));
+                    msg.channel.send(Tools.parseReply(config.simple_multi_solve, [msg.author, value])).catch(function (error) {
+                        if (Tools.msg_contains(error, 'must be 2000 or fewer in length')) {
+                            msg.channel.send('I\'m sorry. The result of your calculation is too long to be printed in Discord.');
+                        }
+
+                        Application.log.error(error);
+                   });
                 }
             });
         } else {
@@ -118,8 +127,8 @@ module.exports = class Solver extends Module {
         var wor = worker.spawn('solve_worker.js');
         setTimeout(function(){
             wor.kill();
-            console.log("Killed");
-        }, single_timeout);
+            Application.log.info(`Killed single worker after reaching its timeout of ${Application.modules.Solver.config.single_timeout / 1000} seconds.`);
+        }, this.config.single_timeout);
         return await wor.run('do_calc', [data]);
     }
 
@@ -127,8 +136,8 @@ module.exports = class Solver extends Module {
         var wor = worker.spawn('solve_worker.js');
         setTimeout(function(){
             wor.kill();
-            console.log("Killed");
-        }, multi_timeout);
+            Application.log.info(`Killed multi worker after reaching its timeout of ${Application.modules.Solver.multi_timeout / 1000} seconds.`);
+        }, this.config.multi_timeout);
         return await wor.run('do_multi_calc', [data]);
     }
 
