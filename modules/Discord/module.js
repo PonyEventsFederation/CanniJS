@@ -152,7 +152,7 @@ module.exports = class Discord extends Module {
         if (this.channelMessaged.has(cooldownTarget)) {
             // Do nothing. We don't want to spam everyone all the time.
         } else {
-            msg.channel.send(cooldownMessage)
+            msg.channel.send(cooldownMessage);
 
             this.channelMessaged.add(cooldownTarget);
             setTimeout(() => {
