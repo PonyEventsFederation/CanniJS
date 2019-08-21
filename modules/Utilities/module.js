@@ -30,7 +30,7 @@ module.exports = class AssFart extends Module {
                 } else if (Tools.msg_contains_word_list(msg, this.config.phrase_hello)) {
                     return this.hello(msg);
                 }
-                else if (Tools.msg_contains_word_list(msg, this.config.phrase_hello_morning)) {
+                else if (Tools.msg_contains_list(msg, this.config.phrase_hello_morning)) {
                     return this.hello_morning(msg);
                 }
 
@@ -65,9 +65,9 @@ module.exports = class AssFart extends Module {
     }
 
     hello_morning(msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.helloType, false, 'channel', undefined, undefined, 30000)) {
-            let random = Tools.getRandomIntFromInterval(0, this.config.ans_hello.length - 1);
-            msg.channel.send(Tools.parseReply(this.config.ans_hello[random], [msg.author]));
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.hello_morning_Type, false, 'channel', undefined, undefined, 30000)) {
+            let random = Tools.getRandomIntFromInterval(0, this.config.ans_hello_morning.length - 1);
+            msg.channel.send(Tools.parseReply(this.config.ans_hello_morning[random], [msg.author]));
             Application.modules.Discord.setMessageSent();
         }
     }
