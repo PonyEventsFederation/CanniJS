@@ -78,7 +78,6 @@ module.exports = class Help extends Module {
     stop() {
         return new Promise((resolve, reject) => {
             this.log.debug("Stopping...");
-
             return resolve(this);
         })
     }

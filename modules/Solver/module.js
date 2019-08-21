@@ -103,7 +103,7 @@ module.exports = class Solver extends Module {
         let config = this.config;
         var alg = msg.content.split("multi");
         if (alg.length > 1 && alg[1] !== "") {
-            this.multi(this.prepareMulti(alg[1].split(","))).then(function(value) {
+            this.multi(this.prepareMulti(alg[1].split(",")), this, msg.id).then(function(value) {
                 let res = value[0];
                 let obj = value[1];
                 let id = value[2];
