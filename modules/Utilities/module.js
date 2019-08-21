@@ -30,6 +30,9 @@ module.exports = class AssFart extends Module {
                 } else if (Tools.msg_contains_word_list(msg, this.config.phrase_hello)) {
                     return this.hello(msg);
                 }
+                else if (Tools.msg_contains_word_list(msg, this.config.phrase_hello_morning)) {
+                    return this.hello_morning(msg);
+                }
 
             });
 
@@ -38,7 +41,7 @@ module.exports = class AssFart extends Module {
     }
 
     bye_night(msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.byenightType, false, 'message')) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.byenightType, false, 'channel', undefined, undefined, 30000)) {
             let random = Tools.getRandomIntFromInterval(0, this.config.ans_bye_night.length - 1);
             msg.channel.send(Tools.parseReply(this.config.ans_bye_night[random], [msg.author]));
             Application.modules.Discord.setMessageSent();
@@ -46,20 +49,28 @@ module.exports = class AssFart extends Module {
     }
 
     bye(msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.byeType, false, 'message')) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.byeType, false, 'channel', undefined, undefined, 30000)) {
             let random = Tools.getRandomIntFromInterval(0, this.config.ans_bye.length - 1);
             msg.channel.send(Tools.parseReply(this.config.ans_bye[random], [msg.author]));
             Application.modules.Discord.setMessageSent();
         }
     }
+
     hello(msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.helloType, false, 'message')) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.helloType, false, 'channel', undefined, undefined, 30000)) {
             let random = Tools.getRandomIntFromInterval(0, this.config.ans_hello.length - 1);
             msg.channel.send(Tools.parseReply(this.config.ans_hello[random], [msg.author]));
             Application.modules.Discord.setMessageSent();
         }
     }
 
+    hello_morning(msg) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.helloType, false, 'channel', undefined, undefined, 30000)) {
+            let random = Tools.getRandomIntFromInterval(0, this.config.ans_hello.length - 1);
+            msg.channel.send(Tools.parseReply(this.config.ans_hello[random], [msg.author]));
+            Application.modules.Discord.setMessageSent();
+        }
+    }
 
     stop() {
         return new Promise((resolve, reject) => {
