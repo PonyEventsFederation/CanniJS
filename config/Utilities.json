@@ -1,0 +1,36 @@
+{
+  "byenightType": "byenightType",
+  "phrase_bye_night":[
+    "good night",
+    "nighty night"
+  ],
+  "ans_bye_night": [
+    "Good Night %s",
+    "Sleep well %s",
+    "Sweet dreams %s",
+    "Have a good sleep %s"
+  ],
+
+  "byeType": "byeType",
+  "phrase_bye":[
+    "bye"
+  ],
+  "ans_bye": [
+    "%s Bye, see you soon.",
+    "%s Bye, come back soon.",
+    "%s Don´t be away for too long"
+  ],
+
+  "helloType": "helloType",
+  "phrase_hello":[
+    "hello",
+    "hi"
+  ],
+  "ans_hello": [
+    "Hello %s",
+    "Hello %s, welcome back.",
+    "Hi %s, nice to see you again.",
+    "%s Hi, how are you?",
+    "%s Hey, how are you today?"
+  ]
+}
