@@ -110,6 +110,9 @@ module.exports = class Discord extends Module {
             case 'individual':
                 cooldownTarget = msg.author.id;
                 break;
+            case 'message':
+                cooldownTarget = msg.author.id + type;
+                break;
         }
 
         if (this.talkedRecently.has(cooldownTarget)) {

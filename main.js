@@ -22,6 +22,7 @@ Application.configure({
 // resources
 //Application.registerModule("EMPTY");
 Application.registerModule("Discord");
+//Application.registerModule("Python");
 Application.registerModule("UserJoined");
 Application.registerModule("Help");
 Application.registerModule("CanniTimeToHype");
@@ -34,8 +35,9 @@ Application.registerModule("BestPony");
 Application.registerModule("WorstPony");
 Application.registerModule("MentionCanni");
 Application.registerModule("DevCommands");
-// Application.registerModule("Solver");
+//Application.registerModule("Solver");
 Application.registerModule("GamerCanni");
+Application.registerModule("Utilities");
 Application.registerModule("NoMessageProcessor");
 
 

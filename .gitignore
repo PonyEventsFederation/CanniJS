@@ -103,3 +103,5 @@ $RECYCLE.BIN/
 .Trash-*
 config/application/ids.json
 Test.js
+config/Drop.json
+modules/Drop/module.js

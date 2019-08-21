@@ -7,6 +7,7 @@ const worker = require('worker');
 const Module = require("../../lib/Module");
 const Promise = require("bluebird");
 const Tools = require("../../lib/Tools");
+var calc_runing = {};
 
 module.exports = class Solver extends Module {
     start() {
@@ -49,16 +50,46 @@ module.exports = class Solver extends Module {
         Application.modules.Discord.setMessageSent();
     }
 
+    log_calc(id) {
+        //console.log("Calc logged");
+        calc_runing[id.toString()] = true;
+    }
+
+    end_calc(id) {
+        //console.log("Calc ended");
+        calc_runing[id.toString()] = false;
+    }
+
+    remove_calc(id) {
+        //console.log("Calc removed");
+        delete calc_runing[id.toString()];
+    }
+
+    final_check_calc(id) {
+        if (calc_runing[id.toString()]) {
+            this.remove_calc(id);
+            return true;
+        } else {
+            this.remove_calc(id);
+            return false;
+        }
+    }
+
     simple_parse(msg) {
         let config = this.config;
         var alg = msg.content.split("solve");
         if (alg.length > 1 && alg[1] !== "") {
-            this.single(alg[1]).then(function(value) {
-                msg.channel.send(Tools.parseReply(config.simple_solve, [msg.author, value])).catch(function (error) {
+            this.log_calc(msg.id);
+            this.single(alg[1], this, msg.id).then(function(value) {
+                let res = value[0];
+                let obj = value[1];
+                let id = value[2];
+                obj.end_calc(id);
+                value[3].kill();
+                msg.channel.send(Tools.parseReply(config.simple_solve, [msg.author, res])).catch(function (error) {
                     if (error.toString().toLowerCase().includes('must be 2000 or fewer in length')) {
                         msg.channel.send('I\'m sorry. The result of your calculation is too long to be printed in Discord.');
                     }
-
                     Application.log.error(error);
                });
             });
@@ -70,14 +101,18 @@ module.exports = class Solver extends Module {
 
     simple_multi_parse(msg) {
         let config = this.config;
-        var res = "";
         var alg = msg.content.split("multi");
         if (alg.length > 1 && alg[1] !== "") {
             this.multi(this.prepareMulti(alg[1].split(","))).then(function(value) {
-                if (value === "") {
+                let res = value[0];
+                let obj = value[1];
+                let id = value[2];
+                obj.end_calc(id);
+                value[3].kill();
+                if (res === "") {
                     msg.channel.send(Tools.parseReply(config.solver_no_output, [msg.author]));
                 } else {
-                    msg.channel.send(Tools.parseReply(config.simple_multi_solve, [msg.author, value])).catch(function (error) {
+                    msg.channel.send(Tools.parseReply(config.simple_multi_solve, [msg.author, res])).catch(function (error) {
                         if (Tools.msg_contains(error, 'must be 2000 or fewer in length')) {
                             msg.channel.send('I\'m sorry. The result of your calculation is too long to be printed in Discord.');
                         }
@@ -123,22 +158,26 @@ module.exports = class Solver extends Module {
         return data;
     }
 
-    async single(data) {
+    async single(data, obj, id) {
         var wor = worker.spawn('solve_worker.js');
         setTimeout(function(){
-            wor.kill();
-            Application.log.info(`Killed single worker after reaching its timeout of ${Application.modules.Solver.config.single_timeout / 1000} seconds.`);
+            if (obj.final_check_calc(id)) {
+                wor.kill();
+                Application.log.info(`Killed single worker after reaching its timeout of ${Application.modules.Solver.config.single_timeout / 1000} seconds.`);
+            }
         }, this.config.single_timeout);
-        return await wor.run('do_calc', [data]);
+        return [await wor.run('do_calc', [data]), obj, id, wor];
     }
 
-    async multi(data) {
+    async multi(data, obj, id) {
         var wor = worker.spawn('solve_worker.js');
         setTimeout(function(){
-            wor.kill();
-            Application.log.info(`Killed multi worker after reaching its timeout of ${Application.modules.Solver.multi_timeout / 1000} seconds.`);
+            if (obj.final_check_calc(id)) {
+                wor.kill();
+                Application.log.info(`Killed multi worker after reaching its timeout of ${Application.modules.Solver.multi_timeout / 1000} seconds.`);
+            }
         }, this.config.multi_timeout);
-        return await wor.run('do_multi_calc', [data]);
+        return [await wor.run('do_multi_calc', [data]), obj, id, wor];
     }
 
     stop() {
