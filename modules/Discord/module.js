@@ -100,7 +100,7 @@ module.exports = class Discord extends Module {
         return "";
     }
 
-    controlTalkedRecently(msg, type, sendMessage = true, target = 'channel', cooldownMessage = null, blockUser = false) {
+    controlTalkedRecently(msg, type, sendMessage = true, target = 'channel', cooldownMessage = null, blockUser = false, cooldownTimeout = null) {
         var cooldownTarget;
 
         switch (target) {
@@ -110,12 +110,20 @@ module.exports = class Discord extends Module {
             case 'individual':
                 cooldownTarget = msg.author.id;
                 break;
+            case 'message':
+                cooldownTarget = msg.author.id + type;
+                break;
         }
 
         if (this.talkedRecently.has(cooldownTarget)) {
             // Set the default cooldown message if none is passed from another module.
             if (cooldownMessage == null) {
-                cooldownMessage = Tools.parseReply(this.config.cooldownMessageDefault, [msg.author, this.getEmoji('error')]);
+                if (Application.modules.DevCommands.auth_dev(msg.author.id)) {
+                    cooldownMessage = Tools.parseReply(this.config.cooldownMessageDev, [msg.author, this.getEmoji('shy')]);
+                }
+                else {
+                    cooldownMessage = Tools.parseReply(this.config.cooldownMessageDefault, [msg.author, this.getEmoji('error')]);
+                }
             }
 
             if (sendMessage) {
@@ -125,10 +133,12 @@ module.exports = class Discord extends Module {
             return false;
         } else {
             this.talkedRecently.add(cooldownTarget);
-
+            if (cooldownTimeout === null) {
+                cooldownTimeout = this.config.cooldownTimeout;
+            }
             setTimeout(() => {
                 this.talkedRecently.delete(cooldownTarget);
-            }, this.config.cooldownTimeout);
+            }, cooldownTimeout);
 
             return true;
         }
@@ -149,6 +159,8 @@ module.exports = class Discord extends Module {
                 this.channelMessaged.delete(cooldownTarget);
             }, this.config.cooldownTimeout);
         }
+
+        Application.modules.Discord.setMessageSent();
     }
 
     blockUser(userId, blockTimeout) {

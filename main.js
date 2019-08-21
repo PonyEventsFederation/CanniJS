@@ -22,6 +22,9 @@ Application.configure({
 // resources
 //Application.registerModule("EMPTY");
 Application.registerModule("Discord");
+//Application.registerModule("Python");
+Application.registerModule("UserJoined");
+Application.registerModule("Help");
 Application.registerModule("CanniTimeToHype");
 Application.registerModule("Boop");
 Application.registerModule("Hug");
@@ -30,7 +33,11 @@ Application.registerModule("Bizaam");
 Application.registerModule("Assfart");
 Application.registerModule("BestPony");
 Application.registerModule("WorstPony");
-Application.registerModule("LoveCanni");
+Application.registerModule("MentionCanni");
+Application.registerModule("DevCommands");
+Application.registerModule("Solver");
+Application.registerModule("GamerCanni");
+Application.registerModule("Utilities");
 Application.registerModule("NoMessageProcessor");
 
 

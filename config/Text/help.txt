@@ -1,0 +1,30 @@
+Hey %s! It looks like you need some help!
+I'm always listening so I'll do my best to respond to you.
+
+These are things you can ask me to do for you:
+**!when**: I'll tell you how much longer it is until the next iteration of GalaCon! Wooo!
+**hug @target****: I'll let the mentioned person know you hugged them. (You can also hug me. I like hugs too)
+**boop @target**: I'll go and boop the snoot of whomever you mention here! Don't boop me though, that's illegal.
+
+I also listen to certain words and sentences!
+**Assfart**: I honestly don't know why this is a thing...
+**Bizaam**: BIIZAAAAAM!
+**Who is best pony**: I'll definitely let you know who I think is best!
+**[x] is best pony**: I have an opinion about this too.
+**Fanta**: Unlike Perry, I like making Fanta jokes.
+**Canni is worst pony**: I don't know why you would say something like this, but if you do it too often I'll just stop talking to you for a bit...
+
+Oh! And I'll respond to you if you @mention me! But please don't be mad at me if I don't understand you.
+I respond to these things:
+**@Canni I'm sorry**: You know, for when you called me worst pony. That was mean, but I might just forgive you.
+**@Canni I love you**: I like this one. It's much better than calling me worst pony.
+**@Canni When is galacon**: I'll let you know how much longer it is until the next time we'll see each other at GalaCon!
+**@Canni Can I have a hug**: Of course you can, silly! I love giving hugs!
+**@Canni How are you**: It's so nice of you to ask about me!
+
+Did you know I'm not just charming, but also a smart bot? I can solve all the math problems you can think of!
+You can ask me like this:
+**@Canni solve `1+2`**: This is just an example, but I can solve simple problems like 1+2 with ease!
+**@Canni solve multi `x=3,y=4,z=x+y,z`**: Yep, even complex problems are a breeze!
+
+So that's it! If you've any more questions about me, you should probably ask one of my creators.
