@@ -100,7 +100,7 @@ module.exports = class Discord extends Module {
         return "";
     }
 
-    controlTalkedRecently(msg, type, sendMessage = true, target = 'channel', cooldownMessage = null, blockUser = false) {
+    controlTalkedRecently(msg, type, sendMessage = true, target = 'channel', cooldownMessage = null, blockUser = false, cooldownTimeout = null) {
         var cooldownTarget;
 
         switch (target) {
@@ -133,10 +133,12 @@ module.exports = class Discord extends Module {
             return false;
         } else {
             this.talkedRecently.add(cooldownTarget);
-
+            if (cooldownTimeout === null) {
+                cooldownTimeout = this.config.cooldownTimeout;
+            }
             setTimeout(() => {
                 this.talkedRecently.delete(cooldownTarget);
-            }, this.config.cooldownTimeout);
+            }, cooldownTimeout);
 
             return true;
         }
