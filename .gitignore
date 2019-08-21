@@ -105,3 +105,4 @@ config/application/ids.json
 Test.js
 config/Drop.json
 modules/Drop/module.js
+modules/Python/scripts/test_script.py
