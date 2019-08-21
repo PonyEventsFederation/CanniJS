@@ -27,7 +27,7 @@ module.exports = class AssFart extends Module {
                     return this.bye_night(msg);
                 } else if (Tools.msg_contains_list(msg, this.config.phrase_bye)) {
                     return this.bye(msg);
-                } else if (Tools.msg_contains_list(msg, this.config.phrase_hello)) {
+                } else if (Tools.msg_contains_word_list(msg, this.config.phrase_hello)) {
                     return this.hello(msg);
                 }
 
