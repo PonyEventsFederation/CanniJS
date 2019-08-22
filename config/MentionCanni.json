@@ -8,6 +8,7 @@
         "%s I'm a bit sad that it's not GalaCon yet."
     ],
     "chrisBrokeMeAnswer": "%s I'm not sure. I think ChrisFhey might've broken something again...",
+    "xrayMeAnswer": "%s I'm not sure. I think Xray messed up something with the Python environment again...",
     "loveCanniType": "loveCanni",
     "howAreYouType": "howAreYou",
     "cooldownMessageLove": "I cannot handle this much love! %s"
