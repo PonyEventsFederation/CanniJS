@@ -74,7 +74,7 @@ module.exports = class RockPaperScissors extends Module {
                 }
             }).catch(() => {
                 this.log.info('User decided not to play');
-                msg.reply(Tools.parseReply(this.config.didNotPlayAnswer));
+                msg.reply(Tools.parseReply(this.config.didNotPlayAnswer, [Application.modules.Discord.getEmoji('shy')]));
             });
         });
 
