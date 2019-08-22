@@ -33,7 +33,7 @@ module.exports = class WorstPony extends Module {
                 if (Tools.msg_contains(msg,' is worst pony')) {
                     return this.whoIsWorstPony(msg);
                 }
-            })
+            });
 
             return resolve(this);
         });
