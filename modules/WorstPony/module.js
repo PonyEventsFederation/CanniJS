@@ -45,8 +45,12 @@ module.exports = class WorstPony extends Module {
             msg.channel.send(Tools.parseReply(this.config.forgiveUserAnswer[random], [msg.author, Application.modules.Discord.getEmoji('love')]));
 
             Application.modules.Discord.unblockUser(msg.author.id);
-            Application.modules.Discord.setMessageSent();
+        } else {
+            let random = Tools.getRandomIntFromInterval(0, this.config.notSorryAnswer.length - 1);
+            msg.channel.send(Tools.parseReply(this.config.notSorryAnswer[random], [msg.author]));
         }
+
+        Application.modules.Discord.setMessageSent();
     }
 
     whoIsWorstPony(msg) {
