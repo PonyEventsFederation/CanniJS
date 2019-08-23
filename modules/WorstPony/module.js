@@ -45,6 +45,7 @@ module.exports = class WorstPony extends Module {
             msg.channel.send(Tools.parseReply(this.config.forgiveUserAnswer[random], [msg.author, Application.modules.Discord.getEmoji('love')]));
 
             Application.modules.Discord.unblockUser(msg.author.id);
+            Application.modules.Discord.setMessageSent();
         }
     }
 
