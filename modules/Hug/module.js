@@ -28,7 +28,7 @@ module.exports = class Hug extends Module {
 
                 // Politely asking for a hug from Canni.
                 if (msg.isMemberMentioned(Application.modules.Discord.client.user)) {
-                    if (Tools.msg_contains(msg,'can i have a hug')) {
+                    if (Tools.msg_contains_list(msg,this.config.phrase_askHug)) {
                         return this.requestHug(msg);
                     }
                 }
