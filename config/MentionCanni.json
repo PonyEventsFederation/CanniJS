@@ -24,9 +24,9 @@
 
     "phrase_how_many_members": [
         "how many are we",
-        "how many members are we",
+        "how many members are there",
         "how many members are on the server"
     ],
 
-    "ans_memberCount": "There we currently %s server members."
+    "ans_memberCount": "There are currently %s server members."
 }
