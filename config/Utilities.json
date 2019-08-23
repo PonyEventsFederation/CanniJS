@@ -6,10 +6,10 @@
     "night"
   ],
   "ans_bye_night": [
-    "Good Night",
+    "Good night",
     "Sleep well",
     "Sweet dreams",
-    "Have a good sleep"
+    "Sleep well"
   ],
 
   "byeType": "byeType",
@@ -19,7 +19,7 @@
   "ans_bye": [
     "Bye, see you soon.",
     "Bye, come back soon.",
-    "Don´t be away for too long"
+    "Don´t stay away for too long"
   ],
 
   "helloType": "helloType",
