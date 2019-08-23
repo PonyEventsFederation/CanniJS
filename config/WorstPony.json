@@ -6,5 +6,8 @@
     "cooldownMessageWorstPony": "%s Fine, I'm not talking to you anymore for a while.",
     "forgiveUserAnswer": [
         "%s %s Oh all right. I forgive you."
+    ],
+    "notSorryAnswer": [
+        "%s What're you sorry for? You didn't do anything wrong, did you?"
     ]
 }
