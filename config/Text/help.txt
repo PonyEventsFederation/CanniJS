@@ -3,7 +3,7 @@ I'm always listening so I'll do my best to respond to you.
 
 These are things you can ask me to do for you:
 **!when**: I'll tell you how much longer it is until the next iteration of GalaCon! Wooo!
-**hug @target****: I'll let the mentioned person know you hugged them. (You can also hug me. I like hugs too)
+**hug @target**: I'll let the mentioned person know you hugged them. (You can also hug me. I like hugs too)
 **boop @target**: I'll go and boop the snoot of whomever you mention here! Don't boop me though, that's illegal.
 
 I also listen to certain words and sentences!
@@ -13,6 +13,10 @@ I also listen to certain words and sentences!
 **[x] is best pony**: I have an opinion about this too.
 **Fanta**: Unlike Perry, I like making Fanta jokes.
 **Canni is worst pony**: I don't know why you would say something like this, but if you do it too often I'll just stop talking to you for a bit...
+**Good night, Nighty night, Night**: I'll wish you good night!
+**Bye**: I'll say a quick goodbye when you're leaving.
+**Hello, Hi**: I'll say hi to you as well.
+**Good morning**: I'll wish you a good morning whenever I hear your voice! Or well, read your text.
 
 Oh! And I'll respond to you if you @mention me! But please don't be mad at me if I don't understand you.
 I respond to these things:
@@ -21,6 +25,8 @@ I respond to these things:
 **@Canni When is galacon**: I'll let you know how much longer it is until the next time we'll see each other at GalaCon!
 **@Canni Can I have a hug**: Of course you can, silly! I love giving hugs!
 **@Canni How are you**: It's so nice of you to ask about me!
+**@Canni Compliment me**: Sure! I'm still learning about compliments though, so don't be mad at me if I say something silly, okay?
+**@Canni Compliment @target**: This is for when you want me to compliment someone else. That's very nice of you.
 
 Did you know I'm not just charming, but also a smart bot? I can solve all the math problems you can think of!
 You can ask me like this:
