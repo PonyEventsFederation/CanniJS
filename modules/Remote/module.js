@@ -89,10 +89,10 @@ module.exports = class Remote extends Module {
     }
 
     remoteControl(msg) {
-        if (user === msg.author) {
+        if (user === msg.author && sender === msg.channel) {
             target.send(Tools.parseReply(msg.content));
+            Application.modules.Discord.setMessageSent();
         }
-        Application.modules.Discord.setMessageSent();
     }
 
     remoteNotAvailable(msg) {
