@@ -48,7 +48,8 @@ module.exports = class Remote extends Module {
                             return this.remoteControl(msg);
                         }
                     } else {
-                        return this.remoteNotAvailable(msg);
+                        if (Tools.msg_starts(msg, ">remote") || Tools.msg_starts(msg, ">deactivate"))
+                            return this.remoteNotAvailable(msg);
                     }
                 }
             });
