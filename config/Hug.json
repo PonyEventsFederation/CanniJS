@@ -16,5 +16,9 @@
         "can I get a hug",
         "can i have a hug",
         "please hug me"
-    ]
+    ],
+    "cooldownMessage": "%s Oh my. I can't keep up with that many hugs. You'll have to let me cool down for a bit! %s",
+    "hugLimit": 3,
+    "hugTimeout": 180000,
+    "hugType": "hugType"
 }
