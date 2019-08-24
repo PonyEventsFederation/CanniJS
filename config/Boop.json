@@ -7,5 +7,6 @@
     ],
     "cooldownMessage": "%s Oh my. I can't keep up with that many boops. You'll have to let me cool down for a bit! %s",
     "boopLimit": 3,
-    "boopTimeout": 60000
+    "boopTimeout": 180000,
+    "boopType": "boopType"
 }

@@ -100,6 +100,17 @@ module.exports = class Discord extends Module {
         return "";
     }
 
+    setCooldown(userId, type, cooldownTimeout) {
+        this.talkedRecently.add(userId + type);
+        setTimeout(() => {
+            this.talkedRecently.delete(userId + type);
+        }, cooldownTimeout);
+    }
+
+    hasCooldown(userId, type) {
+        return this.talkedRecently.has(userId + type);
+    }
+
     controlTalkedRecently(msg, type, sendMessage = true, target = 'channel', cooldownMessage = null, blockUser = false, cooldownTimeout = null) {
         var cooldownTarget;
 
