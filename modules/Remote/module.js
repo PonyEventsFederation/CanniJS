@@ -16,12 +16,9 @@ module.exports = class Remote extends Module {
         return new Promise((resolve, reject) => {
             this.log.debug("Starting...");
 
-            if (process.env.GENERAL_CHAT) {
-                target = Application.modules.Discord.client.channels.find(x => x.id === process.env.GENERAL_CHAT);
-            } else {
-                console.log("Warning no ENV variable called: GENERAL_CHAT")
+            if (Tools.test_ENV("GENERAL_CHAT")) {
+                target = Application.getClient().channels.find(x => x.id === process.env.GENERAL_CHAT);
             }
-
 
             Application.modules.Discord.client.on('message', (msg) => {
                 if (msg.author.bot) {

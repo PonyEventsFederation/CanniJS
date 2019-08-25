@@ -65,7 +65,7 @@ module.exports = class MentionCanni extends Module {
                 msg.channel.send(Tools.parseReply(this.config.chrisBrokeMeAnswer, [msg.author]));
             } else if (broken === 110) {
                 msg.channel.send(Tools.parseReply(this.config.xrayBrokeMeAnswer, [msg.author]));
-            } else if (broken >= 10) {
+            } else if (broken <= 10) {
                 msg.channel.send(Tools.parseReply(this.config.remoteAnswer, [msg.author]));
             } else {
                 let random = Tools.getRandomIntFromInterval(0, this.config.howAreYouAnswer.length - 1);
