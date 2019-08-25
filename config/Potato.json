@@ -1,0 +1,37 @@
+{
+  "potatoType": "potato",
+  "bestpotatoType": "bestpotato",
+  "phrase_potato": [
+    "canni is a potato",
+    "canni is potato",
+    "canni = potato",
+    "canni == potato",
+    "canni === potato"
+  ],
+  "phrase_best_potato": [
+    "canni is the best potato",
+    "canni is best potato",
+    "canni > potato",
+    "canni >= potato",
+    "canni is smartato",
+    "canni is best smartato",
+    "canni is the best smartato",
+    "canni is a smartato"
+  ],
+
+  "ans_potato": [
+    "%s hey, I´m not a potato!\nI´m a smart potato!",
+    "%s I´m a smart potato\nA Smartato!",
+    "%s I´m the smartest potato around!",
+    "%s Smartato! GlaDos would be proud!",
+    "Smartato!"
+  ],
+  "ans_best_potato": [
+    "%s I´m the best potato around!",
+    "%s I´m the incredible smartato!",
+    "%s I´m the smartest potato ever!",
+    "%s Indeed. I´m the best potato! GlaDos would be proud!",
+    "%s I´m as smart as GlaDos just in nice and friendly!",
+    "The best Smartato!"
+  ]
+}
