@@ -25,7 +25,7 @@ module.exports = class NoMessageProcessor extends Module {
                 }
 
                 // When no message was sent, Canni either says she doesn't understand, or boops someone at random if she's not mentioned.
-                if (msg.isMemberMentioned(Application.modules.Discord.client.user)) {
+                if (msg.isMemberMentioned(Application.getClient().user)) {
                     msg.channel.send(Tools.parseReply(this.config.stillLearningAnswer, [Application.modules.Discord.getEmoji('shy')]));
                 } else {
                     let random = Tools.getRandomIntFromInterval(0, 200);
@@ -36,7 +36,6 @@ module.exports = class NoMessageProcessor extends Module {
                     if (random === 42) {
                         Application.modules.GamerCanni.letsPlay(msg, this.config.playGameAnswer);
                     }
-
                 }
             });
 
