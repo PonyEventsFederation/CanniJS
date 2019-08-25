@@ -61,10 +61,12 @@ module.exports = class MentionCanni extends Module {
         if (Application.modules.Discord.controlTalkedRecently(msg, this.config.howAreYouType)) {
             let broken = Tools.getRandomIntFromInterval(0, 200);
 
-            if (broken === 10) {
+            if (broken === 100) {
                 msg.channel.send(Tools.parseReply(this.config.chrisBrokeMeAnswer, [msg.author]));
-            } else if (broken === 20) {
-                msg.channel.send(Tools.parseReply(this.config.xrayMeAnswer, [msg.author]));
+            } else if (broken === 110) {
+                msg.channel.send(Tools.parseReply(this.config.xrayBrokeMeAnswer, [msg.author]));
+            } else if (broken >= 10) {
+                msg.channel.send(Tools.parseReply(this.config.remoteAnswer, [msg.author]));
             } else {
                 let random = Tools.getRandomIntFromInterval(0, this.config.howAreYouAnswer.length - 1);
                 msg.channel.send(Tools.parseReply(this.config.howAreYouAnswer[random], [msg.author]));

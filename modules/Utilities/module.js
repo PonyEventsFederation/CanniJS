@@ -41,7 +41,7 @@ module.exports = class Utilities extends Module {
     }
 
     bye_night(msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.byenightType, false, 'channel', undefined, undefined, 45000)) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.byenightType, false, 'channel', undefined, undefined, 90000)) {
             let random = Tools.getRandomIntFromInterval(0, this.config.ans_bye_night.length - 1);
             msg.channel.send(Tools.parseReply(this.config.ans_bye_night[random]));
             Application.modules.Discord.setMessageSent();
@@ -49,7 +49,7 @@ module.exports = class Utilities extends Module {
     }
 
     bye(msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.byeType, false, 'channel', undefined, undefined, 45000)) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.byeType, false, 'channel', undefined, undefined, 90000)) {
             let random = Tools.getRandomIntFromInterval(0, this.config.ans_bye.length - 1);
             msg.channel.send(Tools.parseReply(this.config.ans_bye[random]));
             Application.modules.Discord.setMessageSent();
@@ -57,7 +57,7 @@ module.exports = class Utilities extends Module {
     }
 
     hello(msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.helloType, false, 'channel', undefined, undefined, 45000)) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.helloType, false, 'channel', undefined, undefined, 90000)) {
             let random = Tools.getRandomIntFromInterval(0, this.config.ans_hello.length - 1);
             msg.channel.send(Tools.parseReply(this.config.ans_hello[random]));
             Application.modules.Discord.setMessageSent();
@@ -65,7 +65,7 @@ module.exports = class Utilities extends Module {
     }
 
     hello_morning(msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.hello_morning_Type, false, 'channel', undefined, undefined, 45000)) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.hello_morning_Type, false, 'channel', undefined, undefined, 90000)) {
             let random = Tools.getRandomIntFromInterval(0, this.config.ans_hello_morning.length - 1);
             msg.channel.send(Tools.parseReply(this.config.ans_hello_morning[random]));
             Application.modules.Discord.setMessageSent();

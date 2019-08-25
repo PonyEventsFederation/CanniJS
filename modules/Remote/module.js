@@ -90,7 +90,9 @@ module.exports = class Remote extends Module {
 
     remoteControl(msg) {
         if (user === msg.author && sender === msg.channel) {
-            target.send(Tools.parseReply(msg.content));
+            let content = msg.content;
+            content = Tools.emoji_parser(content, msg.client);
+            target.send(Tools.parseReply(content));
             Application.modules.Discord.setMessageSent();
         }
     }

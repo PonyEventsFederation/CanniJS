@@ -8,7 +8,8 @@
         "%s I'm a bit sad that it's not GalaCon yet."
     ],
     "chrisBrokeMeAnswer": "%s I'm not sure. I think ChrisFhey might've broken something again...",
-    "xrayMeAnswer": "%s I'm not sure. I think Xray messed up something with the Python environment again...",
+    "xrayBrokeMeAnswer": "%s I'm not sure. I think Xray messed up something with the Python environment again...",
+    "remoteAnswer": "%s Sometimes I feel like I´m being remote controlled...",
     "loveCanniType": "loveCanni",
     "howAreYouType": "howAreYou",
     "memberCountType": "memberCount",
