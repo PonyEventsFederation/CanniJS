@@ -28,7 +28,7 @@ module.exports = class Hug extends Module {
 
                 // Politely asking for a hug from Canni.
                 if (msg.isMemberMentioned(Application.modules.Discord.client.user)) {
-                    if (Tools.msg_contains(msg,'can i have a hug')) {
+                    if (Tools.msg_contains_list(msg,this.config.phrase_askHug)) {
                         return this.requestHug(msg);
                     }
                 }
@@ -37,20 +37,34 @@ module.exports = class Hug extends Module {
                     if (msg.mentions !== null && !msg.mentions.everyone && msg.mentions.users.array().length > 0) {
                         let users = msg.mentions.users.array();
 
-                        for (let i = 0; i < users.length; i++) {
-                            // Hug targeted at Canni.
-                            if (Application.checkSelf(users[i].id)) {
-                                this.botHug(msg);
-                                continue;
+                        if (users.length > this.config.hugLimit) {
+                            let cooldownMessage = Tools.parseReply(this.config.cooldownMessage, [msg.author, Application.modules.Discord.getEmoji('error')]);
+
+                            if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.hugType)) {
+                                Application.modules.Discord.setCooldown(msg.author.id, this.config.hugType, this.config.hugTimeout);
+                                Application.modules.Discord.sendCooldownMessage(msg, msg.author.id + this.config.hugType, cooldownMessage, false);
+                                this.log.info(`${msg.author} added to hug cooldown list.`);
                             }
 
-                            // Hugs targeted at self.
-                            if (users[i].id === msg.author.id) {
-                                this.selfHug(msg);
-                                continue;
-                            }
+                            Application.modules.Discord.setMessageSent();
+                        }
 
-                            this.hug(users[i], msg);
+                        if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.hugType)) {
+                            for (let i = 0; i < users.length; i++) {
+                                // Hug targeted at Canni.
+                                if (Application.checkSelf(users[i].id)) {
+                                    this.botHug(msg);
+                                    continue;
+                                }
+
+                                // Hugs targeted at self.
+                                if (users[i].id === msg.author.id) {
+                                    this.selfHug(msg);
+                                    continue;
+                                }
+
+                                this.hug(users[i], msg);
+                            }
                         }
                     }
                 }

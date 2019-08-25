@@ -15,8 +15,9 @@ module.exports = class Help extends Module {
 
             let path = Application.config.config_path + "/Text/help.txt";
             let prep = this.prepare_help;
-            fs.readFile(path, function(err, buf) {
-                if (err) { console.log(err) }
+
+            fs.readFile(path, function (err, buf) {
+                if (err) { this.log.error(err) }
                 help_list = prep(buf.toString());
             });
 
@@ -35,32 +36,37 @@ module.exports = class Help extends Module {
     }
 
     recursiveSender(msg, counter, sender) {
-        msg.author.send(Tools.parseReply(help_list[counter], [msg.author])).then(function (res) {
-            if (counter < help_list.length-1) {
-                sender(msg, counter+1, sender);
+        msg.author.send(Tools.parseReply(help_list[counter] + "_ _", [msg.author])).then(function (res) {
+            if (counter < help_list.length - 1) {
+                sender(msg, counter + 1, sender)
             }
+        }).catch(function (error) {
+            Application.modules.Help.log.error(error);
         });
     }
 
     prepare_help(data_in) {
         let pre = [];
         let tmp = "";
-        data_in = data_in.split("\n");
-        let first = data_in.shift()+ "\n";
-        data_in.forEach(function (item) {
-            if (item !== "\r") {tmp += item + "\n";}
-            else {
-                tmp += item + "\n";
-                pre.push(tmp);
-                if (tmp.length >= 1999) {console.log("Warning Help Paragraph to long.")}
-                tmp = "";
-            }
+
+        data_in = data_in.split("\n\n");
+        let first = data_in.shift();
+
+        data_in.forEach(function (item, index, array) {
+            tmp += item + "\n";
+            pre.push(tmp);
+
+            if (tmp.length >= 1999) Application.modules.Help.log.error("Help Paragraph too long.");
+
+            tmp = (index === (array.length - 1)) ? "" : "\n";
         });
+
         pre.push(tmp);
         tmp = "";
         let count = 0;
         let res = [];
         res.push(first);
+
         pre.forEach(function (item) {
             if (count + item.length < 1999) {
                 tmp += item;
@@ -71,6 +77,7 @@ module.exports = class Help extends Module {
                 count = item.length;
             }
         });
+
         res.push(tmp);
         return res;
     }

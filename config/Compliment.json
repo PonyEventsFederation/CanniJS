@@ -1,0 +1,17 @@
+{
+  "selfcomplimentType":"selfcomplimentType",
+  "usercomplimentType": "usercomplimentType",
+  "botcomplimentType": "botcomplimentType",
+
+  "ans_self_compliment_template": "%s %s",
+  "ans_user_compliment_template": "Hey %s! %s says: %s",
+  "ans_bot_compliment": "Oh thanks %s! That's very sweet of you. %s",
+  "ans_compliment_dev": "%s Hey, wait a minute! You are one of my creators!\nMaking me compliment you is too much self-praise...",
+  "ans_compliment_dev_final": [
+    "Ok... Fine...\n%s You are a nice developer.",
+    "Ok... Fine...\n%s You are a good programmer."
+  ],
+
+  "complimentDevTimeout": 7000
+
+}

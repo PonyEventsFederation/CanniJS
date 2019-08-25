@@ -11,6 +11,9 @@ module.exports = class Boop extends Module {
         return new Promise((resolve, reject) => {
             this.log.debug("Starting...");
 
+            this.boopCooldown = new Set();
+            this.messageSent = new Set();
+
             Application.modules.Discord.client.on('message', (msg) => {
                 if (msg.author.bot) {
                     return;
@@ -28,13 +31,27 @@ module.exports = class Boop extends Module {
                     if (msg.mentions !== null && !msg.mentions.everyone && msg.mentions.users.array().length > 0) {
                         let users = msg.mentions.users.array();
 
-                        for (let i = 0; i < users.length; i++) {
-                            if (Application.checkSelf(users[i].id)) {
-                                this.selfBoop(msg);
-                                continue;
+                        if (users.length > this.config.boopLimit) {
+                            let cooldownMessage = Tools.parseReply(this.config.cooldownMessage, [msg.author, Application.modules.Discord.getEmoji('error')]);
+
+                            if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.boopType)) {
+                                Application.modules.Discord.setCooldown(msg.author.id, this.config.boopType, this.config.boopTimeout);
+                                Application.modules.Discord.sendCooldownMessage(msg, msg.author.id + this.config.boopType, cooldownMessage, false);
+                                this.log.info(`${msg.author} added to boop cooldown list.`);
                             }
 
-                            this.boop(msg,users[i]);
+                            Application.modules.Discord.setMessageSent();
+                        }
+
+                        if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.boopType)) {
+                            for (let i = 0; i < users.length; i++) {
+                                if (Application.checkSelf(users[i].id)) {
+                                    this.selfBoop(msg);
+                                    continue;
+                                }
+
+                                this.boop(msg,users[i]);
+                            }
                         }
                     }
                 }

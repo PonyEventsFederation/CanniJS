@@ -1,6 +1,6 @@
 {
     "requestHugAnswer": [
-        "%s Of course you can! \n*HUGS* %s %s"
+        "%s Of course you can have a hug! \n*HUGS* %s %s"
     ],
     "botHugAnswer": [
         "Awwww. That's very sweet of you. \nThank you %s. %s"
@@ -10,5 +10,15 @@
     ],
     "hugAnswer": [
         "Hey %s! %s hugged you %s"
-    ]
+    ],
+
+    "phrase_askHug" : [
+        "can I get a hug",
+        "can i have a hug",
+        "please hug me"
+    ],
+    "cooldownMessage": "%s Oh my. I can't keep up with that many hugs. You'll have to let me cool down for a bit! %s",
+    "hugLimit": 3,
+    "hugTimeout": 180000,
+    "hugType": "hugType"
 }

@@ -2,13 +2,14 @@
   "byenightType": "byenightType",
   "phrase_bye_night":[
     "good night",
-    "nighty night"
+    "nighty night",
+    "nini"
   ],
   "ans_bye_night": [
-    "Good Night %s",
-    "Sleep well %s",
-    "Sweet dreams %s",
-    "Have a good sleep %s"
+    "Good night",
+    "Sleep well",
+    "Sweet dreams",
+    "Sleep well"
   ],
 
   "byeType": "byeType",
@@ -16,9 +17,9 @@
     "bye"
   ],
   "ans_bye": [
-    "%s Bye, see you soon.",
-    "%s Bye, come back soon.",
-    "%s Don´t be away for too long"
+    "Bye, see you soon.",
+    "Bye, come back soon.",
+    "Don´t stay away for too long"
   ],
 
   "helloType": "helloType",
@@ -27,11 +28,11 @@
     "hi"
   ],
   "ans_hello": [
-    "Hello %s",
-    "Hello %s, welcome back.",
-    "Hi %s, nice to see you again.",
-    "%s Hi, how are you?",
-    "%s Hey, how are you today?"
+    "Hello",
+    "Hello, welcome back.",
+    "Hi, nice to see you again.",
+    "Hi, how are you?",
+    "Hey, how are you today?"
   ],
 
   "hello_morning_Type": "hello_morning_Type",
@@ -39,8 +40,8 @@
     "good morning"
   ],
   "ans_hello_morning": [
-    "%s Good morning",
+    "Good morning",
     "Rise and shine.",
-    "%s Good morning. How are you today?"
+    "Good morning. How are you today?"
   ]
 }

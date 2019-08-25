@@ -8,7 +8,26 @@
         "%s I'm a bit sad that it's not GalaCon yet."
     ],
     "chrisBrokeMeAnswer": "%s I'm not sure. I think ChrisFhey might've broken something again...",
+    "xrayBrokeMeAnswer": "%s I'm not sure. I think Xray messed up something with the Python environment again...",
+    "remoteAnswer": "%s Sometimes I feel like I´m being remote controlled...",
     "loveCanniType": "loveCanni",
     "howAreYouType": "howAreYou",
-    "cooldownMessageLove": "I cannot handle this much love! %s"
+    "memberCountType": "memberCount",
+    "cooldownMessageLove": "I cannot handle this much love! %s",
+
+    "phrase_how_are_you": [
+        "how are you",
+        "I am fine and u",
+        "I am fine and you",
+        "and you?",
+        "and u?"
+    ],
+
+    "phrase_how_many_members": [
+        "how many are we",
+        "how many members are there",
+        "how many members are on the server"
+    ],
+
+    "ans_memberCount": "There are currently %s server members."
 }

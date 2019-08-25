@@ -1,0 +1,7 @@
+{
+  "ans_activate": "Remote listener is now active.",
+  "ans_deactivate": "Remote listener is now deactivated.",
+  "ans_already_deactivate": "Remote listener is already deactivated.",
+  "ans_in_use": "The Remote control is currently in use. Please deactivate it first.",
+  "ans_not_availabel": "Remote control currently not available."
+}

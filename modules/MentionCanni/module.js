@@ -25,18 +25,25 @@ module.exports = class MentionCanni extends Module {
                 }
 
                 if (msg.isMemberMentioned(Application.modules.Discord.client.user)) {
-                    if (Tools.msg_contains(msg, 'i love you') || Tools.msg_contains(msg, 'we love you')) {
-                        return this.love(msg);
-                    }
-
-                    if (Tools.msg_contains(msg, 'how are you')) {
-                        return this.howAreYou(msg);
-                    }
+                    return this.CanniIsMentioned(msg);
                 }
             });
 
             return resolve(this);
         });
+    }
+
+    CanniIsMentioned(msg) {
+        if (Tools.msg_contains(msg, 'i love you') || Tools.msg_contains(msg, 'we love you')) {
+            return this.love(msg);
+        }
+
+        if (Tools.msg_contains_list(msg,this.config.phrase_how_are_you)) {
+            return this.howAreYou(msg);
+        }
+        if (Tools.msg_contains_list(msg,this.config.phrase_how_many_members)) {
+            return this.memberCount(msg)
+        }
     }
 
     love(msg) {
@@ -54,8 +61,12 @@ module.exports = class MentionCanni extends Module {
         if (Application.modules.Discord.controlTalkedRecently(msg, this.config.howAreYouType)) {
             let broken = Tools.getRandomIntFromInterval(0, 200);
 
-            if (broken === 10) {
+            if (broken === 100) {
                 msg.channel.send(Tools.parseReply(this.config.chrisBrokeMeAnswer, [msg.author]));
+            } else if (broken === 110) {
+                msg.channel.send(Tools.parseReply(this.config.xrayBrokeMeAnswer, [msg.author]));
+            } else if (broken <= 10) {
+                msg.channel.send(Tools.parseReply(this.config.remoteAnswer, [msg.author]));
             } else {
                 let random = Tools.getRandomIntFromInterval(0, this.config.howAreYouAnswer.length - 1);
                 msg.channel.send(Tools.parseReply(this.config.howAreYouAnswer[random], [msg.author]));
@@ -63,6 +74,13 @@ module.exports = class MentionCanni extends Module {
 
             Application.modules.Discord.setMessageSent();
         }
+    }
+
+    memberCount(msg) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.memberCountType)) {
+            msg.channel.send(Tools.parseReply(this.config.ans_memberCount, [msg.guild.memberCount]));
+        }
+        Application.modules.Discord.setMessageSent();
     }
 
     stop() {
