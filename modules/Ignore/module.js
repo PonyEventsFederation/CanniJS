@@ -82,7 +82,7 @@ module.exports = class Ignore extends Module {
     }
 
     ignored(msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.potato_ignoredType, false, 'message', undefined, undefined, 300000)) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.potato_ignoredType, false, 'message', undefined, undefined, 600000)) {
             msg.channel.send(Tools.parseReply(this.config.ans_potato_ignore, [msg.author])).then(sentEmbed => {
                 //msg.react(potato_emo);
             });
@@ -90,7 +90,7 @@ module.exports = class Ignore extends Module {
     }
 
     ignored_mentioned(msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.potato_ignored_mentionedType, false, 'message', undefined, undefined, 300000)) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.potato_ignored_mentionedType, false, 'message', undefined, undefined, 600000)) {
             msg.channel.send(Tools.parseReply(this.config.ans_potato_ignored_mentioned, [msg.author])).then(sentEmbed => {
                 //msg.react(potato_emo);
             });
