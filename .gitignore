@@ -106,3 +106,4 @@ Test.js
 config/Drop.json
 modules/Drop/module.js
 modules/Python/scripts/test_script.py
+config/application/ignore_ids.json
