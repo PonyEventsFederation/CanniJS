@@ -24,6 +24,7 @@ Application.configure({
 Application.registerModule("Discord");
 //Application.registerModule("Python");
 Application.registerModule("Remote");
+Application.registerModule("Ignore");
 Application.registerModule("Potato");
 Application.registerModule("UserJoined");
 Application.registerModule("Help");
