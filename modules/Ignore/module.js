@@ -67,7 +67,7 @@ module.exports = class Ignore extends Module {
         if (msg.mentions !== null && !msg.mentions.everyone && msg.mentions.users.array().length === 2) {
             var user = msg.mentions.users.array().find(x => x.id !== Application.getClientId());
             this.ignore_id_add(user.id);
-            msg.channel.send(Tools.parseReply(this.config.ans_potato_begin_ignore, [user]));
+            msg.channel.send(Tools.parseReply(this.config.ans_potato_begin_ignore, [msg.author]));
             Application.modules.Discord.setMessageSent();
         }
     }
