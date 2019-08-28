@@ -12,9 +12,12 @@ module.exports = class UserJoined extends Module {
             this.log.debug("Starting...");
 
             Application.modules.Discord.client.on('guildMemberAdd', member => {
-                setTimeout(() => {
-                    member.guild.channels.get(this.config.generalChannelId).send(Tools.parseReply(this.config.welcomeMessage, [member]));
-                }, this.config.welcomeMessageDelay);
+                this.log.info("Member joined on guild " + member.guild.name);
+                if (member.guild.channels.get(this.config.generalChannelId)) {
+                    setTimeout(() => {
+                        member.guild.channels.get(this.config.generalChannelId).send(Tools.parseReply(this.config.welcomeMessage, [member]));
+                    }, this.config.welcomeMessageDelay);
+                }
             });
 
             return resolve(this);
