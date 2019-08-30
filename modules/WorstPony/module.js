@@ -17,7 +17,7 @@ module.exports = class WorstPony extends Module {
                 }
 
                 if (msg.isMemberMentioned(Application.modules.Discord.client.user)) {
-                    if (Tools.msg_contains(msg,'i\'m sorry') || Tools.msg_contains(msg,'i am sorry')) {
+                    if (Tools.msg_contains(msg, 'i\'m sorry') || Tools.msg_contains(msg, 'i am sorry') || Tools.msg_contains(msg, 'i’m sorry')) {
                         return this.forgiveUser(msg);
                     }
                 }
@@ -30,7 +30,7 @@ module.exports = class WorstPony extends Module {
                     return;
                 }
 
-                if (Tools.msg_contains(msg,' is worst pony')) {
+                if (Tools.msg_contains(msg, ' is worst pony')) {
                     return this.whoIsWorstPony(msg);
                 }
             });
