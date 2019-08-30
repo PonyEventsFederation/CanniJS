@@ -42,6 +42,7 @@ Application.registerModule("Solver");
 Application.registerModule("GamerCanni");
 Application.registerModule("Utilities");
 Application.registerModule("Compliment");
+Application.registerModule("Hype");
 Application.registerModule("NoMessageProcessor");
 
 
