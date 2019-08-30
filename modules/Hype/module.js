@@ -39,7 +39,7 @@ module.exports = class Hype extends Module {
     }
 
     hype(msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.hypeType)) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.hypeType, false , undefined, undefined, undefined, 120000)) {
             msg.channel.send(Tools.parseReply(this.config.ans_hype, [this.bizaamEmoji]), {files:[path]});
 
             Application.modules.Discord.setMessageSent();
