@@ -38,7 +38,7 @@ module.exports = class RockPaperScissors extends Module {
     }
 
     sleep(milliseconds) {
-       return new Promise(resolve => setTimeout(resolve, milliseconds));
+        return new Promise(resolve => setTimeout(resolve, milliseconds));
     }
 
     reactMultiple(msg, emojis) {
@@ -50,7 +50,7 @@ module.exports = class RockPaperScissors extends Module {
     }
 
     getEmojiName(emoji) {
-        switch(emoji) {
+        switch (emoji) {
             case '👊':
                 return 'rock';
             case '🖐':
@@ -76,6 +76,7 @@ module.exports = class RockPaperScissors extends Module {
         if (gameType === null) {
             gameType = Math.random() < 0.5 ? "rps" : "rpsls";
         }
+
         let emojis, gameName;
         switch (gameType) {
             case "rps":
@@ -113,7 +114,7 @@ module.exports = class RockPaperScissors extends Module {
     }
 
     play(msg, userChoice, choices) {
-        let canniChoice = this.getEmojiName(choices[Math.floor(Math.random()*choices.length)]);
+        let canniChoice = this.getEmojiName(choices[Math.floor(Math.random() * choices.length)]);
 
         let result;
         if (userChoice === canniChoice) {
