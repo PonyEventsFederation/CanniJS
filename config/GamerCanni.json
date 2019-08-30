@@ -1,5 +1,7 @@
 {
-    "playGameAnswer": "%s Sure thing!\nLet's play *Rock, Paper, Scissors!* \n\n %sI already picked! Now you pick:",
+    "playGameAnswer": "%s Sure thing!\nLet's play *%s!* \n\n %sI already picked! Now you pick:",
+    "playTypeRPS": "Rock, Paper, Scissors",
+    "playTypeRPSLS": "Rock, Paper, Scissors, Lizard, Spock",
     "tieMessage": "%s Oh! It's a tie! I also picked %s! %s",
     "playerWinMessage": "%s Yay! You won! I picked %s. %s",
     "canniWinMessage": "%s *giggles* Yay, I won! I picked %s!\nBut don't feel bad. I'm sure you'll win next time. %s",
