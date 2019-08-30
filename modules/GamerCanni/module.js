@@ -91,6 +91,8 @@ module.exports = class RockPaperScissors extends Module {
                 return;
         }
 
+        const canniChoice = this.getEmojiName(choices[Math.floor(Math.random() * choices.length)]);
+
         msg.channel.send(Tools.parseReply(flavourText, [msg.author, gameName, Application.modules.Discord.getEmoji('excited')])).then(sentEmbed => {
             this.reactMultiple(sentEmbed, emojis);
 
@@ -101,8 +103,8 @@ module.exports = class RockPaperScissors extends Module {
             sentEmbed.awaitReactions(filter, { max: 1, time: 30000, errors: ['time'] }).then(collected => {
                 const reaction = collected.first();
 
-                const emojiName = this.getEmojiName(reaction.emoji.name);
-                this.play(msg, emojiName, emojis);
+                const userChoice = this.getEmojiName(reaction.emoji.name);
+                this.play(msg, userChoice, canniChoice, emojis);
                 this.log.info('User chose ' + emojiName);
             }).catch(() => {
                 this.log.info('User decided not to play');
@@ -113,9 +115,7 @@ module.exports = class RockPaperScissors extends Module {
         Application.modules.Discord.setMessageSent();
     }
 
-    play(msg, userChoice, choices) {
-        let canniChoice = this.getEmojiName(choices[Math.floor(Math.random() * choices.length)]);
-
+    play(msg, userChoice, canniChoice, choices) {
         let result;
         if (userChoice === canniChoice) {
             result = 'tie';
