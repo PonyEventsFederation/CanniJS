@@ -91,7 +91,7 @@ module.exports = class RockPaperScissors extends Module {
                 return;
         }
 
-        const canniChoice = this.getEmojiName(choices[Math.floor(Math.random() * choices.length)]);
+        const canniChoice = this.getEmojiName(emojis[Math.floor(Math.random() * emojis.length)]);
 
         msg.channel.send(Tools.parseReply(flavourText, [msg.author, gameName, Application.modules.Discord.getEmoji('excited')])).then(sentEmbed => {
             this.reactMultiple(sentEmbed, emojis);
@@ -105,7 +105,7 @@ module.exports = class RockPaperScissors extends Module {
 
                 const userChoice = this.getEmojiName(reaction.emoji.name);
                 this.play(msg, userChoice, canniChoice, emojis);
-                this.log.info('User chose ' + emojiName);
+                this.log.info('User chose ' + userChoice);
             }).catch(() => {
                 this.log.info('User decided not to play');
                 msg.reply(Tools.parseReply(this.config.didNotPlayAnswer, [Application.modules.Discord.getEmoji('shy')]));
