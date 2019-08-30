@@ -56,10 +56,12 @@ module.exports = class Remote extends Module {
     }
 
     remoteSwitch(msg) {
+        Application.modules.NoMessageProcessor.remote_target = target;
         if (active) {
             if (sender === msg.channel) {
                 active = !active;
                 sender = null;
+                Application.modules.NoMessageProcessor.remote_on = false;
                 msg.channel.send(Tools.parseReply(this.config.ans_deactivate));
             } else {
                 msg.channel.send(Tools.parseReply(this.config.ans_in_use));
@@ -68,6 +70,7 @@ module.exports = class Remote extends Module {
             active = !active;
             user = msg.author;
             sender = msg.channel;
+            Application.modules.NoMessageProcessor.remote_on = true;
             msg.channel.send(Tools.parseReply(this.config.ans_activate));
 
         }
@@ -78,6 +81,7 @@ module.exports = class Remote extends Module {
         if (active) {
             active = false;
             sender = null;
+            Application.modules.NoMessageProcessor.remote_on = false;
             msg.channel.send(Tools.parseReply(this.config.ans_deactivate));
         } else {
             msg.channel.send(Tools.parseReply(this.config.ans_already_deactivate));
@@ -89,6 +93,7 @@ module.exports = class Remote extends Module {
         if (user === msg.author && sender === msg.channel) {
             let content = msg.content;
             content = Tools.emoji_parser(content, msg.client);
+            content = Tools.mention_parser(content, target);
             target.send(Tools.parseReply(content));
             Application.modules.Discord.setMessageSent();
         }
