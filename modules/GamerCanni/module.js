@@ -37,41 +37,73 @@ module.exports = class RockPaperScissors extends Module {
         });
     }
 
-    letsPlay(msg, flavourText = null) {
+    sleep(milliseconds) {
+        return new Promise(resolve => setTimeout(resolve, milliseconds));
+    }
+
+    reactMultiple(msg, emojis) {
+        if (!emojis.length) {
+            return Promise.resolve();
+        }
+        msg.react(emojis[0]);
+        return this.sleep(300).then(() => this.reactMultiple(msg, emojis.slice(1)));
+    }
+
+    getEmojiName(emoji) {
+        switch (emoji) {
+            case '👊':
+                return 'rock';
+            case '🖐':
+                return 'paper';
+            case '✌':
+                return 'scissors';
+            case '🦎':
+                return 'lizard';
+            case '🖖':
+                return 'Spock';
+            default:
+                return emoji;
+        }
+    }
+
+    letsPlay(msg, flavourText = null, gameType = null) {
         this.log.info('started playing game');
 
         if (flavourText === null) {
             flavourText = this.config.playGameAnswer;
         }
 
-        msg.channel.send(Tools.parseReply(flavourText, [msg.author, Application.modules.Discord.getEmoji('excited')])).then(sentEmbed => {
-            sentEmbed.react('👊');
+        if (gameType === null) {
+            gameType = Math.random() < 0.5 ? "rps" : "rpsls";
+        }
 
-            setTimeout(() => {
-                sentEmbed.react('🖐');
-            }, 300);
+        let emojis, gameName;
+        switch (gameType) {
+            case "rps":
+                emojis = ['👊', '🖐', '✌'];
+                gameName = this.config.playTypeRPS;
+                break;
+            case "rpsls":
+                emojis = ['👊', '🖐', '✌', '🦎', '🖖'];
+                gameName = this.config.playTypeRPSLS;
+                break;
+            default:
+                return;
+        }
 
-            setTimeout(() => {
-                sentEmbed.react('✌');
-            }, 600);
+        msg.channel.send(Tools.parseReply(flavourText, [msg.author, gameName, Application.modules.Discord.getEmoji('excited')])).then(sentEmbed => {
+            this.reactMultiple(sentEmbed, emojis);
 
             const filter = (reaction, user) => {
-                return ['👊', '🖐', '✌'].includes(reaction.emoji.name) && user.id === msg.author.id;
+                return emojis.includes(reaction.emoji.name) && user.id === msg.author.id;
             };
 
             sentEmbed.awaitReactions(filter, { max: 1, time: 30000, errors: ['time'] }).then(collected => {
                 const reaction = collected.first();
 
-                if (reaction.emoji.name === '👊') {
-                    this.play(msg, 'rock');
-                    this.log.info('User chose rock');
-                } else if (reaction.emoji.name === '🖐') {
-                    this.play(msg, 'paper');
-                    this.log.info('User chose paper');
-                } else {
-                    this.play(msg, 'scissors');
-                    this.log.info('User chose scissors');
-                }
+                const emojiName = this.getEmojiName(reaction.emoji.name);
+                this.play(msg, emojiName, emojis);
+                this.log.info('User chose ' + emojiName);
             }).catch(() => {
                 this.log.info('User decided not to play');
                 msg.reply(Tools.parseReply(this.config.didNotPlayAnswer, [Application.modules.Discord.getEmoji('shy')]));
@@ -81,58 +113,57 @@ module.exports = class RockPaperScissors extends Module {
         Application.modules.Discord.setMessageSent();
     }
 
-    play(msg, userChoice) {
-        let canniChoice = Math.random();
-        let canni;
-        if (canniChoice >= 0 && canniChoice <= 0.33) {
-            canni = "rock";
-        } else if (canniChoice >= 0.34 && canniChoice <= 0.66) {
-            canni = "paper";
-        } else {
-            canni = "scissors";
+    play(msg, userChoice, choices) {
+        let canniChoice = this.getEmojiName(choices[Math.floor(Math.random() * choices.length)]);
+
+        let result;
+        if (userChoice === canniChoice) {
+            result = 'tie';
+        } else if (userChoice === "rock") {
+            if (canniChoice === "scissors" || canniChoice == "lizard") {
+                result = "playerWin";
+            } else {
+                result = "canniWin";
+            }
+        } else if (userChoice === "paper") {
+            if (canniChoice === "rock" || canniChoice == "Spock") {
+                result = "playerWin";
+            } else {
+                result = "canniWin";
+            }
+        } else if (userChoice === "scissors") {
+            if (canniChoice === "paper" || canniChoice == "lizard") {
+                result = "playerWin";
+            } else {
+                result = "canniWin";
+            }
+        } else if (userChoice === "lizard") {
+            if (canniChoice === "paper" || canniChoice == "Spock") {
+                result = "playerWin";
+            } else {
+                result = "canniWin";
+            }
+        } else if (userChoice === "Spock") {
+            if (canniChoice === "scissors" || canniChoice == "rock") {
+                result = "playerWin";
+            } else {
+                result = "canniWin";
+            }
         }
 
-        const compare = (choice1, choice2) => {
-            let result;
-
-            if (choice1 === choice2) {
-                result = 'tie';
-            } else if (choice1 === "rock") {
-                if (choice2 === "scissors") {
-                    result = "playerWin";
-                } else {
-                    result = "canniWin";
-                }
-            } else if (choice1 === "paper") {
-                if (choice2 === "rock") {
-                    result = "playerWin";
-                } else {
-                    result = "canniWin";
-                }
-            } else if (choice1 === "scissors") {
-                if (choice2 === "paper") {
-                    result = "playerWin";
-                } else {
-                    result = "canniWin";
-                }
-            }
-
-            return [result, choice2];
-        };
-
-        return this.resultMessage(msg, compare(userChoice, canni));
+        return this.resultMessage(msg, canniChoice, result);
     }
 
-    resultMessage(msg, result) {
-        switch (result[0]) {
+    resultMessage(msg, canniChoice, result) {
+        switch (result) {
             case 'tie':
-                msg.channel.send(Tools.parseReply(this.config.tieMessage, [msg.author, result[1], Application.modules.Discord.getEmoji('hello')]));
+                msg.channel.send(Tools.parseReply(this.config.tieMessage, [msg.author, canniChoice, Application.modules.Discord.getEmoji('hello')]));
                 break;
             case 'playerWin':
-                msg.channel.send(Tools.parseReply(this.config.playerWinMessage, [msg.author, result[1], Application.modules.Discord.getEmoji('bizaam')]));
+                msg.channel.send(Tools.parseReply(this.config.playerWinMessage, [msg.author, canniChoice, Application.modules.Discord.getEmoji('bizaam')]));
                 break;
             case 'canniWin':
-                msg.channel.send(Tools.parseReply(this.config.canniWinMessage, [msg.author, result[1], Application.modules.Discord.getEmoji('smile')]));
+                msg.channel.send(Tools.parseReply(this.config.canniWinMessage, [msg.author, canniChoice, Application.modules.Discord.getEmoji('smile')]));
                 break;
         }
 
