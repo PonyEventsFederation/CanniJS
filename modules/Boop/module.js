@@ -73,7 +73,7 @@ module.exports = class Boop extends Module {
 
                         var cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaBoop, [msg.author]);
 
-                        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.canniWorstPonyType, true, 'individual', cooldownMessage, false, megaBoopTimeout)) {
+                        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaBoopType, true, 'individual', cooldownMessage, false, megaBoopTimeout)) {
                             return this.megaBoop(msg, user);
                         }
                     }
