@@ -38,10 +38,15 @@ module.exports = class MentionCanni extends Module {
             return this.love(msg);
         }
 
-        if (Tools.msg_contains_list(msg,this.config.phrase_how_are_you)) {
+        if (Tools.msg_contains(msg, 'brohoof') || Tools.msg_contains(msg, '/)')) {
+            return this.broHoof(msg);
+        }
+
+        if (Tools.msg_contains_list(msg, this.config.phrase_how_are_you)) {
             return this.howAreYou(msg);
         }
-        if (Tools.msg_contains_list(msg,this.config.phrase_how_many_members)) {
+
+        if (Tools.msg_contains_list(msg, this.config.phrase_how_many_members)) {
             return this.memberCount(msg)
         }
     }
@@ -80,6 +85,14 @@ module.exports = class MentionCanni extends Module {
         if (Application.modules.Discord.controlTalkedRecently(msg, this.config.memberCountType)) {
             msg.channel.send(Tools.parseReply(this.config.ans_memberCount, [msg.guild.memberCount]));
         }
+
+        Application.modules.Discord.setMessageSent();
+    }
+
+    broHoof(msg) {
+        let random = Tools.getRandomIntFromInterval(0, this.config.broHoofAnswer.length - 1);
+        msg.channel.send(Tools.parseReply(this.config.broHoofAnswer[random], [msg.author]));
+
         Application.modules.Discord.setMessageSent();
     }
 
