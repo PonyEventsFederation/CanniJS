@@ -5,8 +5,16 @@
     "selfBoopAnswer": [
         "%s Nu-uh! Don't boop me..... *boops back*. %s"
     ],
+    "megaBoopAnswer": [
+        "All right! Here comes my super powerful, and totally unblockable megaboop!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n**Canni Bot's megaboop crits you for %s damage.**"
+    ],
+    "megaSelfBoopAnswer": [
+        "%s I'm sorry, but I can't do that. \nMy creators added a failsafe so that I don't accidentally damage myself. %s"
+    ],
     "cooldownMessage": "%s Oh my. I can't keep up with that many boops. You'll have to let me cool down for a bit! %s",
+    "cooldownMessageMegaBoop": "%s Oh no! I can't let you megaboop another pony today. That would be far too dangerous!",
     "boopLimit": 3,
     "boopTimeout": 180000,
-    "boopType": "boopType"
+    "boopType": "boopType",
+    "megaBoopType": "megaBoopType"
 }
