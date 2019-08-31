@@ -74,7 +74,7 @@ module.exports = class Boop extends Module {
                         var cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaBoop, [msg.author]);
 
                         if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaBoopType, true, 'individual', cooldownMessage, false, megaBoopTimeout)) {
-                            return this.megaBoop(msg, user);
+                            return this.megaBoopLoader(msg, user);
                         }
                     }
                 }
@@ -98,10 +98,24 @@ module.exports = class Boop extends Module {
         Application.modules.Discord.setMessageSent();
     }
 
+    megaBoopLoader(msg, user) {
+        let hyper_random = Tools.getRandomIntFromInterval(0, 100);
+        if (hyper_random === 1) {
+            this.hyperBoop(msg, user);
+        } else {
+            this.megaBoop(msg, user);
+        }
+    }
+
     megaBoop(msg, user) {
         let random = Tools.getRandomIntFromInterval(0, this.config.megaBoopAnswer.length - 1);
         let damage = Tools.getRandomIntFromInterval(9000, 12000);
-        msg.channel.send(Tools.parseReply(this.config.megaBoopAnswer[random], [user, damage]));
+        let ans = this.config.megaBoopAnswer[random];
+        if (Array.isArray(ans)) {
+            Tools.listSender(msg.channel, ans,1000, [user, damage]);
+        } else {
+            msg.channel.send(Tools.parseReply(ans, [user, damage]));
+        }
 
         Application.modules.Discord.setMessageSent();
     }
@@ -109,6 +123,18 @@ module.exports = class Boop extends Module {
     megaSelfBoop(msg) {
         let random = Tools.getRandomIntFromInterval(0, this.config.megaSelfBoopAnswer.length - 1);
         msg.channel.send(Tools.parseReply(this.config.megaSelfBoopAnswer[random], [msg.author, Application.modules.Discord.getEmoji('hello')]));
+
+        Application.modules.Discord.setMessageSent();
+    }
+
+    hyperBoop(msg, user) {
+        let random = Tools.getRandomIntFromInterval(0, this.config.hyperBoopAnswer.length - 1);
+        let ans = this.config.hyperBoopAnswer[random];
+        if (Array.isArray(ans)) {
+            Tools.listSender(msg.channel, ans,[1000,2000,4000,4000,2000,2000,2000,2000,3000], [user]);
+        } else {
+            msg.channel.send(Tools.parseReply(ans, [user]));
+        }
 
         Application.modules.Discord.setMessageSent();
     }

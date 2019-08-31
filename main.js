@@ -43,6 +43,7 @@ Application.registerModule("GamerCanni");
 Application.registerModule("Utilities");
 Application.registerModule("Compliment");
 Application.registerModule("Hype");
+Application.registerModule("RoutineMessages");
 Application.registerModule("NoMessageProcessor");
 
 
