@@ -6,7 +6,7 @@
         "%s Nu-uh! Don't boop me..... *boops back*. %s"
     ],
     "megaBoopAnswer": [
-        "All right! Here comes my super powerful, and totally unblockable megaboop!\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n**Canni Bot's megaboop crits you for %s damage.**"
+        "All right! Here comes my super powerful, and totally unblockable megaboop!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n**Canni Bot's megaboop crits you for %s damage.**"
     ],
     "megaSelfBoopAnswer": [
         "%s I'm sorry, but I can't do that. \nMy creators added a failsafe so that I don't accidentally damage myself. %s"
