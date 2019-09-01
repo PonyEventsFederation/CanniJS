@@ -28,7 +28,7 @@ module.exports = class Boop extends Module {
                     return;
                 }
 
-                if (Tools.msg_starts(msg,'boop')) {
+                if (Tools.msg_starts(msg, 'boop')) {
                     if (msg.mentions !== null && !msg.mentions.everyone && msg.mentions.users.array().length > 0) {
                         let users = msg.mentions.users.array();
 
@@ -51,7 +51,7 @@ module.exports = class Boop extends Module {
                                     continue;
                                 }
 
-                                this.boop(msg,users[i]);
+                                this.boop(msg, users[i]);
                             }
                         }
                     }
@@ -99,22 +99,43 @@ module.exports = class Boop extends Module {
     }
 
     megaBoopLoader(msg, user) {
-        let hyper_random = Tools.getRandomIntFromInterval(0, 100);
-        if (hyper_random === 1) {
+        let roll = Tools.getRandomIntFromInterval(0, 100);
+
+        if (roll === 100) {
             this.hyperBoop(msg, user);
+        } else if (roll >= 0 && roll <= 5) {
+            this.megaBoop(msg, user, 'miss');
+        } else if (roll >= 90 && roll <= 99) {
+            this.megaBoop(msg, user, 'crit');
         } else {
             this.megaBoop(msg, user);
         }
     }
 
-    megaBoop(msg, user) {
-        let random = Tools.getRandomIntFromInterval(0, this.config.megaBoopAnswer.length - 1);
-        let damage = Tools.getRandomIntFromInterval(9000, 12000);
-        let ans = this.config.megaBoopAnswer[random];
-        if (Array.isArray(ans)) {
-            Tools.listSender(msg.channel, ans,1000, [user, damage]);
+    megaBoop(msg, user, type = 'hit') {
+        let random, damage, answer;
+
+        switch (type) {
+            case 'hit':
+                random = Tools.getRandomIntFromInterval(0, this.config.megaBoopAnswer.length - 1);
+                damage = Tools.getRandomIntFromInterval(9000, 12000);
+                answer = this.config.megaBoopAnswer[random];
+                break;
+            case 'miss':
+                random = Tools.getRandomIntFromInterval(0, this.config.megaBoopAnswer.length - 1);
+                answer = this.config.megaBoopMissAnswer[random];
+                break;
+            case 'crit':
+                random = Tools.getRandomIntFromInterval(0, this.config.megaBoopAnswer.length - 1);
+                damage = Tools.getRandomIntFromInterval(13500, 18000);
+                answer = this.config.megaBoopCritAnswer[random];
+                break;
+        }
+
+        if (Array.isArray(answer)) {
+            Tools.listSender(msg.channel, answer, 1000, [user, damage]);
         } else {
-            msg.channel.send(Tools.parseReply(ans, [user, damage]));
+            msg.channel.send(Tools.parseReply(answer, [user, damage]));
         }
 
         Application.modules.Discord.setMessageSent();
@@ -131,7 +152,7 @@ module.exports = class Boop extends Module {
         let random = Tools.getRandomIntFromInterval(0, this.config.hyperBoopAnswer.length - 1);
         let ans = this.config.hyperBoopAnswer[random];
         if (Array.isArray(ans)) {
-            Tools.listSender(msg.channel, ans,[1000,2000,4000,4000,2000,2000,2000,2000,3000], [user]);
+            Tools.listSender(msg.channel, ans, [1000, 2000, 4000, 4000, 2000, 2000, 2000, 2000, 3000], [user]);
         } else {
             msg.channel.send(Tools.parseReply(ans, [user]));
         }
