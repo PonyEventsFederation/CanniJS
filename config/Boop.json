@@ -6,7 +6,13 @@
         "%s Nu-uh! Don't boop me..... *boops back*. %s"
     ],
     "megaBoopAnswer": [
-        ["All right! Here comes my super powerful, and totally unblockable megaboop!", "Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n**Canni Bot's megaboop crits you with %s damage.**"]
+        ["All right! Here comes my super powerful, and totally unblockable megaboop!", "Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n*Canni Bot's megaboop hits you for %s damage.*"]
+    ],
+    "megaBoopMissAnswer": [
+        ["All right! Here comes my super powerful, and totally unblockable megaboop!", "Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n*Canni Bot's megaboop misses you.*", "Oh no, I missed!"]
+    ],
+    "megaBoopCritAnswer": [
+        ["All right! Here comes my super powerful, and totally unblockable megaboop!", "Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n**Canni Bot's megaboop critically hits you for %s damage.**"]
     ],
     "megaSelfBoopAnswer": [
         "%s I'm sorry, but I can't do that. \nMy creators added a failsafe so that I don't accidentally damage myself. %s"
@@ -18,7 +24,7 @@
             "Hypercharge has been activated!",
             "Converting power to execute **hyperboop**....","...","..",".",
             "Unleashing the ultimate **hyperboop**!",
-            "Incoming!\n\n**( ͡° ͜ʖ (\\  *HYPERBOOPS*** %s \n\n**Canni Bot's hyperboop crits you with *infinite* damage.**"
+            "Incoming!\n\n**( ͡° ͜ʖ (\\  *HYPERBOOPS*** %s \n\n**Canni Bot's hyperboop critically hits you for *infinite* damage.**"
         ]
     ],
     "cooldownMessage": "%s Oh my. I can't keep up with that many boops. You'll have to let me cool down for a bit! %s",
