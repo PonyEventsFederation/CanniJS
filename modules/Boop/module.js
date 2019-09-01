@@ -14,6 +14,8 @@ module.exports = class Boop extends Module {
 
             this.boopCooldown = new Set();
             this.messageSent = new Set();
+            this.interrupt = {inter:false};
+            this.megaon = false;
 
             Application.modules.Discord.client.on('message', (msg) => {
                 if (msg.author.bot) {
@@ -57,6 +59,16 @@ module.exports = class Boop extends Module {
                     }
                 }
 
+                if (Tools.msg_starts(msg, 'devblock')) {
+                    if (Application.modules.DevCommands.auth_dev(msg.author.id)) {
+                        return this.counter(msg,"DevBlock");
+                    }
+                } else if (Tools.msg_starts(msg, 'devcounter')) {
+                    if (Application.modules.DevCommands.auth_dev(msg.author.id)) {
+                        return this.counter(msg, "DevCounter");
+                    }
+                }
+
                 if (Tools.msg_starts(msg, 'mega boop') || Tools.msg_starts(msg, 'megaboop')) {
                     // Calculates the difference between now and midnight in milliseconds.
                     // Only one megaboop is allowed per day.
@@ -66,7 +78,6 @@ module.exports = class Boop extends Module {
 
                     if (msg.mentions !== null && !msg.mentions.everyone && msg.mentions.users.array().length === 1) {
                         let user = msg.mentions.users.array()[0];
-
                         if (Application.checkSelf(user.id)) {
                             return this.megaSelfBoop(msg);
                         }
@@ -114,7 +125,7 @@ module.exports = class Boop extends Module {
 
     megaBoop(msg, user, type = 'hit') {
         let random, damage, answer;
-
+        this.interrupt.inter = false;
         switch (type) {
             case 'hit':
                 random = Tools.getRandomIntFromInterval(0, this.config.megaBoopAnswer.length - 1);
@@ -132,11 +143,23 @@ module.exports = class Boop extends Module {
                 break;
         }
 
-        if (Array.isArray(answer)) {
-            Tools.listSender(msg.channel, answer, 1000, [user, damage]);
-        } else {
-            msg.channel.send(Tools.parseReply(answer, [user, damage]));
+        let init_delay = 500;
+        let delay = 2000;
+
+        if (Application.modules.DevCommands.auth_dev(msg.author.id)) {
+            init_delay += 1500;
+            delay += 3000;
         }
+
+        this.counterWindow(delay+init_delay);
+
+        setTimeout(function () {
+            if (Array.isArray(answer)) {
+                Tools.listSender(msg.channel, answer, [delay,2000], [user, damage], this.interrupt);
+            } else {
+                msg.channel.send(Tools.parseReply(answer, [user, damage]));
+            }
+        }.bind(this), init_delay);
 
         Application.modules.Discord.setMessageSent();
     }
@@ -158,6 +181,24 @@ module.exports = class Boop extends Module {
         }
 
         Application.modules.Discord.setMessageSent();
+    }
+
+    counter(msg, type) {
+        if (this.megaon) {
+            this.interrupt.inter = true;
+            setTimeout(function () {
+                Tools.listSender(msg.channel, this.config.megaBoopDevBlock, [2000], [msg.author,type]);
+                //msg.channel.send(Tools.parseReply(this.config.megaboopdevblock, ["s"]));
+            }.bind(this),2000);
+        }
+        Application.modules.Discord.setMessageSent();
+    }
+
+    counterWindow(time) {
+        this.megaon = true;
+        setTimeout(function () {
+            this.megaon = false;
+        }.bind(this), time)
     }
 
     stop() {

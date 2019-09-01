@@ -6,19 +6,20 @@
         "%s Nu-uh! Don't boop me..... *boops back*. %s"
     ],
     "megaBoopAnswer": [
-        ["All right! Here comes my super powerful, and totally unblockable megaboop!", "Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n*Canni Bot's megaboop hits you for %s damage.*"]
+        ["All right! Get ready! Here comes my super powerful, and totally unblockable megaboop!", "Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n*Canni Bot's megaboop hits you for %s damage.*"]
     ],
     "megaBoopMissAnswer": [
-        ["All right! Here comes my super powerful, and totally unblockable megaboop!", "Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n*Canni Bot's megaboop misses you.*", "Oh no, I missed!"]
+        ["All right! Get ready! Here comes my super powerful, and totally unblockable megaboop!", "Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n*Canni Bot's megaboop misses you.*", "Oh no, I missed!"]
     ],
     "megaBoopCritAnswer": [
-        ["All right! Here comes my super powerful, and totally unblockable megaboop!", "Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n**Canni Bot's megaboop critically hits you for %s damage.**"]
+        ["All right! Get ready! Here comes my super powerful, and totally unblockable megaboop!", "Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n**Canni Bot's megaboop critically hits you for %s damage.**"]
     ],
     "megaSelfBoopAnswer": [
         "%s I'm sorry, but I can't do that. \nMy creators added a failsafe so that I don't accidentally damage myself. %s"
     ],
+    "megaBoopDevBlock": ["**The ultimate Dev Megaboop Annihilation nullifies Canni Bot's megaboop!**","Hey... %s you can´t just use your %s to counter my megaboop... Not fair..."],
     "hyperBoopAnswer": [
-        ["All right! Here comes my super powerful, and totally unblockable megaaaaaaaaaaaaaaa.............................",
+        ["All right! Get ready! Here comes my super powerful, and totally unblockable megaaaaaaaaaaaaaaa.............................",
             "**Warning!**",
             "Megaboop is overloading.",
             "Hypercharge has been activated!",
