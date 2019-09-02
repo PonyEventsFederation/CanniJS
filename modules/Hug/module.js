@@ -5,6 +5,7 @@ const Application = require("../../lib/Application");
 const Module = require("../../lib/Module");
 const Promise = require("bluebird");
 const Tools = require("../../lib/Tools");
+const moment = require("moment");
 
 module.exports = class Hug extends Module {
     start() {
@@ -68,10 +69,51 @@ module.exports = class Hug extends Module {
                         }
                     }
                 }
+
+
+
+
+
+                if (Tools.msg_starts(msg,'megahug') || Tools.msg_starts(msg,'mega hug')) {
+                    let now = moment();
+                    let val = moment().endOf('day');
+                    let megaHugTimeout = val.diff(now, 'milliseconds');
+
+                    if (msg.mentions !== null && !msg.mentions.everyone && msg.mentions.users.array().length === 1) {
+                        let user = msg.mentions.users.array()[0];
+                        if (Application.checkSelf(user.id)) {
+                            return this.megaSelfHug(msg);
+                        }
+
+                        let cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaHug, [msg.author]);
+
+                        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaBoopType, true, 'individual', cooldownMessage, false, megaHugTimeout)) {
+                            return this.megaHug(msg, user);
+                        }
+                    }
+                }
             });
 
             return resolve(this);
         });
+    }
+
+    megaSelfHug(msg) {
+        let random = Tools.getRandomIntFromInterval(0, this.config.megaSelfHugAnswer.length - 1);
+        msg.channel.send(Tools.parseReply(this.config.megaSelfHugAnswer[random], [msg.author, this.hugEmoji]));
+
+        Application.modules.Discord.setMessageSent();
+    }
+
+    megaHug(msg, user) {
+        let random = Tools.getRandomIntFromInterval(0, this.config.megaHugAnswer.length - 1);
+        let answer = this.config.megaHugAnswer[random];
+        if (Array.isArray(answer)) {
+            Tools.listSender(msg.channel, answer, [1000], [user,this.hugEmoji]);
+        } else {
+            msg.channel.send(Tools.parseReply(answer, [user,this.hugEmoji]));
+        }
+        Application.modules.Discord.setMessageSent();
     }
 
     requestHug(msg) {

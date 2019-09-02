@@ -20,5 +20,11 @@
     "cooldownMessage": "%s Oh my. I can't keep up with that many hugs. You'll have to let me cool down for a bit! %s",
     "hugLimit": 3,
     "hugTimeout": 180000,
-    "hugType": "hugType"
+    "hugType": "hugType",
+
+    "cooldownMessageMegaHug": "%s Oh no! I can't let you Megahug another pony today. That would be far too dangerous! Too much hugging energy!",
+    "megaSelfHugAnswer":["Awwww. That's very sweet of you. \nThank you %s. %s"],
+    "megaHugAnswer": ["%s You have been Megahugged! Somebody really wanted to hug you! %s"]
+
+
 }
