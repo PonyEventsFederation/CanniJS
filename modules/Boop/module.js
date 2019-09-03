@@ -134,7 +134,7 @@ module.exports = class Boop extends Module {
     }
 
     megaBoop(msg, user, type = 'hit') {
-        let random, damage, answer, limit, effect;
+        let random, damage, answer = "", limit;
         this.interrupt.inter = false;
         switch (type) {
             case 'hit':
@@ -225,7 +225,7 @@ module.exports = class Boop extends Module {
     }
 
     statusgenerator(ans, limit, miss = false) {
-        let effect, template, add;
+        let effect = "", template = "", add = "", res = [];;
         if (Tools.chancePercent(limit)){
             if (miss) {
                 template = this.config.status_effect_miss_template;
@@ -235,9 +235,15 @@ module.exports = class Boop extends Module {
             let random = Tools.getRandomIntFromInterval(0, this.config.status_effects.length - 1);
             effect = this.config.status_effects[random];
             add = Tools.parseReply(template,[effect]);
-            ans.push(add);
+            
+            for(var i = 0, len = ans.length; i < len; ++i)
+                res[i] = ans[i];
+            res[i] = add;
+        } else {
+            res = ans;
         }
-        return ans;
+        console.log(res);
+        return res;
     }
 
     stop() {
