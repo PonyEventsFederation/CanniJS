@@ -29,12 +29,12 @@ module.exports = class Hug extends Module {
 
                 // Politely asking for a hug from Canni.
                 if (msg.isMemberMentioned(Application.modules.Discord.client.user)) {
-                    if (Tools.msg_contains_list(msg,this.config.phrase_askHug)) {
+                    if (Tools.msg_contains_list(msg, this.config.phrase_askHug)) {
                         return this.requestHug(msg);
                     }
                 }
 
-                if (Tools.msg_starts(msg,'hug')) {
+                if (Tools.msg_starts(msg, 'hug')) {
                     if (msg.mentions !== null && !msg.mentions.everyone && msg.mentions.users.array().length > 0) {
                         let users = msg.mentions.users.array();
 
@@ -70,11 +70,7 @@ module.exports = class Hug extends Module {
                     }
                 }
 
-
-
-
-
-                if (Tools.msg_starts(msg,'megahug') || Tools.msg_starts(msg,'mega hug')) {
+                if (Tools.msg_starts(msg, 'megahug') || Tools.msg_starts(msg, 'mega hug')) {
                     let now = moment();
                     let val = moment().endOf('day');
                     let megaHugTimeout = val.diff(now, 'milliseconds');
@@ -87,7 +83,7 @@ module.exports = class Hug extends Module {
 
                         let cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaHug, [msg.author]);
 
-                        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaBoopType, true, 'individual', cooldownMessage, false, megaHugTimeout)) {
+                        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaHugType, true, 'individual', cooldownMessage, false, megaHugTimeout)) {
                             return this.megaHug(msg, user);
                         }
                     }
@@ -109,9 +105,9 @@ module.exports = class Hug extends Module {
         let random = Tools.getRandomIntFromInterval(0, this.config.megaHugAnswer.length - 1);
         let answer = this.config.megaHugAnswer[random];
         if (Array.isArray(answer)) {
-            Tools.listSender(msg.channel, answer, [1000], [user,this.hugEmoji]);
+            Tools.listSender(msg.channel, answer, [1000], [user, this.hugEmoji]);
         } else {
-            msg.channel.send(Tools.parseReply(answer, [user,this.hugEmoji]));
+            msg.channel.send(Tools.parseReply(answer, [user, this.hugEmoji]));
         }
         Application.modules.Discord.setMessageSent();
     }

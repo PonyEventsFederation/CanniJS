@@ -11,7 +11,6 @@
     "hugAnswer": [
         "Hey %s! %s hugged you %s"
     ],
-
     "phrase_askHug" : [
         "can I get a hug",
         "can i have a hug",
@@ -21,10 +20,12 @@
     "hugLimit": 3,
     "hugTimeout": 180000,
     "hugType": "hugType",
-
+    "megaHugType": "megaHugType",
     "cooldownMessageMegaHug": "%s Oh no! I can't let you Megahug another pony today. That would be far too dangerous! Too much hugging energy!",
-    "megaSelfHugAnswer":["Awwww. That's very sweet of you. \nThank you %s. %s"],
-    "megaHugAnswer": ["%s You have been Megahugged! Somebody really wanted to hug you! %s"]
-
-
+    "megaSelfHugAnswer":[
+        "Oh my. You must really like me if you're using your megahug on me! \nThank you %s! %s"
+    ],
+    "megaHugAnswer": [
+        "%s You have been Megahugged! Somebody really wanted to hug you! %s"
+    ]
 }
