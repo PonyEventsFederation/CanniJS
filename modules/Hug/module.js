@@ -83,7 +83,7 @@ module.exports = class Hug extends Module {
 
                         let cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaHug, [msg.author]);
 
-                        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaHugType, true, 'individual', cooldownMessage, false, megaHugTimeout)) {
+                        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaHugType, true, 'message', cooldownMessage, false, megaHugTimeout)) {
                             return this.megaHug(msg, user);
                         }
                     }
