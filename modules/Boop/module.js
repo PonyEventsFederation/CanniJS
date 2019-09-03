@@ -73,7 +73,7 @@ module.exports = class Boop extends Module {
                         let now = moment();
                         let val = moment().endOf('day');
                         let blockTimeout = val.diff(now, 'milliseconds');
-                        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaBoopType, false, 'individual', undefined, undefined, blockTimeout)) {
+                        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaBoopType, false, 'message', undefined, undefined, blockTimeout)) {
                             return this.counter(msg, "Block");
                         }
                     }
