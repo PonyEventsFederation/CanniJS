@@ -2,8 +2,11 @@
     "boopAnswer": [
         "( ͡° ͜ʖ (\\  *BOOPS* %s"
     ],
-    "selfBoopAnswer": [
+    "canniBoopAnswer": [
         "%s Nu-uh! Don't boop me..... *boops back*. %s"
+    ],
+    "selfBoopAnswer": [
+        "Teehee. Chris isn't looking~. %s\n*( ͡° ͜ʖ (\\ Canni quickly boops her own snoot.*"
     ],
     "megaBoopAnswer": [
         ["All right! Get ready! Here comes my super powerful, and totally unblockable megaboop!", "Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n*Canni Bot's megaboop hits you for %s damage.*"]
