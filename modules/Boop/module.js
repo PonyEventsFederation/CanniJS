@@ -113,9 +113,7 @@ module.exports = class Boop extends Module {
     }
 
     selfBoop(msg) {
-        let selfboop = Tools.getRandomIntFromInterval(0, 100);
-
-        if (selfboop === 10) {
+        if (Tools.chancePercent(5)) {
             let random = Tools.getRandomIntFromInterval(0, this.config.selfBoopAnswer.length - 1);
             msg.channel.send(Tools.parseReply(this.config.selfBoopAnswer[random], [Application.modules.Discord.getEmoji('excited')]));
         } else {
