@@ -113,8 +113,15 @@ module.exports = class Boop extends Module {
     }
 
     selfBoop(msg) {
-        let random = Tools.getRandomIntFromInterval(0, this.config.selfBoopAnswer.length - 1);
-        msg.channel.send(Tools.parseReply(this.config.selfBoopAnswer[random], [msg.author, Application.modules.Discord.getEmoji('shy')]));
+        let selfboop = Tools.getRandomIntFromInterval(0, 100);
+
+        if (selfboop === 10) {
+            let random = Tools.getRandomIntFromInterval(0, this.config.selfBoopAnswer.length - 1);
+            msg.channel.send(Tools.parseReply(this.config.selfBoopAnswer[random], [Application.modules.Discord.getEmoji('excited')]));
+        } else {
+            let random = Tools.getRandomIntFromInterval(0, this.config.canniBoopAnswer.length - 1);
+            msg.channel.send(Tools.parseReply(this.config.canniBoopAnswer[random], [msg.author, Application.modules.Discord.getEmoji('shy')]));
+        }
 
         Application.modules.Discord.setMessageSent();
     }
@@ -235,7 +242,7 @@ module.exports = class Boop extends Module {
             let random = Tools.getRandomIntFromInterval(0, this.config.status_effects.length - 1);
             effect = this.config.status_effects[random];
             add = Tools.parseReply(template,[effect]);
-            
+
             for(var i = 0, len = ans.length; i < len; ++i)
                 res[i] = ans[i];
             res[i] = add;
