@@ -80,6 +80,28 @@
         "Stung.\nHow could the boop possibly contain a mosquito?"
     ],
     "status_effect_template": "*The megaboop gave you the following temporary status effect:\n\n%s*",
-    "status_effect_miss_template": "*The megaboop missed but gave you a status effect anyway:\n\n%s*"
-
+    "status_effect_miss_template": "*The megaboop missed but gave you a status effect anyway:\n\n%s*",
+    "dev_ultra_boop_rejection": ["%s Silly you... You don´t have the permission to do that..."],
+    "dev_ultra_boop": [
+        [
+            "Processing request...",
+            "Authorisation as master dev successful!\n~~~~",
+            "Full access granted!\n~~~~",
+            "**Warning!**\nAll safety parameters disabled!\n~~~~",
+            "Target locked!\nEvasion not possible!\n~~~~",
+            "Initiating charging process.\nCompletion in 60 seconds.\n~~~~",
+            "Charge at 25%",
+            "Charge at 50%",
+            "Charge at 75%",
+            "Charge at 99%",
+            "Charge at 100%\nApproaching critical mass!\n~~~~",
+            "Ultraboop singularity has successfully been generated!\n~~~~",
+            "Loading Master Chief Dev Ultraboop Cannon!\n~~~~",
+            "Finalizing remaining prelaunch routines...\n~~~~",
+            "Unleashing the ultimate, absolute, unstoppable **Master Chief Dev Ultraboop**!"
+        ]
+    ],
+    "dev_ultra_boop_impact":"Incoming!\n\n( ͡° ͜ʖ (\\  *ULTRABOOPS* %s",
+    "dev_ultra_boop_postimpact":"**Canni Bot's Master Chief Dev Ultraboop hits you for *infinite* damage.**",
+    "dev_self_boop": ["%s\nWarning!\nThis operation can´t be performed!"]
 }
