@@ -219,8 +219,10 @@ module.exports = class Boop extends Module {
     }
 
     devbooprejection(msg) {
-        let random = Tools.getRandomIntFromInterval(0, this.config.dev_ultra_boop_rejection.length - 1);
-        msg.channel.send(Tools.parseReply(this.config.dev_ultra_boop_rejection[random], [msg.author]));
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.dev_ultra_boop_rejection_type, false, 'message')) {
+            let random = Tools.getRandomIntFromInterval(0, this.config.dev_ultra_boop_rejection.length - 1);
+            msg.channel.send(Tools.parseReply(this.config.dev_ultra_boop_rejection[random], [msg.author]));
+        }
 
         Application.modules.Discord.setMessageSent();
     }
