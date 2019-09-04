@@ -6,6 +6,8 @@ const Module = require("../../lib/Module");
 const Promise = require("bluebird");
 const Tools = require("../../lib/Tools");
 const moment = require("moment");
+var path;
+var boop_dev_on = true;
 
 module.exports = class Boop extends Module {
     start() {
@@ -16,6 +18,7 @@ module.exports = class Boop extends Module {
             this.messageSent = new Set();
             this.interrupt = {inter:false};
             this.megaon = false;
+            path = Application.config.rootDir + "/data/impact.gif";
 
             Application.modules.Discord.client.on('message', (msg) => {
                 if (msg.author.bot) {
@@ -78,23 +81,40 @@ module.exports = class Boop extends Module {
                         }
                     }
                 } else {
-                    if (Tools.msg_starts(msg, 'mega boop') || Tools.msg_starts(msg, 'megaboop')) {
-                        // Calculates the difference between now and midnight in milliseconds.
-                        // Only one megaboop is allowed per day.
-                        let now = moment();
-                        let val = moment().endOf('day');
-                        let megaBoopTimeout = val.diff(now, 'milliseconds');
+                    if (boop_dev_on) {
+                        if (Tools.msg_starts(msg, 'mega boop') || Tools.msg_starts(msg, 'megaboop')) {
+                            // Calculates the difference between now and midnight in milliseconds.
+                            // Only one megaboop is allowed per day.
+                            let now = moment();
+                            let val = moment().endOf('day');
+                            let megaBoopTimeout = val.diff(now, 'milliseconds');
 
-                        if (msg.mentions !== null && !msg.mentions.everyone && msg.mentions.users.array().length === 1) {
-                            let user = msg.mentions.users.array()[0];
-                            if (Application.checkSelf(user.id)) {
-                                return this.megaSelfBoop(msg);
+                            if (msg.mentions !== null && !msg.mentions.everyone && msg.mentions.users.array().length === 1) {
+                                let user = msg.mentions.users.array()[0];
+                                if (Application.checkSelf(user.id)) {
+                                    return this.megaSelfBoop(msg);
+                                }
+
+                                var cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaBoop, [msg.author]);
+
+                                if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaBoopType, true, 'individual', cooldownMessage, false, megaBoopTimeout)) {
+                                    return this.megaBoopLoader(msg, user);
+                                }
                             }
+                        }
+                        if (Tools.msg_starts(msg, 'master chief dev ultra boop') || Tools.msg_starts(msg, 'master chief dev ultraboop')) {
+                            if (Application.modules.DevCommands.auth_dev_master(msg.author.id)) {
+                                if (msg.mentions !== null && !msg.mentions.everyone && msg.mentions.users.array().length === 1) {
+                                    let user = msg.mentions.users.array()[0];
+                                    if (Application.checkSelf(user.id)) {
+                                        return this.selfDevBoop(msg);
+                                    }
 
-                            var cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaBoop, [msg.author]);
+                                    return this.devboop(msg, user);
+                                }
 
-                            if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaBoopType, true, 'individual', cooldownMessage, false, megaBoopTimeout)) {
-                                return this.megaBoopLoader(msg, user);
+                            } else {
+                                return this.devbooprejection(msg);
                             }
                         }
                     }
@@ -203,6 +223,46 @@ module.exports = class Boop extends Module {
         Application.modules.Discord.setMessageSent();
     }
 
+    devbooprejection(msg) {
+        let random = Tools.getRandomIntFromInterval(0, this.config.dev_ultra_boop_rejection.length - 1);
+        msg.channel.send(Tools.parseReply(this.config.dev_ultra_boop_rejection[random], [msg.author]));
+
+        Application.modules.Discord.setMessageSent();
+    }
+
+    selfDevBoop(msg) {
+        let random = Tools.getRandomIntFromInterval(0, this.config.dev_self_boop.length - 1);
+        msg.channel.send(Tools.parseReply(this.config.dev_self_boop[random], [msg.author]));
+
+        Application.modules.Discord.setMessageSent();
+    }
+
+    devboop(msg, user) {
+        boop_dev_on = false;
+        let random = Tools.getRandomIntFromInterval(0, this.config.dev_ultra_boop.length - 1);
+        let ans = this.config.dev_ultra_boop[random];
+        let delay = [2000, 3000, 3000, 3000, 3000, 15000, 15000, 15000, 13000, 2000, 3000, 3000, 3000, 5000];
+        let delay2 = 2000;
+        //let delay = [2000, 2000, 2000, 200, 200, 1500, 1500, 1500, 1000, 500, 300, 300, 300, 200];
+        let config = this.config;
+        if (Array.isArray(ans)) {
+            Tools.listSender(msg.channel, ans, delay, [user]).then(res => {
+                setTimeout(function () {
+                    msg.channel.send(Tools.parseReply(config.dev_ultra_boop_impact, [user]), {files:[path]}).then(function () {
+                        boop_dev_on = true;
+                        msg.channel.send(Tools.parseReply(config.dev_ultra_boop_postimpact));
+                    });
+                }, delay2);
+            });
+
+        } else {
+            msg.channel.send(Tools.parseReply(ans, [user]));
+        }
+
+        Application.modules.Discord.setMessageSent();
+    }
+
+
     counter(msg, type_pre) {
         this.interrupt.inter = true;
         let ans;
@@ -247,7 +307,6 @@ module.exports = class Boop extends Module {
         } else {
             res = ans;
         }
-        console.log(res);
         return res;
     }
 
