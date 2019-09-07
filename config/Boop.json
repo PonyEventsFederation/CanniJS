@@ -107,5 +107,8 @@
     "dev_ultra_boop_impact":"Incoming!\n\n( ͡° ͜ʖ (\\  *ULTRABOOPS* %s",
     "dev_ultra_boop_postimpact":"**Canni Bot's Master Chief Dev Ultraboop hits you for *infinite* damage.**",
     "dev_self_boop": ["%s\nWarning!\nThis operation can´t be performed!"],
-    "dev_ultra_boop_rejection_type":"dev_ultra_boop_rejection_type"
+    "dev_ultra_boop_rejection_type":"dev_ultra_boop_rejection_type",
+    "boop_guard_type": "boop_guard_type",
+    "ans_boop_guard_cooldown": "I think he doesn´t want to be disturbed right now..."
+
 }
