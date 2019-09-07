@@ -44,6 +44,7 @@ Application.registerModule("Utilities");
 Application.registerModule("Compliment");
 Application.registerModule("Hype");
 Application.registerModule("RoutineMessages");
+Application.registerModule("InterBotCom");
 Application.registerModule("NoMessageProcessor");
 
 
