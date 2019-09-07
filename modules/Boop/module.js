@@ -8,6 +8,7 @@ const Tools = require("../../lib/Tools");
 const moment = require("moment");
 var path;
 var boop_dev_on = true;
+var wachmann_id;
 
 module.exports = class Boop extends Module {
     start() {
@@ -19,6 +20,10 @@ module.exports = class Boop extends Module {
             this.interrupt = {inter:false};
             this.megaon = false;
             path = Application.config.rootDir + "/data/impact.gif";
+
+            if (Tools.test_ENV("WACHMANN_ID")) {
+                wachmann_id = process.env.WACHMANN_ID;
+            }
 
             Application.modules.Discord.client.on('message', (msg) => {
                 if (msg.author.bot) {
@@ -53,6 +58,11 @@ module.exports = class Boop extends Module {
                             for (let i = 0; i < users.length; i++) {
                                 if (Application.checkSelf(users[i].id)) {
                                     this.selfBoop(msg);
+                                    continue;
+                                }
+
+                                if (wachmann_id === users[i].id) {
+                                    this.wachmannBoop(msg, users[i]);
                                     continue;
                                 }
 
@@ -137,6 +147,13 @@ module.exports = class Boop extends Module {
         msg.channel.send(Tools.parseReply(this.config.selfBoopAnswer[random], [msg.author, Application.modules.Discord.getEmoji('shy')]));
 
         Application.modules.Discord.setMessageSent();
+    }
+
+    wachmannBoop(msg, user) {
+        let guard_cooldown_message = Tools.parseReply(this.config.ans_boop_guard_cooldown);
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.boop_guard_type, true, 'channel',guard_cooldown_message,undefined,120000)) {
+            this.boop(msg, user);
+        }
     }
 
     megaBoopLoader(msg, user) {
@@ -240,7 +257,6 @@ module.exports = class Boop extends Module {
         let ans = this.config.dev_ultra_boop[random];
         let delay = [2000, 3000, 3000, 3000, 3000, 15000, 15000, 15000, 13000, 2000, 3000, 3000, 3000, 5000];
         let delay2 = 2000;
-        //let delay = [2000, 2000, 2000, 200, 200, 1500, 1500, 1500, 1000, 500, 300, 300, 300, 200];
         let config = this.config;
         if (Array.isArray(ans)) {
             Tools.listSender(msg.channel, ans, delay, [user]).then(res => {
@@ -287,7 +303,7 @@ module.exports = class Boop extends Module {
     }
 
     statusgenerator(ans, limit, miss = false) {
-        let effect = "", template = "", add = "", res = [];;
+        let effect = "", template = "", add = "", res = [];
         if (Tools.chancePercent(limit)){
             if (miss) {
                 template = this.config.status_effect_miss_template;
