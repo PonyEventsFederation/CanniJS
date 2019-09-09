@@ -30,6 +30,7 @@ Application.registerModule("UserJoined");
 Application.registerModule("Help");
 Application.registerModule("CanniTimeToHype");
 Application.registerModule("Boop");
+Application.registerModule("Bap");
 Application.registerModule("Hug");
 Application.registerModule("Fanta");
 Application.registerModule("Bizaam");
