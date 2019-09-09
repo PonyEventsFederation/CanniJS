@@ -1,0 +1,17 @@
+{
+    "bapAnswer": [
+        "%s *BAPS* %s"
+    ],
+    "canniBapAnswer": [
+        "%s *Canni gives herself a good bap on the head.* \n%s Ouch! That hurt! %s"
+    ],
+    "selfBapAnswer": [
+        "%s Noooooo! \nDon't bap me. I'm a good pony. %s"
+    ],
+    "cooldownMessage": "%s It's not very nice to bap people that often, you know...",
+    "bapLimit": 3,
+    "bapTimeout": 180000,
+    "bapType": "bapType",
+    "bapGuardType": "bapGuardType",
+    "bapGuardCooldownAnswer": "I better not, or Wachmann will be mad at me again..."
+}
