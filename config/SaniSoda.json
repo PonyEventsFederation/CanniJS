@@ -1,0 +1,19 @@
+{
+    "saniSodaId": "469364968463007755",
+    "sickAnswer": [
+        "%s *Gasp* You're feeling sick? Oh no! Hey %s, we need your assistance!"
+    ],
+    "sickType": "sick",
+    "injuredAnswer": [
+        "%s Injured?! Oh no! %s! Someone needs your help!"
+    ],
+    "injuredType": "injured",
+    "hurtAnswer": [
+        "%s Awww you're hurt? Let me call %s, she will fix you up. :heart:"
+    ],
+    "hurtType": "hurt",
+    "sadAnswer": [
+        "%s Come here you poor cutie. %s? Could you spend a moment of your time to cheer up our attendee? :heart:"
+    ],
+    "sadType": "sad"
+}
