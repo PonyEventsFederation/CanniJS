@@ -43,7 +43,7 @@ module.exports = class Boop extends Module {
                         let users = msg.mentions.users.array();
 
                         if (users.length > this.config.boopLimit) {
-                            let cooldownMessage = Tools.parseReply(this.config.cooldownMessage, [Application.modules.Discord.getEmoji('newspaper2'), msg.author]);
+                            let cooldownMessage = Tools.parseReply(this.config.cooldownMessage, [msg.author]);
 
                             if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.bapType)) {
                                 Application.modules.Discord.setCooldown(msg.author.id, this.config.bapType, this.config.bapTimeout);
@@ -79,7 +79,7 @@ module.exports = class Boop extends Module {
 
     bap(msg, user) {
         let random = Tools.getRandomIntFromInterval(0, this.config.bapAnswer.length - 1);
-        msg.channel.send(Tools.parseReply(this.config.bapAnswer[random], [Application.modules.Discord.getEmoji('newspaper2'), user]));
+        msg.channel.send(Tools.parseReply(this.config.bapAnswer[random], [user]));
 
         Application.modules.Discord.setMessageSent();
     }
@@ -91,7 +91,6 @@ module.exports = class Boop extends Module {
         } else {
             let random = Tools.getRandomIntFromInterval(0, this.config.canniBapAnswer.length - 1);
             msg.channel.send(Tools.parseReply(this.config.canniBapAnswer[random], [
-                Application.modules.Discord.getEmoji('newspaper2'),
                 msg.author,
                 Application.modules.Discord.getEmoji('error')
             ]));
