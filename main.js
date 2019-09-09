@@ -46,6 +46,7 @@ Application.registerModule("Compliment");
 Application.registerModule("Hype");
 Application.registerModule("RoutineMessages");
 Application.registerModule("InterBotCom");
+Application.registerModule("SaniSoda");
 Application.registerModule("NoMessageProcessor");
 
 
