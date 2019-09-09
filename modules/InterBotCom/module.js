@@ -37,6 +37,12 @@ module.exports = class InterBotCom extends Module {
                     msg.channel.send(Tools.parseReply(this.config.ans_boop_guard_response, [msg.author]));
                 }.bind(this), 2000);
             }
+
+            if (Tools.msg_contains(msg, "what the hay!?")) {
+                setTimeout(function () {
+                    msg.channel.send(Tools.parseReply(this.config.bapGuardResponse, [Application.modules.Discord.getEmoji('shy')]));
+                }.bind(this), 2000);
+            }
         }
     }
 
