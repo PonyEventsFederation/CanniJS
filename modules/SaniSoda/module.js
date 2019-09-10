@@ -8,8 +8,16 @@ const Tools = require("../../lib/Tools");
 
 module.exports = class SaniSoda extends Module {
     start() {
-        return new Promise((resolve, reject) => {
+        return new Promise(async(resolve, reject) => {
             this.log.debug("Starting...");
+
+            try {
+                this.SaniSoda = await Application.getUser(this.config.saniSodaId);
+                this.log.info(`Fetched user with username: ${this.SaniSoda.username}`);
+            } catch(exception) {
+                this.log.error(`Could not fetch user with ID: ${this.config.saniSodaId}`);
+                return;
+            }
 
             Application.modules.Discord.client.on('message', (msg) => {
                 if (msg.author.bot) {
@@ -23,11 +31,6 @@ module.exports = class SaniSoda extends Module {
                 if (Application.modules.Discord.isMessageSent()) {
                     return;
                 }
-
-                this.guild = Tools.guild_by_id(Application.getClient(), process.env.MAIN_SERVER);
-                this.SaniSoda = this.guild.members.find(async function(user) {
-                    return await Application.modules.SaniSoda.config.SaniSodaId == user
-                });
 
                 if (msg.isMemberMentioned(Application.modules.Discord.client.user)) {
                     if (Tools.msg_contains(msg, 'sick')) {
