@@ -85,7 +85,7 @@ module.exports = class Boop extends Module {
     }
 
     selfBap(msg) {
-        if (Tools.chancePercent(10)) {
+        if (Tools.chancePercent(25)) {
             let random = Tools.getRandomIntFromInterval(0, this.config.selfBapAnswer.length - 1);
             msg.channel.send(Tools.parseReply(this.config.selfBapAnswer[random], [msg.author, Application.modules.Discord.getEmoji('error')]));
         } else {

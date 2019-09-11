@@ -1,12 +1,14 @@
 {
     "bapAnswer": [
-        ":newspaper2: *BAPS* %s"
+        ":newspaper2: *BAPS* %s",
+        "*Canni sneaks up behind her target and...*\n:newspaper2: *BAPS* %s"
     ],
     "canniBapAnswer": [
         ":newspaper2:*Canni gives herself a good bap on the head.* \n%s Ouch! That hurt! %s"
     ],
     "selfBapAnswer": [
-        "%s Noooooo! \nDon't bap me. I'm a good pony. %s"
+        "%s Noooooo! \nDon't bap me. I'm a good pony. %s",
+        ":newspaper2: *Canni baps %s instead*.\nTeehee! I got you!"
     ],
     "cooldownMessage": "%s It's not very nice to bap people that often, you know...",
     "bapLimit": 3,
