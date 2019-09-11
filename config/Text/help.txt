@@ -2,31 +2,40 @@ Hey %s! It looks like you need some help!
 I'm always listening so I'll do my best to respond to you.
 
 These are things you can ask me to do for you:
-**!when**: I'll tell you how much longer it is until the next iteration of GalaCon! Wooo!
-**hug @target**: I'll let the mentioned person know you hugged them. (You can also hug me. I like hugs too)
+**bap @target**: Put your newspaper to good use and deliver a bap to a pony's head!
 **boop @target**: I'll go and boop the snoot of whomever you mention here! Don't boop me though, that's illegal.
+**megaboop @target**: Megaboops drain a lot of my power, so you can only megaboop once per day.
+**block**: If you're quick enough, you can block a megaboop and reduce the amount of damage it deals.
+**hug @target**: I'll let the mentioned person know you hugged them. (You can also hug me. I like hugs too)
+**megahug @target**: These are hugs for when you *really* want to hug someone. But you only get one of these per day!
+**!when**: I'll tell you how much longer it is until the next iteration of GalaCon! Wooo!
 
 I also listen to certain words and sentences!
 **Assfart**: I honestly don't know why this is a thing...
 **Bizaam**: BIIZAAAAAM!
+**Bye**: I'll say a quick goodbye when you're leaving.
+**Canni is worst pony**: I don't know why you would say something like this, but if you do it too often I'll just stop talking to you for a bit...
+**Fanta**: Unlike Perry, I like making Fanta jokes.
+**Good morning**: I'll wish you a good morning whenever I hear your voice! Or well, read your text.
+**Good night, Nighty night, Night**: I'll wish you good night!
+**Hello, Hi**: I'll say hi to you as well.
+**Hype**: HYPE!!!!!!1!!1!
 **Who is best pony**: I'll definitely let you know who I think is best!
 **[x] is best pony**: I have an opinion about this too.
-**Fanta**: Unlike Perry, I like making Fanta jokes.
-**Canni is worst pony**: I don't know why you would say something like this, but if you do it too often I'll just stop talking to you for a bit...
-**Good night, Nighty night, Night**: I'll wish you good night!
-**Bye**: I'll say a quick goodbye when you're leaving.
-**Hello, Hi**: I'll say hi to you as well.
-**Good morning**: I'll wish you a good morning whenever I hear your voice! Or well, read your text.
 
 Oh! And I'll respond to you if you @mention me! But please don't be mad at me if I don't understand you.
 I respond to these things:
-**@Canni I'm sorry**: You know, for when you called me worst pony. That was mean, but I might just forgive you.
-**@Canni I love you**: I like this one. It's much better than calling me worst pony.
-**@Canni When is galacon**: I'll let you know how much longer it is until the next time we'll see each other at GalaCon!
 **@Canni Can I have a hug**: Of course you can, silly! I love giving hugs!
-**@Canni How are you**: It's so nice of you to ask about me!
 **@Canni Compliment me**: Sure! I'm still learning about compliments though, so don't be mad at me if I say something silly, okay?
 **@Canni Compliment @target**: This is for when you want me to compliment someone else. That's very nice of you.
+**@Canni How are you**: It's so nice of you to ask about me!
+**@Canni How many members are on the server**: Erm, let me count quickly...
+**@Canni I love you**: I like this one. It's much better than calling me worst pony.
+**@Canni I'm sorry**: You know, for when you called me worst pony. That was mean, but I might just forgive you.
+**@Canni I'm [sick|hurt|injured|sad]**: Oh no! That's no good! Let me quickly get my sister. She'll take care of you!
+**@Canni Let's play a game**: Sure! I'd love to play a game!
+**@Canni When is galacon**: I'll let you know how much longer it is until the next time we'll see each other at GalaCon!
+**@Canni /)**: /)*(\
 
 Did you know I'm not just charming, but also a smart bot? I can solve all the math problems you can think of!
 You can ask me like this:
