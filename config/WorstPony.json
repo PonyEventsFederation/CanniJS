@@ -9,5 +9,6 @@
     ],
     "notSorryAnswer": [
         "%s What're you sorry for? You didn't do anything wrong, did you?"
-    ]
+    ],
+    "blockTimeout": 300000
 }
