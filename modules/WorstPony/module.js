@@ -59,7 +59,7 @@ module.exports = class WorstPony extends Module {
             case 'canni soda is worst pony':
                 var cooldownMessage = Tools.parseReply(this.config.cooldownMessageWorstPony, [msg.author]);
 
-                if (Application.modules.Discord.controlTalkedRecently(msg, this.config.canniWorstPonyType, true, 'individual', cooldownMessage, true)) {
+                if (Application.modules.Discord.controlTalkedRecently(msg, this.config.canniWorstPonyType, true, 'individual', cooldownMessage, true, this.config.blockTimeout)) {
                     let random = Tools.getRandomIntFromInterval(0, this.config.canniWorstPonyAnswer.length - 1);
                     msg.channel.send(Tools.parseReply(this.config.canniWorstPonyAnswer[random], [msg.author]));
 
