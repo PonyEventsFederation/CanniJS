@@ -33,6 +33,7 @@ I respond to these things:
 **@Canni I love you**: I like this one. It's much better than calling me worst pony.
 **@Canni I'm sorry**: You know, for when you called me worst pony. That was mean, but I might just forgive you.
 **@Canni I'm [sick|hurt|injured|sad]**: Oh no! That's no good! Let me quickly get my sister. She'll take care of you!
+**@Canni I'm happy**: That's lovely. My sister is doing a good job taking care of everyone.
 **@Canni Let's play a game**: Sure! I'd love to play a game!
 **@Canni When is galacon**: I'll let you know how much longer it is until the next time we'll see each other at GalaCon!
 **@Canni /)**: /)*(\
