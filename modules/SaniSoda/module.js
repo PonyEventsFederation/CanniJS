@@ -48,6 +48,10 @@ module.exports = class SaniSoda extends Module {
                     if (Tools.msg_contains(msg, 'sad')) {
                         return this.sad(msg);
                     }
+
+                    if (Tools.msg_contains(msg, 'happy')) {
+                        return this.happy(msg);
+                    }
                 }
             });
 
@@ -86,6 +90,15 @@ module.exports = class SaniSoda extends Module {
         if (Application.modules.Discord.controlTalkedRecently(msg, this.config.sadType)) {
             let random = Tools.getRandomIntFromInterval(0, this.config.sadAnswer.length - 1);
             msg.channel.send(Tools.parseReply(this.config.sadAnswer[random], [msg.author, this.SaniSoda]));
+
+            Application.modules.Discord.setMessageSent();
+        }
+    }
+
+    happy(msg) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.happyType)) {
+            let random = Tools.getRandomIntFromInterval(0, this.config.happyAnswer.length - 1);
+            msg.channel.send(Tools.parseReply(this.config.happyAnswer[random], [msg.author, this.SaniSoda]));
 
             Application.modules.Discord.setMessageSent();
         }
