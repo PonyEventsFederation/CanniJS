@@ -15,5 +15,9 @@
     "sadAnswer": [
         "%s Come here you poor cutie. %s? Could you spend a moment of your time to cheer up our attendee? :heart:"
     ],
-    "sadType": "sad"
+    "sadType": "sad",
+    "happyAnswer": [
+        "You're feeling happy, %s? Yay! :heart: You did a wonderful job again, dear %s. :heart:"
+    ],
+    "happyType": "happy"
 }
