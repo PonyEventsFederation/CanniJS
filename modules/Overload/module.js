@@ -100,7 +100,7 @@ module.exports = class Overload extends Module {
         });
     }
 
-    static add_to_overload(type, num = 1) {
+    static add_to_overload(type, num = 0) {
         if (overload[type] || overload[type] === 0) {
             overload[type] += num;
             setTimeout(function() {
