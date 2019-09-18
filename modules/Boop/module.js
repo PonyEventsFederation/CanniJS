@@ -164,7 +164,6 @@ module.exports = class Boop extends Module {
     }
 
     megaBoopLoader(msg, user) {
-        Application.modules.Overload.overload("boop");
         let roll = Tools.getRandomIntFromInterval(0, 100);
 
         if (roll === 100) {
