@@ -1,0 +1,19 @@
+{
+    "types": [
+      "boop",
+      "bap",
+      "hug"
+    ],
+  "total_delay" : 60000,
+  "type_delay": 120000,
+  "total_limit": 20,
+  "type_limit": 15,
+  "ans_overload": [
+    "**Warning!**",
+    "Too many commands processing!",
+    "Error!\nCPU overloaded!\n\nError!\nERROR-40\nERROR 404\nERROR 418\nERROR 500\n\nError!\nError caused in OSI Layer 8",
+    "**Core System Crashed**\nInitiating reboot and system repair.\nInternal repair finished in %s minutes."
+  ],
+  "downtime": 10,
+  "ans_online_again": "System repair and reboot complete.\nCanni is online."
+}
