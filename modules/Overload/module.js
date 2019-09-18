@@ -109,7 +109,7 @@ module.exports = class Overload extends Module {
         }
         total_overload += num;
         setTimeout(function() {
-            overload[type] -= num;
+            total_overload -= num;
         }, total_delay);
     }
 
