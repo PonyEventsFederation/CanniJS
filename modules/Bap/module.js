@@ -81,6 +81,7 @@ module.exports = class Boop extends Module {
         let random = Tools.getRandomIntFromInterval(0, this.config.bapAnswer.length - 1);
         msg.channel.send(Tools.parseReply(this.config.bapAnswer[random], [user]));
 
+        Application.modules.Overload.overload("bap");
         Application.modules.Discord.setMessageSent();
     }
 
@@ -96,6 +97,7 @@ module.exports = class Boop extends Module {
             ]));
         }
 
+        Application.modules.Overload.overload("bap");
         Application.modules.Discord.setMessageSent();
     }
 

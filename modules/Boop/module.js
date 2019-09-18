@@ -139,6 +139,7 @@ module.exports = class Boop extends Module {
         let random = Tools.getRandomIntFromInterval(0, this.config.boopAnswer.length - 1);
         msg.channel.send(Tools.parseReply(this.config.boopAnswer[random], [user]));
 
+        Application.modules.Overload.overload("boop");
         Application.modules.Discord.setMessageSent();
     }
 
@@ -151,6 +152,7 @@ module.exports = class Boop extends Module {
             msg.channel.send(Tools.parseReply(this.config.canniBoopAnswer[random], [msg.author, Application.modules.Discord.getEmoji('shy')]));
         }
 
+        Application.modules.Overload.overload("boop");
         Application.modules.Discord.setMessageSent();
     }
 
@@ -162,6 +164,7 @@ module.exports = class Boop extends Module {
     }
 
     megaBoopLoader(msg, user) {
+        Application.modules.Overload.overload("boop");
         let roll = Tools.getRandomIntFromInterval(0, 100);
 
         if (roll === 100) {
@@ -225,6 +228,7 @@ module.exports = class Boop extends Module {
         let random = Tools.getRandomIntFromInterval(0, this.config.megaSelfBoopAnswer.length - 1);
         msg.channel.send(Tools.parseReply(this.config.megaSelfBoopAnswer[random], [msg.author, Application.modules.Discord.getEmoji('hello')]));
 
+        Application.modules.Overload.overload("boop");
         Application.modules.Discord.setMessageSent();
     }
 
