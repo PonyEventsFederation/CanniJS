@@ -109,6 +109,8 @@ module.exports = class Hug extends Module {
         } else {
             msg.channel.send(Tools.parseReply(answer, [user, this.hugEmoji]));
         }
+
+        Application.modules.Overload.overload("hug");
         Application.modules.Discord.setMessageSent();
     }
 
@@ -116,6 +118,7 @@ module.exports = class Hug extends Module {
         let random = Tools.getRandomIntFromInterval(0, this.config.requestHugAnswer.length - 1);
         msg.channel.send(Tools.parseReply(this.config.requestHugAnswer[random], [msg.author, msg.author, this.hugEmoji]));
 
+        Application.modules.Overload.overload("hug");
         Application.modules.Discord.setMessageSent();
     }
 
@@ -123,6 +126,8 @@ module.exports = class Hug extends Module {
         let random = Tools.getRandomIntFromInterval(0, this.config.botHugAnswer.length - 1);
         msg.channel.send(Tools.parseReply(this.config.botHugAnswer[random], [msg.author, this.hugEmoji]));
 
+
+        Application.modules.Overload.overload("hug");
         Application.modules.Discord.setMessageSent();
     }
 
@@ -130,6 +135,7 @@ module.exports = class Hug extends Module {
         let random = Tools.getRandomIntFromInterval(0, this.config.selfHugAnswer.length - 1);
         msg.channel.send(Tools.parseReply(this.config.selfHugAnswer[random], [msg.author, this.hugEmoji]));
 
+        Application.modules.Overload.overload("hug");
         Application.modules.Discord.setMessageSent();
     }
 
@@ -137,6 +143,7 @@ module.exports = class Hug extends Module {
         let random = Tools.getRandomIntFromInterval(0, this.config.hugAnswer.length - 1);
         msg.channel.send(Tools.parseReply(this.config.hugAnswer[random], [target, msg.author, this.hugEmoji]));
 
+        Application.modules.Overload.overload("hug");
         Application.modules.Discord.setMessageSent();
     }
 
