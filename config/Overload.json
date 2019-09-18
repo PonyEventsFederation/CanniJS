@@ -6,8 +6,8 @@
     ],
   "total_delay" : 60000,
   "type_delay": 120000,
-  "total_limit": 20,
-  "type_limit": 15,
+  "total_limit": 25,
+  "type_limit": 20,
   "ans_overload": [
     "**Warning!**",
     "Too many commands processing!",

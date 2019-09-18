@@ -88,6 +88,7 @@ module.exports = class Overload extends Module {
         let downtime_ms = this.config.downtime * 60000;
         let online = this.config.ans_online_again;
         let answer = this.config.ans_overload;
+        this.reset_all();
         Application.getClient().user.setStatus("idle");
         Tools.listSender(msg.channel, answer, [2000,4000,4000], [this.config.downtime]).then(function () {
             Application.getClient().user.setStatus("dnd");
@@ -110,6 +111,12 @@ module.exports = class Overload extends Module {
         setTimeout(function() {
             overload[type] -= num;
         }, total_delay);
+    }
+
+    reset_all() {
+        total_overload = 0;
+        overload = {};
+        this.load_overloader();
     }
 
     stop() {
