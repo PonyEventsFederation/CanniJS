@@ -29,7 +29,7 @@ module.exports = class Hype extends Module {
                     return;
                 }
 
-                if (Tools.msg_contains(msg,'hype')) {
+                if (Tools.strContainsWord(msg.content, 'hype')) {
                     return this.hype(msg);
                 }
             });
