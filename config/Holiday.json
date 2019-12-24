@@ -1,0 +1,14 @@
+{
+  "christmasAnswer" : [
+    "Hey %s! Sani and I wish you a very Merry Christmas! %s",
+    "%s They say Christmas is a time for smiles, but how can I smile when I've run out of Fanta?\n Gladly I´ve bunkered enough Fanta for decades!",
+    "%s I hope you're enjoying a beautiful white Christmas! %s",
+    "%s Ho ho ho! Merry Christmas! %s",
+    "%s I hope you're making this a Christmas to remember! %s",
+    "%s Christmas wouldn't be Christmas without you. %s",
+    "%s Have a wonderful Christmas! %s"
+  ],
+  "specialchristmasAnswer": [["Hey %s! Sani and I wish all of you a very Merry Christmas! %s", "But hey, %s! Wish everyone a Merry Christmas as well!"]],
+  "christmasType": "christmas"
+
+}
