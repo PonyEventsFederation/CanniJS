@@ -49,6 +49,10 @@ module.exports = class MentionCanni extends Module {
         if (Tools.msg_contains_list(msg, this.config.phrase_how_many_members)) {
             return this.memberCount(msg)
         }
+
+        if (Tools.msg_contains(msg, 'merry christmas')) {
+            Application.modules.Discord.setMessageSent();
+        }
     }
 
     love(msg) {
