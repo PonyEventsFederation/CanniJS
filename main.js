@@ -26,6 +26,7 @@ Application.registerModule("Discord");
 Application.registerModule("Remote");
 Application.registerModule("Overload");
 Application.registerModule("Ignore");
+Application.registerModule("Holiday");
 Application.registerModule("Potato");
 Application.registerModule("UserJoined");
 Application.registerModule("Help");
