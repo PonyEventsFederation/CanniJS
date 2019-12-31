@@ -9,6 +9,10 @@
     "%s Have a wonderful Christmas! %s"
   ],
   "specialchristmasAnswer": [["Hey %s! Sani and I wish all of you a very Merry Christmas! %s", "But hey, %s! Wish everyone a Merry Christmas as well!"]],
-  "christmasType": "christmas"
-
+  "christmasType": "christmas",
+  "silvesterType": "silvester",
+  "silvesterAnswer": [
+    "%s Happy New Year! %s"
+  ],
+  "specialsilvesterAnswer": [["Hey %s! Sani and I wish all of you a Happy New Year! %s", "Hey, %s! Wish everyone a Happy New Year as well!"]]
 }
