@@ -21,6 +21,9 @@ module.exports = class Boop extends Module {
             this.megaon = false;
             path = Application.config.rootDir + "/data/impact.gif";
 
+            //time in ms
+            this.bapDeleteTimeout = 40000;
+
             if (Tools.test_ENV("WACHMANN_ID")) {
                 wachmann_id = process.env.WACHMANN_ID;
             }
@@ -79,23 +82,32 @@ module.exports = class Boop extends Module {
 
     bap(msg, user) {
         let random = Tools.getRandomIntFromInterval(0, this.config.bapAnswer.length - 1);
-        msg.channel.send(Tools.parseReply(this.config.bapAnswer[random], [user]));
+        msg.delete();
+        msg.channel.send(Tools.parseReply(this.config.bapAnswer[random], [user])).then(msg => {
+            msg.delete(this.bapDeleteTimeout);
+        });
 
         Application.modules.Overload.overload("bap");
         Application.modules.Discord.setMessageSent();
     }
 
     selfBap(msg) {
+        let response;
+        msg.delete();
         if (Tools.chancePercent(25)) {
             let random = Tools.getRandomIntFromInterval(0, this.config.selfBapAnswer.length - 1);
-            msg.channel.send(Tools.parseReply(this.config.selfBapAnswer[random], [msg.author, Application.modules.Discord.getEmoji('error')]));
+            response = msg.channel.send(Tools.parseReply(this.config.selfBapAnswer[random], [msg.author, Application.modules.Discord.getEmoji('error')]));
         } else {
             let random = Tools.getRandomIntFromInterval(0, this.config.canniBapAnswer.length - 1);
-            msg.channel.send(Tools.parseReply(this.config.canniBapAnswer[random], [
+            response = msg.channel.send(Tools.parseReply(this.config.canniBapAnswer[random], [
                 msg.author,
                 Application.modules.Discord.getEmoji('error')
             ]));
         }
+
+        response.then(msg => {
+            msg.delete(this.bapDeleteTimeout);
+        });
 
         Application.modules.Overload.overload("bap");
         Application.modules.Discord.setMessageSent();

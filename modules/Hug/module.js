@@ -14,6 +14,9 @@ module.exports = class Hug extends Module {
 
             this.hugEmoji = Application.modules.Discord.getEmoji('hug');
 
+            //time in ms
+            this.hugDeleteTimeout = 40000;
+
             Application.modules.Discord.client.on('message', (msg) => {
                 if (msg.author.bot) {
                     return;
@@ -124,27 +127,41 @@ module.exports = class Hug extends Module {
 
     botHug(msg) {
         let random = Tools.getRandomIntFromInterval(0, this.config.botHugAnswer.length - 1);
-        msg.channel.send(Tools.parseReply(this.config.botHugAnswer[random], [msg.author, this.hugEmoji]));
-
+        msg.delete();
+        msg.channel.send(Tools.parseReply(this.config.botHugAnswer[random], [msg.author, this.hugEmoji])).then(msg => {
+            msg.delete(this.hugDeleteTimeout);
+        });
 
         Application.modules.Overload.overload("hug");
         Application.modules.Discord.setMessageSent();
+
+        //console.log("botHug");
     }
 
     selfHug(msg) {
         let random = Tools.getRandomIntFromInterval(0, this.config.selfHugAnswer.length - 1);
-        msg.channel.send(Tools.parseReply(this.config.selfHugAnswer[random], [msg.author, this.hugEmoji]));
+        msg.delete();
+        msg.channel.send(Tools.parseReply(this.config.selfHugAnswer[random], [msg.author, this.hugEmoji])).then(msg => {
+            msg.delete(this.hugDeleteTimeout);
+        });
 
         Application.modules.Overload.overload("hug");
         Application.modules.Discord.setMessageSent();
+
+        //console.log("selfHug");
     }
 
     hug(target, msg) {
         let random = Tools.getRandomIntFromInterval(0, this.config.hugAnswer.length - 1);
-        msg.channel.send(Tools.parseReply(this.config.hugAnswer[random], [target, msg.author, this.hugEmoji]));
+        msg.delete();
+        msg.channel.send(Tools.parseReply(this.config.hugAnswer[random], [target, msg.author, this.hugEmoji])).then(msg => {
+            msg.delete(this.hugDeleteTimeout);
+        });
 
         Application.modules.Overload.overload("hug");
         Application.modules.Discord.setMessageSent();
+
+        //console.log("hug");
     }
 
     stop() {
