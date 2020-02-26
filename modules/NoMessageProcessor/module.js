@@ -33,7 +33,7 @@ module.exports = class NoMessageProcessor extends Module {
                         msg.channel.send(Tools.parseReply(this.config.stillLearningAnswer, [Application.modules.Discord.getEmoji('shy')]));
                     }
                 } else {
-                    let random = Tools.getRandomIntFromInterval(0, 200);
+                    let random = Tools.getRandomIntFromInterval(0, 300);
                     if (random === 10) {
                         msg.channel.send(Tools.parseReply(this.config.randomBoopAnswer, [msg.author]));
                     }
