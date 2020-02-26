@@ -21,6 +21,9 @@ module.exports = class Boop extends Module {
             this.megaon = false;
             path = Application.config.rootDir + "/data/impact.gif";
 
+            //time in ms
+            this.boopDeleteTimeout = 40000;
+
             if (Tools.test_ENV("WACHMANN_ID")) {
                 wachmann_id = process.env.WACHMANN_ID;
             }
@@ -136,21 +139,30 @@ module.exports = class Boop extends Module {
     }
 
     boop(msg, user) {
+        msg.delete();
         let random = Tools.getRandomIntFromInterval(0, this.config.boopAnswer.length - 1);
-        msg.channel.send(Tools.parseReply(this.config.boopAnswer[random], [user]));
+        msg.channel.send(Tools.parseReply(this.config.boopAnswer[random], [user])).then(msg => {
+            msg.delete(this.boopDeleteTimeout);
+        });
 
         Application.modules.Overload.overload("boop");
         Application.modules.Discord.setMessageSent();
     }
 
     selfBoop(msg) {
+        let response;
+        msg.delete();
         if (Tools.chancePercent(5)) {
             let random = Tools.getRandomIntFromInterval(0, this.config.selfBoopAnswer.length - 1);
-            msg.channel.send(Tools.parseReply(this.config.selfBoopAnswer[random], [Application.modules.Discord.getEmoji('excited')]));
+            response = msg.channel.send(Tools.parseReply(this.config.selfBoopAnswer[random], [Application.modules.Discord.getEmoji('excited')]));
         } else {
             let random = Tools.getRandomIntFromInterval(0, this.config.canniBoopAnswer.length - 1);
-            msg.channel.send(Tools.parseReply(this.config.canniBoopAnswer[random], [msg.author, Application.modules.Discord.getEmoji('shy')]));
+            response = msg.channel.send(Tools.parseReply(this.config.canniBoopAnswer[random], [msg.author, Application.modules.Discord.getEmoji('shy')]));
         }
+
+        response.then(msg => {
+            msg.delete(this.boopDeleteTimeout);
+        });
 
         Application.modules.Overload.overload("boop");
         Application.modules.Discord.setMessageSent();
