@@ -43,6 +43,7 @@ module.exports = class Discord extends Module {
             this.log.debug("Starting...");
 
             return this.client.login(this.authToken).then(() => {
+                this.firstActivity();
                 return resolve(this);
             }, (err) => {
                 this.log.error(err);
@@ -203,5 +204,14 @@ module.exports = class Discord extends Module {
 
     isMessageSent() {
         return this.messageSent;
+    }
+
+    firstActivity() {
+        if (!this.isReady()) {
+            return;
+        }
+
+        const msg = "Internal systems fully operational";
+        Application.modules.Discord.client.user.setActivity(msg);
     }
 };
