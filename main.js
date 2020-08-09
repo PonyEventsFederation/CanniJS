@@ -49,7 +49,7 @@ Application.registerModule("Hype");
 Application.registerModule("RoutineMessages");
 Application.registerModule("InterBotCom");
 Application.registerModule("SaniSoda");
-Application.registerModule("Activity");
+// Application.registerModule("Activity");
 Application.registerModule("NoMessageProcessor");
 
 
