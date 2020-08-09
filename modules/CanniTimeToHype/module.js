@@ -24,7 +24,7 @@ module.exports = class CanniTimeToHype extends Module {
                 //Deactivated for 2020
                 //Reactivate for Galacon 2021
 
-                return this.tellMeWhen();
+                return this.tellMeWhen(msg);
                 // msg.channel.send("Currently not available...");
                 // Application.modules.Discord.setMessageSent();
             });
@@ -43,7 +43,7 @@ module.exports = class CanniTimeToHype extends Module {
                         //Deactivated for 2020
                         //Reactivate for Galacon 2021
 
-                        return this.tellMeWhen();
+                        return this.tellMeWhen(msg);
                         // msg.channel.send("Currently not available...");
                         // Application.modules.Discord.setMessageSent();
                     }
