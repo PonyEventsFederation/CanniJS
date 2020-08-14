@@ -50,6 +50,7 @@ module.exports = class Help extends Module {
         let tmp = "";
 
         data_in = data_in.split("\n\n");
+        if (data_in.length === 1) data_in = data_in[0].split("\r\n\r\n"); // handle crlf line endings
         let first = data_in.shift();
 
         data_in.forEach(function (item, index, array) {
