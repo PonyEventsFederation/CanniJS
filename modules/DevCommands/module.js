@@ -5,7 +5,7 @@ const Application = require("../../lib/Application");
 const Module = require("../../lib/Module");
 const Promise = require("bluebird");
 const Tools = require("../../lib/Tools");
-const fs = require('fs');
+const fs = require("fs");
 var dLocation;
 var idLocation;
 var ids;
@@ -16,7 +16,7 @@ var guild;
 
 module.exports = class DevC extends Module {
     start() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Starting...");
 
             this.auth_dev_master = function(id) {
@@ -32,7 +32,7 @@ module.exports = class DevC extends Module {
 
             this.load_ids();
 
-            Application.modules.Discord.client.on('message', (msg) => {
+            Application.modules.Discord.client.on("message", (msg) => {
                 if (msg.author.bot) {
                     return;
                 }
@@ -44,7 +44,8 @@ module.exports = class DevC extends Module {
                 if (Application.modules.Discord.isMessageSent()) {
                     return;
                 }
-                if (msg.isMemberMentioned(Application.getClient().user) && guild) {
+
+                if (msg.mentions.has(Application.getClient().user) && guild) {
                     if (this.auth_dev_master(msg.author.id)) {
                         if (Tools.msg_contains(msg, "add dev")) {
                             return this.addDev(msg);
@@ -56,15 +57,15 @@ module.exports = class DevC extends Module {
                     }
 
                     if (this.auth_dev_master(msg.author.id) || this.auth_dev(msg.author.id)) {
-                        if (Tools.msg_contains(msg,"status report")) {
+                        if (Tools.msg_contains(msg, "status report")) {
                             return this.sReport(msg);
                         }
 
-                        if (Tools.msg_contains(msg,"list devs")){
+                        if (Tools.msg_contains(msg, "list devs")) {
                             return this.listDevs(msg);
                         }
 
-                        if (Tools.msg_contains(msg,"list master devs")) {
+                        if (Tools.msg_contains(msg, "list master devs")) {
                             return this.listMasterDevs(msg);
                         }
 
@@ -83,16 +84,16 @@ module.exports = class DevC extends Module {
     }
 
     addDev(msg) {
-            if (msg.mentions !== null && !msg.mentions.everyone && msg.mentions.users.array().length === 2) {
-                var user = msg.mentions.users.array().find(x => x.id !== Application.getClientId());
-                this.id_add(user.id);
-                msg.channel.send(Tools.parseReply(this.config.ans_add_dev, [user]));
-                Application.modules.Discord.setMessageSent();
-            }
+        if (!msg.mentions.everyone && msg.mentions.users.array().length === 2) {
+            var user = msg.mentions.users.array().find(x => x.id !== Application.getClientId());
+            this.id_add(user.id);
+            msg.channel.send(Tools.parseReply(this.config.ans_add_dev, [user]));
+            Application.modules.Discord.setMessageSent();
+        }
     }
 
     removeDev(msg) {
-        if (msg.mentions !== null && !msg.mentions.everyone && msg.mentions.users.array().length === 2) {
+        if (!msg.mentions.everyone && msg.mentions.users.array().length === 2) {
             var user = msg.mentions.users.array().find(x => x.id !== Application.getClientId());
             this.id_remove(user.id);
             msg.channel.send(Tools.parseReply(this.config.ans_remove_dev, [user]));
@@ -107,14 +108,14 @@ module.exports = class DevC extends Module {
 
     listMasterDevs(msg) {
         var users = "";
-        dev_master_ids.forEach(item => users += guild.members.find(m => m.id === item) +"\n");
+        dev_master_ids.forEach(item => users += guild.members.find(m => m.id === item) + "\n");
         msg.channel.send(Tools.parseReply(this.config.ans_list_master_devs, [users]));
         Application.modules.Discord.setMessageSent();
     }
 
     listDevs(msg) {
         var users = "";
-        dev_ids.forEach(item => users += guild.members.find(m => m.id === item) +"\n");
+        dev_ids.forEach(item => users += guild.members.find(m => m.id === item) + "\n");
         msg.channel.send(Tools.parseReply(this.config.ans_list_dev, [users]));
         Application.modules.Discord.setMessageSent();
     }
@@ -124,9 +125,9 @@ module.exports = class DevC extends Module {
             msg.delete();
         }
         var user;
-        if (msg.mentions !== null && !msg.mentions.everyone && msg.mentions.users.array().length === 2) {
+        if (!msg.mentions.everyone && msg.mentions.users.array().length === 2) {
             user = msg.mentions.users.array().find(x => x.id !== Application.getClientId());
-            msg.channel.send(Tools.parseReply(this.config.ans_member_id, [user.username,user.id])).then(message => {message.delete(8000);});
+            msg.channel.send(Tools.parseReply(this.config.ans_member_id, [user.username, user.id])).then(message => {message.delete(8000);});
         }
         Application.modules.Discord.setMessageSent();
     }
@@ -135,21 +136,21 @@ module.exports = class DevC extends Module {
         if (msg.channel.type !== "dm") {
             msg.delete();
         }
-        msg.channel.send(Tools.parseReply(this.config.ans_channel_id, [msg.channel.id])).then(message => {message.delete(8000)});
+        msg.channel.send(Tools.parseReply(this.config.ans_channel_id, [msg.channel.id])).then(message => message.delete(8000));
         Application.modules.Discord.setMessageSent();
     }
 
     stop() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Stopping...");
             return resolve(this);
-        })
+        });
     }
 
-    load_ids () {
+    load_ids() {
         var dconfig;
         idLocation = Application.config.config_path + "/application/ids.json";
-        dLocation =  Application.config.config_path + "/Discord.json";
+        dLocation = Application.config.config_path + "/Discord.json";
 
         if (!fs.existsSync(idLocation)) {
             fs.writeFileSync(idLocation, "[[],[]]");
@@ -167,21 +168,21 @@ module.exports = class DevC extends Module {
         if (fs.existsSync(dLocation)) {
             dconfig = Tools.loadCommentedConfigFile(dLocation);
 
-            if (dconfig.token.toLowerCase() === 'env') {
+            if (dconfig.token.toLowerCase() === "env") {
                 if (Tools.test_ENV("MASTER_DEV_ID")) {
                     var masters = process.env.MASTER_DEV_ID.split(",");
                     masters.forEach(this.add_master_dev);
                     ids = [dev_ids, dev_master_ids];
-                    fs.writeFile(idLocation, JSON.stringify(ids), function (err) {if (err) throw err;});
+                    fs.writeFile(idLocation, JSON.stringify(ids), function(err) {if (err) throw err;});
                 }
             }
         }
     }
 
-    add_master_dev(item, index){
+    add_master_dev(item) {
         if (!dev_master_ids.includes(item)) {
             dev_master_ids.push(item);
-            if (!dev_ids.includes(item)) {dev_ids.push(item);}
+            if (!dev_ids.includes(item)) dev_ids.push(item);
         }
     }
 

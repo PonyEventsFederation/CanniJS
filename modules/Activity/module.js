@@ -8,14 +8,14 @@ const Tools = require("../../lib/Tools");
 
 module.exports = class Activity extends Module {
     start() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Starting...");
 
             this.propability = 0.25;
 
             this.activitySelect();
 
-            Application.modules.Discord.client.on('message', (msg) => {
+            Application.modules.Discord.client.on("message", (msg) => {
                 if (msg.author.bot) {
                     return;
                 }
@@ -37,8 +37,8 @@ module.exports = class Activity extends Module {
     }
 
     randomizerActivity() {
-        if (Tools.chancePercent(this.propability,true)) {
-            this.activitySelect()
+        if (Tools.chancePercent(this.propability, true)) {
+            this.activitySelect();
         }
     }
 
@@ -46,15 +46,21 @@ module.exports = class Activity extends Module {
         if (!Application.modules.Discord.isReady()) {
             return;
         }
-        let random = Tools.getRandomIntFromInterval(0, this.config.activity.length - 1);
-        Application.modules.Discord.client.user.setActivity(this.config.activity[random]);
+        const random = Tools.getRandomIntFromInterval(0, this.config.activity.length - 1);
+        Application.modules.Discord.client.user.setPresence({
+            status: "online",
+            afk: false,
+            activity: {
+                name: this.config.activity[random]
+            }
+        });
     }
 
 
     stop() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Stopping...");
             return resolve(this);
-        })
+        });
     }
 };

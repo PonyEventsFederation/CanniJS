@@ -8,14 +8,14 @@ const Tools = require("../../lib/Tools");
 
 module.exports = class UserJoined extends Module {
     start() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Starting...");
 
-            Application.modules.Discord.client.on('guildMemberAdd', member => {
+            Application.modules.Discord.client.on("guildMemberAdd", member => {
                 this.log.info("Member joined on guild " + member.guild.name);
-                if (member.guild.channels.get(this.config.generalChannelId)) {
+                if (member.guild.channels.resolve(this.config.generalChannelId)) {
                     setTimeout(() => {
-                        member.guild.channels.get(this.config.generalChannelId).send(Tools.parseReply(this.config.welcomeMessage, [member]));
+                        member.guild.channels.resolve(this.config.generalChannelId).send(Tools.parseReply(this.config.welcomeMessage, [member]));
                     }, this.config.welcomeMessageDelay);
                 }
             });
@@ -25,9 +25,9 @@ module.exports = class UserJoined extends Module {
     }
 
     stop() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Stopping...");
             return resolve(this);
-        })
+        });
     }
 };

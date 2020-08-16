@@ -8,10 +8,10 @@ const Tools = require("../../lib/Tools");
 
 module.exports = class RockPaperScissors extends Module {
     start() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Starting...");
 
-            Application.modules.Discord.client.on('message', (msg) => {
+            Application.modules.Discord.client.on("message", (msg) => {
                 if (msg.author.bot) {
                     return;
                 }
@@ -24,8 +24,8 @@ module.exports = class RockPaperScissors extends Module {
                     return;
                 }
 
-                if (msg.isMemberMentioned(Application.modules.Discord.client.user)) {
-                    if (Tools.msg_contains(msg, 'let\'s play a game') || Tools.msg_contains(msg, 'let’s play a game')) {
+                if (msg.mentions.has(Application.modules.Discord.client.user)) {
+                    if (Tools.msg_contains(msg, "let's play a game") || Tools.msg_contains(msg, "let's play a game")) {
                         if (Application.modules.Discord.controlTalkedRecently(msg, this.config.playGameType)) {
                             return this.letsPlay(msg);
                         }
@@ -51,23 +51,23 @@ module.exports = class RockPaperScissors extends Module {
 
     getEmojiName(emoji) {
         switch (emoji) {
-            case '👊':
-                return 'rock';
-            case '🖐':
-                return 'paper';
-            case '✌':
-                return 'scissors';
-            case '🦎':
-                return 'lizard';
-            case '🖖':
-                return 'Spock';
+            case "👊":
+                return "rock";
+            case "🖐":
+                return "paper";
+            case "✌":
+                return "scissors";
+            case "🦎":
+                return "lizard";
+            case "🖖":
+                return "Spock";
             default:
                 return emoji;
         }
     }
 
     letsPlay(msg, flavourText = null, gameType = null) {
-        this.log.info('started playing game');
+        this.log.info("started playing game");
 
         if (flavourText === null) {
             flavourText = this.config.playGameAnswer;
@@ -80,11 +80,11 @@ module.exports = class RockPaperScissors extends Module {
         let emojis, gameName;
         switch (gameType) {
             case "rps":
-                emojis = ['👊', '🖐', '✌'];
+                emojis = ["👊", "🖐", "✌"];
                 gameName = this.config.playTypeRPS;
                 break;
             case "rpsls":
-                emojis = ['👊', '🖐', '✌', '🦎', '🖖'];
+                emojis = ["👊", "🖐", "✌", "🦎", "🖖"];
                 gameName = this.config.playTypeRPSLS;
                 break;
             default:
@@ -93,22 +93,22 @@ module.exports = class RockPaperScissors extends Module {
 
         const canniChoice = this.getEmojiName(emojis[Math.floor(Math.random() * emojis.length)]);
 
-        msg.channel.send(Tools.parseReply(flavourText, [msg.author, gameName, Application.modules.Discord.getEmoji('excited')])).then(sentEmbed => {
+        msg.channel.send(Tools.parseReply(flavourText, [msg.author, gameName, Application.modules.Discord.getEmoji("excited")])).then(sentEmbed => {
             this.reactMultiple(sentEmbed, emojis);
 
             const filter = (reaction, user) => {
                 return emojis.includes(reaction.emoji.name) && user.id === msg.author.id;
             };
 
-            sentEmbed.awaitReactions(filter, { max: 1, time: 30000, errors: ['time'] }).then(collected => {
+            sentEmbed.awaitReactions(filter, { max: 1, time: 30000, errors: ["time"] }).then(collected => {
                 const reaction = collected.first();
 
                 const userChoice = this.getEmojiName(reaction.emoji.name);
                 this.play(msg, userChoice, canniChoice, emojis);
-                this.log.info('User chose ' + userChoice);
+                this.log.info("User chose " + userChoice);
             }).catch(() => {
-                this.log.info('User decided not to play');
-                msg.reply(Tools.parseReply(this.config.didNotPlayAnswer, [Application.modules.Discord.getEmoji('shy')]));
+                this.log.info("User decided not to play");
+                msg.reply(Tools.parseReply(this.config.didNotPlayAnswer, [Application.modules.Discord.getEmoji("shy")]));
             });
         });
 
@@ -118,7 +118,7 @@ module.exports = class RockPaperScissors extends Module {
     play(msg, userChoice, canniChoice, choices) {
         let result;
         if (userChoice === canniChoice) {
-            result = 'tie';
+            result = "tie";
         } else if (userChoice === "rock") {
             if (canniChoice === "scissors" || canniChoice == "lizard") {
                 result = "playerWin";
@@ -156,14 +156,14 @@ module.exports = class RockPaperScissors extends Module {
 
     resultMessage(msg, canniChoice, result) {
         switch (result) {
-            case 'tie':
-                msg.channel.send(Tools.parseReply(this.config.tieMessage, [msg.author, canniChoice, Application.modules.Discord.getEmoji('hello')]));
+            case "tie":
+                msg.channel.send(Tools.parseReply(this.config.tieMessage, [msg.author, canniChoice, Application.modules.Discord.getEmoji("hello")]));
                 break;
-            case 'playerWin':
-                msg.channel.send(Tools.parseReply(this.config.playerWinMessage, [msg.author, canniChoice, Application.modules.Discord.getEmoji('bizaam')]));
+            case "playerWin":
+                msg.channel.send(Tools.parseReply(this.config.playerWinMessage, [msg.author, canniChoice, Application.modules.Discord.getEmoji("bizaam")]));
                 break;
-            case 'canniWin':
-                msg.channel.send(Tools.parseReply(this.config.canniWinMessage, [msg.author, canniChoice, Application.modules.Discord.getEmoji('smile')]));
+            case "canniWin":
+                msg.channel.send(Tools.parseReply(this.config.canniWinMessage, [msg.author, canniChoice, Application.modules.Discord.getEmoji("smile")]));
                 break;
         }
 
@@ -171,9 +171,9 @@ module.exports = class RockPaperScissors extends Module {
     }
 
     stop() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Stopping...");
             return resolve(this);
-        })
+        });
     }
 };

@@ -8,10 +8,10 @@ const Tools = require("../../lib/Tools");
 
 module.exports = class AssFart extends Module {
     start() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Starting...");
 
-            Application.modules.Discord.client.on('message', (msg) => {
+            Application.modules.Discord.client.on("message", (msg) => {
                 if (msg.author.bot) {
                     return;
                 }
@@ -24,7 +24,7 @@ module.exports = class AssFart extends Module {
                     return;
                 }
 
-                if (Tools.msg_contains(msg,'assfart') && !Tools.msg_contains(msg,'is best pony')) {
+                if (Tools.msg_contains(msg, "assfart") && !Tools.msg_contains(msg, "is best pony")) {
                     return this.assFart(msg);
                 }
             });
@@ -35,7 +35,7 @@ module.exports = class AssFart extends Module {
 
     assFart(msg) {
         if (Application.modules.Discord.controlTalkedRecently(msg, this.config.assfartType)) {
-            let random = Tools.getRandomIntFromInterval(0, this.config.assfartAnswer.length - 1);
+            const random = Tools.getRandomIntFromInterval(0, this.config.assfartAnswer.length - 1);
             msg.channel.send(Tools.parseReply(this.config.assfartAnswer[random], [msg.author]));
 
             Application.modules.Discord.setMessageSent();
@@ -46,6 +46,6 @@ module.exports = class AssFart extends Module {
         return new Promise((resolve, reject) => {
             this.log.debug("Stopping...");
             return resolve(this);
-        })
+        });
     }
 };

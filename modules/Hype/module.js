@@ -9,14 +9,14 @@ var path;
 
 module.exports = class Hype extends Module {
     start() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Starting...");
 
             path = Application.config.rootDir + "/data/hype.gif";
 
-            this.bizaamEmoji = Application.modules.Discord.getEmoji('bizaam');
+            this.bizaamEmoji = Application.modules.Discord.getEmoji("bizaam");
 
-            Application.modules.Discord.client.on('message', (msg) => {
+            Application.modules.Discord.client.on("message", (msg) => {
                 if (msg.author.bot) {
                     return;
                 }
@@ -29,7 +29,7 @@ module.exports = class Hype extends Module {
                     return;
                 }
 
-                if (Tools.strContainsWord(msg.content, 'hype')) {
+                if (Tools.strContainsWord(msg.content, "hype")) {
                     return this.hype(msg);
                 }
             });
@@ -39,17 +39,17 @@ module.exports = class Hype extends Module {
     }
 
     hype(msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.hypeType, false , undefined, undefined, undefined, 120000)) {
-            msg.channel.send(Tools.parseReply(this.config.ans_hype, [this.bizaamEmoji]), {files:[path]});
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.hypeType, false, undefined, undefined, undefined, 120000)) {
+            msg.channel.send(Tools.parseReply(this.config.ans_hype, [this.bizaamEmoji]), { files:[path] });
 
             Application.modules.Discord.setMessageSent();
         }
     }
 
     stop() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Stopping...");
             return resolve(this);
-        })
+        });
     }
 };

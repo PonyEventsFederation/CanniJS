@@ -20,9 +20,9 @@ Application.configure({
 });
 
 // resources
-//Application.registerModule("EMPTY");
+// Application.registerModule("EMPTY");
 Application.registerModule("Discord");
-//Application.registerModule("Python");
+// Application.registerModule("Python");
 Application.registerModule("Remote");
 Application.registerModule("Overload");
 Application.registerModule("Ignore");
@@ -55,10 +55,10 @@ Application.registerModule("NoMessageProcessor");
 
 Application.run();
 
-process.on('SIGINT', function () {
+process.on("SIGINT", function() {
     Application.stop();
 });
 
-process.on('exit', function () {
+process.on("exit", function() {
     Application.stop();
 });
