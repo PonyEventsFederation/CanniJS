@@ -8,13 +8,13 @@ const Tools = require("../../lib/Tools");
 
 module.exports = class NoMessageProcessor extends Module {
     start() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Starting...");
 
             this.remote_on = false;
             this.remote_target = null;
 
-            Application.modules.Discord.client.on('message', (msg) => {
+            Application.modules.Discord.client.on("message", (msg) => {
                 if (msg.author.bot) {
                     return;
                 }
@@ -28,12 +28,12 @@ module.exports = class NoMessageProcessor extends Module {
                 }
 
                 // When no message was sent, Canni either says she doesn't understand, or boops someone at random if she's not mentioned.
-                if (msg.isMemberMentioned(Application.getClient().user)) {
+                if (msg.mentions.has(Application.getClient().user)) {
                     if (!this.remote_on || this.remote_target !== msg.channel) {
-                        msg.channel.send(Tools.parseReply(this.config.stillLearningAnswer, [Application.modules.Discord.getEmoji('shy')]));
+                        msg.channel.send(Tools.parseReply(this.config.stillLearningAnswer, [Application.modules.Discord.getEmoji("shy")]));
                     }
                 } else {
-                    let random = Tools.getRandomIntFromInterval(0, 300);
+                    const random = Tools.getRandomIntFromInterval(0, 300);
                     if (random === 10) {
                         msg.channel.send(Tools.parseReply(this.config.randomBoopAnswer, [msg.author]));
                     }
@@ -49,9 +49,9 @@ module.exports = class NoMessageProcessor extends Module {
     }
 
     stop() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Stopping...");
             return resolve(this);
-        })
+        });
     }
 };

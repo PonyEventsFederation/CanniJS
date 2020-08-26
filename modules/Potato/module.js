@@ -9,12 +9,12 @@ var smartato_emo;
 
 module.exports = class Potato extends Module {
     start() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Starting...");
 
-            smartato_emo = Tools.getEmoji(Application.getClient(),"smartato");
+            smartato_emo = Tools.getEmoji(Application.getClient(), "smartato");
 
-            Application.modules.Discord.client.on('message', (msg) => {
+            Application.modules.Discord.client.on("message", (msg) => {
                 if (msg.author.bot) {
                     return;
                 }
@@ -31,7 +31,7 @@ module.exports = class Potato extends Module {
                     return this.potato(msg);
                 } else if (Tools.msg_contains_list(msg, this.config.phrase_best_potato)) {
                     return this.bestpotato(msg);
-                } else if (Tools.msg_contains(msg,'potato') || Tools.msg_contains(msg,'smartato')) {
+                } else if (Tools.msg_contains(msg, "potato") || Tools.msg_contains(msg, "smartato")) {
                     return this.potatofy(msg);
                 }
             });
@@ -42,7 +42,7 @@ module.exports = class Potato extends Module {
 
     bestpotato(msg) {
         if (Application.modules.Discord.controlTalkedRecently(msg, this.config.bestpotatoType)) {
-            let random = Tools.getRandomIntFromInterval(0, this.config.ans_best_potato.length - 1);
+            const random = Tools.getRandomIntFromInterval(0, this.config.ans_best_potato.length - 1);
             msg.channel.send(Tools.parseReply(this.config.ans_best_potato[random], [msg.author])).then(sentEmbed => {
                 this.potatofy(sentEmbed);
             });
@@ -52,7 +52,7 @@ module.exports = class Potato extends Module {
 
     potato(msg) {
         if (Application.modules.Discord.controlTalkedRecently(msg, this.config.potatoType)) {
-            let random = Tools.getRandomIntFromInterval(0, this.config.ans_potato.length - 1);
+            const random = Tools.getRandomIntFromInterval(0, this.config.ans_potato.length - 1);
             msg.channel.send(Tools.parseReply(this.config.ans_potato[random], [msg.author])).then(sentEmbed => {
                 this.potatofy(sentEmbed);
             });
@@ -65,9 +65,9 @@ module.exports = class Potato extends Module {
     }
 
     stop() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Stopping...");
             return resolve(this);
-        })
+        });
     }
 };

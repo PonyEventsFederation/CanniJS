@@ -8,10 +8,10 @@ const Tools = require("../../lib/Tools");
 
 module.exports = class MentionCanni extends Module {
     start() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Starting...");
 
-            Application.modules.Discord.client.on('message', (msg) => {
+            Application.modules.Discord.client.on("message", (msg) => {
                 if (msg.author.bot) {
                     return;
                 }
@@ -24,7 +24,7 @@ module.exports = class MentionCanni extends Module {
                     return;
                 }
 
-                if (msg.isMemberMentioned(Application.modules.Discord.client.user)) {
+                if (msg.mentions.has(Application.modules.Discord.client.user)) {
                     return this.CanniIsMentioned(msg);
                 }
             });
@@ -34,11 +34,11 @@ module.exports = class MentionCanni extends Module {
     }
 
     CanniIsMentioned(msg) {
-        if (Tools.msg_contains(msg, 'i love you') || Tools.msg_contains(msg, 'we love you')) {
+        if (Tools.msg_contains(msg, "i love you") || Tools.msg_contains(msg, "we love you")) {
             return this.love(msg);
         }
 
-        if (Tools.msg_contains(msg, 'brohoof') || Tools.msg_contains(msg, '/)')) {
+        if (Tools.msg_contains(msg, "brohoof") || Tools.msg_contains(msg, "/)")) {
             return this.broHoof(msg);
         }
 
@@ -47,20 +47,20 @@ module.exports = class MentionCanni extends Module {
         }
 
         if (Tools.msg_contains_list(msg, this.config.phrase_how_many_members)) {
-            return this.memberCount(msg)
+            return this.memberCount(msg);
         }
 
-        if (Tools.msg_contains(msg, 'merry christmas')) {
+        if (Tools.msg_contains(msg, "merry christmas")) {
             Application.modules.Discord.setMessageSent();
         }
     }
 
     love(msg) {
-        var cooldownMessage = Tools.parseReply(this.config.cooldownMessageLove, [msg.author, Application.modules.Discord.getEmoji('error')]);
+        var cooldownMessage = Tools.parseReply(this.config.cooldownMessageLove, [msg.author, Application.modules.Discord.getEmoji("error")]);
 
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.loveCanniType, true, 'channel', cooldownMessage)) {
-            let random = Tools.getRandomIntFromInterval(0, this.config.loveAnswer.length - 1);
-            msg.channel.send(Tools.parseReply(this.config.loveAnswer[random], [msg.author, Application.modules.Discord.getEmoji('love')]));
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.loveCanniType, true, "channel", cooldownMessage)) {
+            const random = Tools.getRandomIntFromInterval(0, this.config.loveAnswer.length - 1);
+            msg.channel.send(Tools.parseReply(this.config.loveAnswer[random], [msg.author, Application.modules.Discord.getEmoji("love")]));
 
             Application.modules.Discord.setMessageSent();
         }
@@ -68,7 +68,7 @@ module.exports = class MentionCanni extends Module {
 
     howAreYou(msg) {
         if (Application.modules.Discord.controlTalkedRecently(msg, this.config.howAreYouType)) {
-            let broken = Tools.getRandomIntFromInterval(0, 200);
+            const broken = Tools.getRandomIntFromInterval(0, 200);
 
             if (broken === 100) {
                 msg.channel.send(Tools.parseReply(this.config.chrisBrokeMeAnswer, [msg.author]));
@@ -77,7 +77,7 @@ module.exports = class MentionCanni extends Module {
             } else if (broken <= 10) {
                 msg.channel.send(Tools.parseReply(this.config.remoteAnswer, [msg.author]));
             } else {
-                let random = Tools.getRandomIntFromInterval(0, this.config.howAreYouAnswer.length - 1);
+                const random = Tools.getRandomIntFromInterval(0, this.config.howAreYouAnswer.length - 1);
                 msg.channel.send(Tools.parseReply(this.config.howAreYouAnswer[random], [msg.author]));
             }
 
@@ -94,16 +94,16 @@ module.exports = class MentionCanni extends Module {
     }
 
     broHoof(msg) {
-        let random = Tools.getRandomIntFromInterval(0, this.config.broHoofAnswer.length - 1);
+        const random = Tools.getRandomIntFromInterval(0, this.config.broHoofAnswer.length - 1);
         msg.channel.send(Tools.parseReply(this.config.broHoofAnswer[random], [msg.author]));
 
         Application.modules.Discord.setMessageSent();
     }
 
     stop() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Stopping...");
             return resolve(this);
-        })
+        });
     }
 };

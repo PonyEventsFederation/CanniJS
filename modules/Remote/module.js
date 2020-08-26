@@ -13,14 +13,14 @@ var active = false;
 
 module.exports = class Remote extends Module {
     start() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Starting...");
 
             if (Tools.test_ENV("GENERAL_CHAT")) {
-                target = Application.getClient().channels.find(x => x.id === process.env.GENERAL_CHAT);
+                target = Application.getClient().channels.fetch(process.env.GENERAL_CHAT);
             }
 
-            Application.modules.Discord.client.on('message', (msg) => {
+            Application.modules.Discord.client.on("message", (msg) => {
                 if (msg.author.bot) {
                     return;
                 }
@@ -44,9 +44,8 @@ module.exports = class Remote extends Module {
                         if (!Tools.msg_starts(msg, ">") && active) {
                             return this.remoteControl(msg);
                         }
-                    } else {
-                        if (Tools.msg_starts(msg, ">remote") || Tools.msg_starts(msg, ">deactivate"))
-                            return this.remoteNotAvailable(msg);
+                    } else if (Tools.msg_starts(msg, ">remote") || Tools.msg_starts(msg, ">deactivate")) {
+                        return this.remoteNotAvailable(msg);
                     }
                 }
             });
@@ -105,9 +104,9 @@ module.exports = class Remote extends Module {
     }
 
     stop() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Stopping...");
             return resolve(this);
-        })
+        });
     }
 };

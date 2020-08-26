@@ -4,12 +4,12 @@
 const Application = require("../../lib/Application");
 const Module = require("../../lib/Module");
 const Promise = require("bluebird");
-const DiscordJS = require('discord.js');
+const DiscordJS = require("discord.js");
 const Tools = require("../../lib/Tools");
 
 module.exports = class Discord extends Module {
     init() {
-        return new Promise(async (resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Initializing...");
 
             this.commands = [];
@@ -20,17 +20,17 @@ module.exports = class Discord extends Module {
             this.messageSent = false;
 
             this.client = new DiscordJS.Client();
-            this.client.on('ready', () => {
+            this.client.on("ready", () => {
                 this.log.info("Discord Bot is ready to rock!");
             });
 
-            this.client.on('message', (msg) => {
+            this.client.on("message", (msg) => {
                 this.messageSent = false;
                 return this.processMessage(msg);
             });
 
             this.authToken = this.config.token;
-            if (this.authToken.toLowerCase() === 'env') {
+            if (this.authToken.toLowerCase() === "env") {
                 this.authToken = process.env.BOT_TOKEN;
             }
 
@@ -39,21 +39,21 @@ module.exports = class Discord extends Module {
     }
 
     start() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Starting...");
 
             return this.client.login(this.authToken).then(() => {
                 this.firstActivity();
                 return resolve(this);
-            }, (err) => {
+            }, err => {
                 this.log.error(err);
                 return resolve(this);
-            })
+            });
         });
     }
 
     stop() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Stopping...");
 
             this.client.destroy();
@@ -72,7 +72,7 @@ module.exports = class Discord extends Module {
         // first we process the commands
         for (let i = 0; i < this.commands.length; i++) {
             const command = this.commands[i];
-            if ((msg.isMemberMentioned(this.client.user) && msg.content.toLowerCase().includes(command.cmd)) || msg.content.toLowerCase().startsWith("!" + command.cmd)) {
+            if ((msg.mentions.has(this.client.user) && msg.content.toLowerCase().includes(command.cmd)) || msg.content.toLowerCase().startsWith("!" + command.cmd)) {
                 return command.cb(msg);
             }
         }
@@ -83,15 +83,15 @@ module.exports = class Discord extends Module {
     }
 
     addCommand(cmd, cb) {
-        this.commands.push({cmd, cb});
+        this.commands.push({ cmd, cb });
     }
 
     addReaction(text, type, cb) {
-        this.reactions.push({text, type, cb});
+        this.reactions.push({ text, type, cb });
     }
 
     getEmoji(type) {
-        var emoji = this.client.emojis.find(emoji => emoji.name.toLowerCase() === type.toLowerCase());
+        var emoji = this.client.emojis.resolve(emoji => emoji.name.toLowerCase() === type.toLowerCase());
 
         if (emoji) {
             return emoji;
@@ -112,17 +112,17 @@ module.exports = class Discord extends Module {
         return this.talkedRecently.has(userId + type);
     }
 
-    controlTalkedRecently(msg, type, sendMessage = true, target = 'channel', cooldownMessage = null, blockUser = false, cooldownTimeout = null) {
+    controlTalkedRecently(msg, type, sendMessage = true, target = "channel", cooldownMessage = null, blockUser = false, cooldownTimeout = null) {
         var cooldownTarget;
 
         switch (target) {
-            case 'channel':
+            case "channel":
                 cooldownTarget = msg.channel.id + type;
                 break;
-            case 'individual':
+            case "individual":
                 cooldownTarget = msg.author.id;
                 break;
-            case 'message':
+            case "message":
                 cooldownTarget = msg.author.id + type;
                 break;
         }
@@ -131,10 +131,9 @@ module.exports = class Discord extends Module {
             // Set the default cooldown message if none is passed from another module.
             if (cooldownMessage == null) {
                 if (Application.modules.DevCommands.auth_dev(msg.author.id)) {
-                    cooldownMessage = Tools.parseReply(this.config.cooldownMessageDev, [msg.author, this.getEmoji('shy')]);
-                }
-                else {
-                    cooldownMessage = Tools.parseReply(this.config.cooldownMessageDefault, [msg.author, this.getEmoji('error')]);
+                    cooldownMessage = Tools.parseReply(this.config.cooldownMessageDev, [msg.author, this.getEmoji("shy")]);
+                } else {
+                    cooldownMessage = Tools.parseReply(this.config.cooldownMessageDefault, [msg.author, this.getEmoji("error")]);
                 }
             }
 
@@ -212,6 +211,12 @@ module.exports = class Discord extends Module {
         }
 
         const msg = "Internal systems fully operational";
-        Application.modules.Discord.client.user.setActivity(msg);
+        Application.modules.Discord.client.user.setPresence({
+            status: "online",
+            afk: false,
+            activity: {
+                name: msg
+            }
+        });
     }
 };

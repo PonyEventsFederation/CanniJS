@@ -8,10 +8,10 @@ const Tools = require("../../lib/Tools");
 
 module.exports = class Fanta extends Module {
     start() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Starting...");
 
-            Application.modules.Discord.client.on('message', (msg) => {
+            Application.modules.Discord.client.on("message", (msg) => {
                 if (msg.author.bot) {
                     return;
                 }
@@ -24,7 +24,7 @@ module.exports = class Fanta extends Module {
                     return;
                 }
 
-                if (Tools.strContainsWord(msg.content, 'fanta') && !Tools.msg_contains(msg,'is best pony')) {
+                if (Tools.strContainsWord(msg.content, "fanta") && !Tools.msg_contains(msg, "is best pony")) {
                     return this.fanta(msg);
                 }
             });
@@ -35,7 +35,7 @@ module.exports = class Fanta extends Module {
 
     fanta(msg) {
         if (Application.modules.Discord.controlTalkedRecently(msg, this.config.fantaType)) {
-            let random = Tools.getRandomIntFromInterval(0, this.config.fantaAnswers.length - 1);
+            const random = Tools.getRandomIntFromInterval(0, this.config.fantaAnswers.length - 1);
             msg.channel.send(Tools.parseReply(this.config.fantaAnswers[random]));
 
             Application.modules.Discord.setMessageSent();
@@ -43,9 +43,9 @@ module.exports = class Fanta extends Module {
     }
 
     stop() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Stopping...");
             return resolve(this);
-        })
+        });
     }
 };

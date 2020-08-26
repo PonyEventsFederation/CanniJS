@@ -8,16 +8,16 @@ const Tools = require("../../lib/Tools");
 
 module.exports = class WorstPony extends Module {
     start() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Starting...");
 
-            Application.modules.Discord.client.on('message', (msg) => {
+            Application.modules.Discord.client.on("message", (msg) => {
                 if (msg.author.bot) {
                     return;
                 }
 
-                if (msg.isMemberMentioned(Application.modules.Discord.client.user)) {
-                    if (Tools.msg_contains(msg, 'i\'m sorry') || Tools.msg_contains(msg, 'i am sorry') || Tools.msg_contains(msg, 'i’m sorry')) {
+                if (msg.mentions.has(Application.modules.Discord.client.user)) {
+                    if (Tools.msg_contains(msg, "i'm sorry") || Tools.msg_contains(msg, "i am sorry") || Tools.msg_contains(msg, "i’m sorry")) {
                         return this.forgiveUser(msg);
                     }
                 }
@@ -30,7 +30,7 @@ module.exports = class WorstPony extends Module {
                     return;
                 }
 
-                if (Tools.msg_contains(msg, ' is worst pony')) {
+                if (Tools.msg_contains(msg, " is worst pony")) {
                     return this.whoIsWorstPony(msg);
                 }
             });
@@ -41,12 +41,12 @@ module.exports = class WorstPony extends Module {
 
     forgiveUser(msg) {
         if (Application.modules.Discord.isUserBlocked(msg.author.id)) {
-            let random = Tools.getRandomIntFromInterval(0, this.config.forgiveUserAnswer.length - 1);
-            msg.channel.send(Tools.parseReply(this.config.forgiveUserAnswer[random], [msg.author, Application.modules.Discord.getEmoji('love')]));
+            const random = Tools.getRandomIntFromInterval(0, this.config.forgiveUserAnswer.length - 1);
+            msg.channel.send(Tools.parseReply(this.config.forgiveUserAnswer[random], [msg.author, Application.modules.Discord.getEmoji("love")]));
 
             Application.modules.Discord.unblockUser(msg.author.id);
         } else {
-            let random = Tools.getRandomIntFromInterval(0, this.config.notSorryAnswer.length - 1);
+            const random = Tools.getRandomIntFromInterval(0, this.config.notSorryAnswer.length - 1);
             msg.channel.send(Tools.parseReply(this.config.notSorryAnswer[random], [msg.author]));
         }
 
@@ -55,24 +55,23 @@ module.exports = class WorstPony extends Module {
 
     whoIsWorstPony(msg) {
         switch (msg.content.toLowerCase()) {
-            case 'canni is worst pony':
-            case 'canni soda is worst pony':
+            case "canni is worst pony":
+            case "canni soda is worst pony":
                 var cooldownMessage = Tools.parseReply(this.config.cooldownMessageWorstPony, [msg.author]);
 
-                if (Application.modules.Discord.controlTalkedRecently(msg, this.config.canniWorstPonyType, true, 'individual', cooldownMessage, true, this.config.blockTimeout)) {
-                    let random = Tools.getRandomIntFromInterval(0, this.config.canniWorstPonyAnswer.length - 1);
+                if (Application.modules.Discord.controlTalkedRecently(msg, this.config.canniWorstPonyType, true, "individual", cooldownMessage, true, this.config.blockTimeout)) {
+                    const random = Tools.getRandomIntFromInterval(0, this.config.canniWorstPonyAnswer.length - 1);
                     msg.channel.send(Tools.parseReply(this.config.canniWorstPonyAnswer[random], [msg.author]));
 
                     Application.modules.Discord.setMessageSent();
                 }
-                break;
         }
     }
 
     stop() {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             this.log.debug("Stopping...");
             return resolve(this);
-        })
+        });
     }
 };
