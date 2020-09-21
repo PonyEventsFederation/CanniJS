@@ -1,23 +1,23 @@
-"use strict";
+'use strict';
 
 // @IMPORTS
-const Application = require("../../lib/Application");
-const Module = require("../../lib/Module");
-const Promise = require("bluebird");
-const Tools = require("../../lib/Tools");
-const moment = require("moment");
+const Application = require('../../lib/Application');
+const Module = require('../../lib/Module');
+const Promise = require('bluebird');
+const Tools = require('../../lib/Tools');
+const moment = require('moment');
 
 module.exports = class Hug extends Module {
     start() {
         return new Promise(resolve => {
-            this.log.debug("Starting...");
+            this.log.debug('Starting...');
 
-            this.hugEmoji = Application.modules.Discord.getEmoji("hug");
+            this.hugEmoji = Application.modules.Discord.getEmoji('hug');
 
             // time in ms
             this.hugDeleteTimeout = 40000;
 
-            Application.modules.Discord.client.on("message", (msg) => {
+            Application.modules.Discord.client.on('message', (msg) => {
                 if (msg.author.bot) {
                     return;
                 }
@@ -37,12 +37,12 @@ module.exports = class Hug extends Module {
                     }
                 }
 
-                if (Tools.msg_starts(msg, "hug")) {
+                if (Tools.msg_starts(msg, 'hug')) {
                     if (!msg.mentions.everyone && msg.mentions.users.array().length > 0) {
                         const users = msg.mentions.users.array();
 
                         if (users.length > this.config.hugLimit) {
-                            const cooldownMessage = Tools.parseReply(this.config.cooldownMessage, [msg.author, Application.modules.Discord.getEmoji("error")]);
+                            const cooldownMessage = Tools.parseReply(this.config.cooldownMessage, [msg.author, Application.modules.Discord.getEmoji('error')]);
 
                             if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.hugType)) {
                                 Application.modules.Discord.setCooldown(msg.author.id, this.config.hugType, this.config.hugTimeout);
@@ -73,10 +73,10 @@ module.exports = class Hug extends Module {
                     }
                 }
 
-                if (Tools.msg_starts(msg, "megahug") || Tools.msg_starts(msg, "mega hug")) {
+                if (Tools.msg_starts(msg, 'megahug') || Tools.msg_starts(msg, 'mega hug')) {
                     const now = moment();
-                    const val = moment().endOf("day");
-                    const megaHugTimeout = val.diff(now, "milliseconds");
+                    const val = moment().endOf('day');
+                    const megaHugTimeout = val.diff(now, 'milliseconds');
 
                     if (!msg.mentions.everyone && msg.mentions.users.array().length === 1) {
                         const user = msg.mentions.users.array()[0];
@@ -86,7 +86,7 @@ module.exports = class Hug extends Module {
 
                         const cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaHug, [msg.author]);
 
-                        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaHugType, true, "message", cooldownMessage, false, megaHugTimeout)) {
+                        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaHugType, true, 'message', cooldownMessage, false, megaHugTimeout)) {
                             return this.megaHug(msg, user);
                         }
                     }
@@ -109,11 +109,12 @@ module.exports = class Hug extends Module {
         const answer = this.config.megaHugAnswer[random];
         if (Array.isArray(answer)) {
             Tools.listSender(msg.channel, answer, [1000], [user, this.hugEmoji]);
-        } else {
+        }
+        else {
             msg.channel.send(Tools.parseReply(answer, [user, this.hugEmoji]));
         }
 
-        Application.modules.Overload.overload("hug");
+        Application.modules.Overload.overload('hug');
         Application.modules.Discord.setMessageSent();
     }
 
@@ -121,52 +122,52 @@ module.exports = class Hug extends Module {
         const random = Tools.getRandomIntFromInterval(0, this.config.requestHugAnswer.length - 1);
         msg.channel.send(Tools.parseReply(this.config.requestHugAnswer[random], [msg.author, msg.author, this.hugEmoji]));
 
-        Application.modules.Overload.overload("hug");
+        Application.modules.Overload.overload('hug');
         Application.modules.Discord.setMessageSent();
     }
 
     botHug(msg) {
         const random = Tools.getRandomIntFromInterval(0, this.config.botHugAnswer.length - 1);
         msg.delete();
-        msg.channel.send(Tools.parseReply(this.config.botHugAnswer[random], [msg.author, this.hugEmoji])).then(msg => {
-            msg.delete({ timeout: this.hugDeleteTimeout });
+        msg.channel.send(Tools.parseReply(this.config.botHugAnswer[random], [msg.author, this.hugEmoji])).then(message => {
+            message.delete({ timeout: this.hugDeleteTimeout });
         });
 
-        Application.modules.Overload.overload("hug");
+        Application.modules.Overload.overload('hug');
         Application.modules.Discord.setMessageSent();
 
-        // console.log("botHug");
+        // console.log('botHug');
     }
 
     selfHug(msg) {
         const random = Tools.getRandomIntFromInterval(0, this.config.selfHugAnswer.length - 1);
         msg.delete();
-        msg.channel.send(Tools.parseReply(this.config.selfHugAnswer[random], [msg.author, this.hugEmoji])).then(msg => {
-            msg.delete({ timeout: this.hugDeleteTimeout });
+        msg.channel.send(Tools.parseReply(this.config.selfHugAnswer[random], [msg.author, this.hugEmoji])).then(message => {
+            message.delete({ timeout: this.hugDeleteTimeout });
         });
 
-        Application.modules.Overload.overload("hug");
+        Application.modules.Overload.overload('hug');
         Application.modules.Discord.setMessageSent();
 
-        // console.log("selfHug");
+        // console.log('selfHug');
     }
 
     hug(target, msg) {
         const random = Tools.getRandomIntFromInterval(0, this.config.hugAnswer.length - 1);
         msg.delete();
-        msg.channel.send(Tools.parseReply(this.config.hugAnswer[random], [target, msg.author, this.hugEmoji])).then(msg => {
-            msg.delete({ timeout: this.hugDeleteTimeout });
+        msg.channel.send(Tools.parseReply(this.config.hugAnswer[random], [target, msg.author, this.hugEmoji])).then(message => {
+            message.delete({ timeout: this.hugDeleteTimeout });
         });
 
-        Application.modules.Overload.overload("hug");
+        Application.modules.Overload.overload('hug');
         Application.modules.Discord.setMessageSent();
 
-        // console.log("hug");
+        // console.log('hug');
     }
 
     stop() {
         return new Promise(resolve => {
-            this.log.debug("Stopping...");
+            this.log.debug('Stopping...');
             return resolve(this);
         });
     }

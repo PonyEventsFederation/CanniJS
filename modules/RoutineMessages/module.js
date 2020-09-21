@@ -1,26 +1,26 @@
-"use strict";
+'use strict';
 
 // @IMPORTS
-const Application = require("../../lib/Application");
-const Module = require("../../lib/Module");
-const Promise = require("bluebird");
-const Tools = require("../../lib/Tools");
-var target;
-var inactive = true;
-var interval;
+const Application = require('../../lib/Application');
+const Module = require('../../lib/Module');
+const Promise = require('bluebird');
+const Tools = require('../../lib/Tools');
+let target;
+let inactive = true;
+let interval;
 
 module.exports = class RoutineMessages extends Module {
     start() {
         return new Promise(resolve => {
-            this.log.debug("Starting...");
+            this.log.debug('Starting...');
 
-            if (Tools.test_ENV("GENERAL_CHAT")) {
+            if (Tools.test_ENV('GENERAL_CHAT')) {
                 target = Application.getClient().channels.fetch(process.env.GENERAL_CHAT);
             }
 
             interval = this.config.m_time_imterval;
 
-            Application.modules.Discord.client.on("message", (msg) => {
+            Application.modules.Discord.client.on('message', (msg) => {
                 if (msg.author.bot) {
                     return;
                 }
@@ -52,8 +52,8 @@ module.exports = class RoutineMessages extends Module {
     specificTimer(time) {
         const hour = time[0];
         const minute = time[1];
-        var now = new Date();
-        var millisTill10 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute, 0, 0) - now;
+        const now = new Date();
+        let millisTill10 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute, 0, 0) - now;
         if (millisTill10 < 0) {
             millisTill10 += 86400000;
         }
@@ -90,7 +90,8 @@ module.exports = class RoutineMessages extends Module {
     processMaintenance(data) {
         if (Array.isArray(data)) {
             Tools.listSender(target, data, 15000);
-        } else {
+        }
+        else {
             target.send(data);
         }
     }

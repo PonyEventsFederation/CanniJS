@@ -1,22 +1,22 @@
-"use strict";
+'use strict';
 
 // @IMPORTS
-const Application = require("../../lib/Application");
-const Module = require("../../lib/Module");
-const Promise = require("bluebird");
-const Tools = require("../../lib/Tools");
-const fetch = require("node-fetch");
-var config;
+const Application = require('../../lib/Application');
+const Module = require('../../lib/Module');
+const Promise = require('bluebird');
+const Tools = require('../../lib/Tools');
+const fetch = require('node-fetch');
+let config;
 
 module.exports = class Compliment extends Module {
     start() {
         return new Promise(resolve => {
-            this.log.debug("Starting...");
+            this.log.debug('Starting...');
 
-            this.hugEmoji = Application.modules.Discord.getEmoji("hug");
+            this.hugEmoji = Application.modules.Discord.getEmoji('hug');
             config = this.config;
 
-            Application.modules.Discord.client.on("message", (msg) => {
+            Application.modules.Discord.client.on('message', (msg) => {
                 if (msg.author.bot) {
                     return;
                 }
@@ -30,13 +30,13 @@ module.exports = class Compliment extends Module {
                 }
 
                 if (msg.mentions.has(Application.getClient().user)) {
-                    if (Tools.msg_starts_mentioned(msg, "compliment")) {
+                    if (Tools.msg_starts_mentioned(msg, 'compliment')) {
                         if (!msg.mentions.everyone && msg.mentions.users.array().length > 0) {
                             const users = msg.mentions.users.array();
 
                             for (let i = 0; i < users.length; i++) {
                                 if (Application.checkSelf(users[i].id)) {
-                                    const id = Tools.get_id_from_mention(msg.content.split(" ").filter(Boolean)[2]);
+                                    const id = Tools.get_id_from_mention(msg.content.split(' ').filter(Boolean)[2]);
                                     if (msg.mentions.users.array().length === 1 && Application.checkSelf(id)) {
                                         this.compliment_bot(msg);
                                     }
@@ -45,7 +45,8 @@ module.exports = class Compliment extends Module {
                                 if (users[i].id === msg.author.id) {
                                     if (Application.modules.DevCommands.auth_dev(msg.author.id)) {
                                         this.compliment_dev(msg);
-                                    } else {
+                                    }
+                                    else {
                                         this.compliment_self(msg);
                                     }
                                     continue;
@@ -55,10 +56,11 @@ module.exports = class Compliment extends Module {
                             }
                         }
                     }
-                    if (Tools.msg_starts_mentioned(msg, "compliment me")) {
+                    if (Tools.msg_starts_mentioned(msg, 'compliment me')) {
                         if (Application.modules.DevCommands.auth_dev(msg.author.id)) {
                             return this.compliment_dev(msg);
-                        } else {
+                        }
+                        else {
                             return this.compliment_self(msg);
                         }
                     }
@@ -70,32 +72,32 @@ module.exports = class Compliment extends Module {
     }
 
     compliment_self(msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.selfcomplimentType, true, "message", undefined, undefined, 120000)) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.selfcomplimentType, true, 'message', undefined, undefined, 120000)) {
             this.getCompliment().then(function(out) {
-                msg.channel.send(Tools.parseReply(config.ans_self_compliment_template, [msg.author, out["compliment"]]));
+                msg.channel.send(Tools.parseReply(config.ans_self_compliment_template, [msg.author, out['compliment']]));
             });
             Application.modules.Discord.setMessageSent();
         }
     }
 
     compliment_user(user, msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.usercomplimentType, true, "message", undefined, undefined, 120000)) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.usercomplimentType, true, 'message', undefined, undefined, 120000)) {
             this.getCompliment().then(function(out) {
-                msg.channel.send(Tools.parseReply(config.ans_user_compliment_template, [user, msg.author, out["compliment"]]));
+                msg.channel.send(Tools.parseReply(config.ans_user_compliment_template, [user, msg.author, out['compliment']]));
             });
             Application.modules.Discord.setMessageSent();
         }
     }
 
     compliment_bot(msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.botcomplimentType, true, "message", undefined, undefined, 120000)) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.botcomplimentType, true, 'message', undefined, undefined, 120000)) {
             msg.channel.send(Tools.parseReply(this.config.ans_bot_compliment, [msg.author, this.hugEmoji]));
             Application.modules.Discord.setMessageSent();
         }
     }
 
     getCompliment() {
-        return fetch("https://complimentr.com/api").then(res => res.json()).catch(err => console.error(err));
+        return fetch('https://complimentr.com/api').then(res => res.json()).catch(err => console.error(err));
     }
 
     compliment_dev(msg) {
@@ -110,7 +112,7 @@ module.exports = class Compliment extends Module {
 
     stop() {
         return new Promise(resolve => {
-            this.log.debug("Stopping...");
+            this.log.debug('Stopping...');
             return resolve(this);
         });
     }

@@ -1,21 +1,21 @@
-"use strict";
+'use strict';
 
 // @IMPORTS
-const Application = require("../../lib/Application");
-const Module = require("../../lib/Module");
-const Promise = require("bluebird");
-const Tools = require("../../lib/Tools");
+const Application = require('../../lib/Application');
+const Module = require('../../lib/Module');
+const Promise = require('bluebird');
+const Tools = require('../../lib/Tools');
 
 module.exports = class Activity extends Module {
     start() {
         return new Promise(resolve => {
-            this.log.debug("Starting...");
+            this.log.debug('Starting...');
 
             this.propability = 0.25;
 
             this.activitySelect();
 
-            Application.modules.Discord.client.on("message", (msg) => {
+            Application.modules.Discord.client.on('message', (msg) => {
                 if (msg.author.bot) {
                     return;
                 }
@@ -48,18 +48,18 @@ module.exports = class Activity extends Module {
         }
         const random = Tools.getRandomIntFromInterval(0, this.config.activity.length - 1);
         Application.modules.Discord.client.user.setPresence({
-            status: "online",
+            status: 'online',
             afk: false,
             activity: {
-                name: this.config.activity[random]
-            }
+                name: this.config.activity[random],
+            },
         });
     }
 
 
     stop() {
         return new Promise(resolve => {
-            this.log.debug("Stopping...");
+            this.log.debug('Stopping...');
             return resolve(this);
         });
     }

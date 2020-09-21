@@ -1,30 +1,31 @@
-"use strict";
+'use strict';
 
 // @IMPORTS
-const Application = require("../../lib/Application");
-const Module = require("../../lib/Module");
-const Promise = require("bluebird");
-const Tools = require("../../lib/Tools");
-const fs = require("fs");
-var idLocation;
-var ignore_ids;
-var write_to_file = true;
-var guild;
+const Application = require('../../lib/Application');
+const Module = require('../../lib/Module');
+const Promise = require('bluebird');
+const Tools = require('../../lib/Tools');
+const fs = require('fs');
+let idLocation;
+let ignore_ids;
+let guild;
+const write_to_file = true;
+
 // var potato_emo;
 
 module.exports = class Ignore extends Module {
     start() {
         return new Promise(resolve => {
-            this.log.debug("Starting...");
+            this.log.debug('Starting...');
 
-            if (Tools.test_ENV("MAIN_SERVER")) {
+            if (Tools.test_ENV('MAIN_SERVER')) {
                 guild = Tools.guild_by_id(Application.getClient(), process.env.MAIN_SERVER);
-                // potato_emo = Tools.getEmoji(guild,"potato");
+                // potato_emo = Tools.getEmoji(guild,'potato');
             }
 
             this.load_ignore_ids();
 
-            Application.modules.Discord.client.on("message", (msg) => {
+            Application.modules.Discord.client.on('message', (msg) => {
                 if (msg.author.bot) {
                     return;
                 }
@@ -43,9 +44,10 @@ module.exports = class Ignore extends Module {
                         return this.ignored_mentioned(msg);
                     }
                     if (Application.modules.DevCommands.auth_dev_master(msg.author.id)) {
-                        if (Tools.msg_contains(msg, "ignore potato")) {
+                        if (Tools.msg_contains(msg, 'ignore potato')) {
                             return this.potato_ignore(msg);
-                        } else if (Tools.msg_contains(msg, "stop ignoring")) {
+                        }
+                        else if (Tools.msg_contains(msg, 'stop ignoring')) {
                             return this.potato_stop_ignore(msg);
                         }
                     }
@@ -63,7 +65,7 @@ module.exports = class Ignore extends Module {
 
     potato_ignore(msg) {
         if (!msg.mentions.everyone && msg.mentions.users.array().length === 2) {
-            var user = msg.mentions.users.array().find(x => x.id !== Application.getClientId());
+            const user = msg.mentions.users.array().find(x => x.id !== Application.getClientId());
             this.ignore_id_add(user.id);
             msg.channel.send(Tools.parseReply(this.config.ans_potato_begin_ignore, [msg.author]));
             Application.modules.Discord.setMessageSent();
@@ -72,7 +74,7 @@ module.exports = class Ignore extends Module {
 
     potato_stop_ignore(msg) {
         if (!msg.mentions.everyone && msg.mentions.users.array().length === 2) {
-            var user = msg.mentions.users.array().find(x => x.id !== Application.getClientId());
+            const user = msg.mentions.users.array().find(x => x.id !== Application.getClientId());
             this.ignore_id_remove(user.id);
             msg.channel.send(Tools.parseReply(this.config.ans_potato_stop_ignore, [msg.author]));
             Application.modules.Discord.setMessageSent();
@@ -80,7 +82,7 @@ module.exports = class Ignore extends Module {
     }
 
     ignored(msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.potato_ignoredType, false, "message", undefined, undefined, 600000)) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.potato_ignoredType, false, 'message', undefined, undefined, 600000)) {
             msg.channel.send(Tools.parseReply(this.config.ans_potato_ignore, [msg.author])).then(() => {
                 // msg.react(potato_emo);
             });
@@ -88,7 +90,7 @@ module.exports = class Ignore extends Module {
     }
 
     ignored_mentioned(msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.potato_ignored_mentionedType, false, "message", undefined, undefined, 600000)) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.potato_ignored_mentionedType, false, 'message', undefined, undefined, 600000)) {
             msg.channel.send(Tools.parseReply(this.config.ans_potato_ignored_mentioned, [msg.author])).then(() => {
                 // msg.react(potato_emo);
             });
@@ -97,7 +99,7 @@ module.exports = class Ignore extends Module {
 
     stop() {
         return new Promise(resolve => {
-            this.log.debug("Stopping...");
+            this.log.debug('Stopping...');
             return resolve(this);
         });
     }
@@ -114,16 +116,17 @@ module.exports = class Ignore extends Module {
     }
 
     load_ignore_ids() {
-        idLocation = Application.config.config_path + "/application/ignore_ids.json";
+        idLocation = Application.config.config_path + '/application/ignore_ids.json';
 
         if (!fs.existsSync(idLocation)) {
-            fs.writeFileSync(idLocation, "[]");
+            fs.writeFileSync(idLocation, '[]');
         }
 
         try {
             ignore_ids = Tools.loadCommentedConfigFile(idLocation);
-        } catch (e) {
-            throw new Error("config of module ... contains invalid json data: " + e.toString());
+        }
+        catch (e) {
+            throw new Error('config of module ... contains invalid json data: ' + e.toString());
         }
     }
 

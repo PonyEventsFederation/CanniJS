@@ -1,22 +1,22 @@
-"use strict";
+'use strict';
 
 // @IMPORTS
-const Application = require("../../lib/Application");
-const Module = require("../../lib/Module");
-const Promise = require("bluebird");
-const Tools = require("../../lib/Tools");
-var path;
+const Application = require('../../lib/Application');
+const Module = require('../../lib/Module');
+const Promise = require('bluebird');
+const Tools = require('../../lib/Tools');
+let path;
 
 module.exports = class Hype extends Module {
     start() {
         return new Promise(resolve => {
-            this.log.debug("Starting...");
+            this.log.debug('Starting...');
 
-            path = Application.config.rootDir + "/data/hype.gif";
+            path = Application.config.rootDir + '/data/hype.gif';
 
-            this.bizaamEmoji = Application.modules.Discord.getEmoji("bizaam");
+            this.bizaamEmoji = Application.modules.Discord.getEmoji('bizaam');
 
-            Application.modules.Discord.client.on("message", (msg) => {
+            Application.modules.Discord.client.on('message', (msg) => {
                 if (msg.author.bot) {
                     return;
                 }
@@ -29,7 +29,7 @@ module.exports = class Hype extends Module {
                     return;
                 }
 
-                if (Tools.strContainsWord(msg.content, "hype")) {
+                if (Tools.strContainsWord(msg.content, 'hype')) {
                     return this.hype(msg);
                 }
             });
@@ -48,7 +48,7 @@ module.exports = class Hype extends Module {
 
     stop() {
         return new Promise(resolve => {
-            this.log.debug("Stopping...");
+            this.log.debug('Stopping...');
             return resolve(this);
         });
     }

@@ -1,26 +1,26 @@
-"use strict";
+'use strict';
 
 // @IMPORTS
-const Application = require("../../lib/Application");
-const Module = require("../../lib/Module");
-const Promise = require("bluebird");
-const Tools = require("../../lib/Tools");
+const Application = require('../../lib/Application');
+const Module = require('../../lib/Module');
+const Promise = require('bluebird');
+const Tools = require('../../lib/Tools');
 
-var target;
-var sender = null;
-var user;
-var active = false;
+let target;
+let sender = null;
+let user;
+let active = false;
 
 module.exports = class Remote extends Module {
     start() {
         return new Promise(resolve => {
-            this.log.debug("Starting...");
+            this.log.debug('Starting...');
 
-            if (Tools.test_ENV("GENERAL_CHAT")) {
+            if (Tools.test_ENV('GENERAL_CHAT')) {
                 target = Application.getClient().channels.fetch(process.env.GENERAL_CHAT);
             }
 
-            Application.modules.Discord.client.on("message", (msg) => {
+            Application.modules.Discord.client.on('message', (msg) => {
                 if (msg.author.bot) {
                     return;
                 }
@@ -35,16 +35,17 @@ module.exports = class Remote extends Module {
 
                 if (Application.modules.DevCommands.auth_dev(msg.author.id)) {
                     if (target) {
-                        if (Tools.msg_starts(msg, ">remote")) {
+                        if (Tools.msg_starts(msg, '>remote')) {
                             return this.remoteSwitch(msg);
                         }
-                        if (Tools.msg_starts(msg, ">deactivate")) {
+                        if (Tools.msg_starts(msg, '>deactivate')) {
                             return this.remoteDeactivate(msg);
                         }
-                        if (!Tools.msg_starts(msg, ">") && active) {
+                        if (!Tools.msg_starts(msg, '>') && active) {
                             return this.remoteControl(msg);
                         }
-                    } else if (Tools.msg_starts(msg, ">remote") || Tools.msg_starts(msg, ">deactivate")) {
+                    }
+                    else if (Tools.msg_starts(msg, '>remote') || Tools.msg_starts(msg, '>deactivate')) {
                         return this.remoteNotAvailable(msg);
                     }
                 }
@@ -62,16 +63,17 @@ module.exports = class Remote extends Module {
                 sender = null;
                 Application.modules.NoMessageProcessor.remote_on = false;
                 msg.channel.send(Tools.parseReply(this.config.ans_deactivate));
-            } else {
+            }
+            else {
                 msg.channel.send(Tools.parseReply(this.config.ans_in_use));
             }
-        } else {
+        }
+        else {
             active = !active;
             user = msg.author;
             sender = msg.channel;
             Application.modules.NoMessageProcessor.remote_on = true;
             msg.channel.send(Tools.parseReply(this.config.ans_activate));
-
         }
         Application.modules.Discord.setMessageSent();
     }
@@ -82,7 +84,8 @@ module.exports = class Remote extends Module {
             sender = null;
             Application.modules.NoMessageProcessor.remote_on = false;
             msg.channel.send(Tools.parseReply(this.config.ans_deactivate));
-        } else {
+        }
+        else {
             msg.channel.send(Tools.parseReply(this.config.ans_already_deactivate));
         }
         Application.modules.Discord.setMessageSent();
@@ -105,7 +108,7 @@ module.exports = class Remote extends Module {
 
     stop() {
         return new Promise(resolve => {
-            this.log.debug("Stopping...");
+            this.log.debug('Stopping...');
             return resolve(this);
         });
     }

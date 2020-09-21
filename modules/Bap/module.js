@@ -1,34 +1,34 @@
-"use strict";
+'use strict';
 
 // @IMPORTS
-const Application = require("../../lib/Application");
-const Module = require("../../lib/Module");
-const Promise = require("bluebird");
-const Tools = require("../../lib/Tools");
-// const moment = require("moment");
-var path;
+const Application = require('../../lib/Application');
+const Module = require('../../lib/Module');
+const Promise = require('bluebird');
+const Tools = require('../../lib/Tools');
+// const moment = require('moment');
+let path;
 // var boop_dev_on = true;
-var wachmann_id;
+let wachmann_id;
 
 module.exports = class Boop extends Module {
     start() {
         return new Promise(resolve => {
-            this.log.debug("Starting...");
+            this.log.debug('Starting...');
 
             this.boopCooldown = new Set();
             this.messageSent = new Set();
             this.interrupt = { inter: false };
             this.megaon = false;
-            path = Application.config.rootDir + "/data/impact.gif";
+            path = Application.config.rootDir + '/data/impact.gif';
 
             // time in ms
             this.bapDeleteTimeout = 40000;
 
-            if (Tools.test_ENV("WACHMANN_ID")) {
+            if (Tools.test_ENV('WACHMANN_ID')) {
                 wachmann_id = process.env.WACHMANN_ID;
             }
 
-            Application.modules.Discord.client.on("message", (msg) => {
+            Application.modules.Discord.client.on('message', (msg) => {
                 if (msg.author.bot) {
                     return;
                 }
@@ -41,7 +41,7 @@ module.exports = class Boop extends Module {
                     return;
                 }
 
-                if (Tools.msg_starts(msg, "bap")) {
+                if (Tools.msg_starts(msg, 'bap')) {
                     if (!msg.mentions.everyone && msg.mentions.users.array().length > 0) {
                         const users = msg.mentions.users.array();
 
@@ -83,11 +83,11 @@ module.exports = class Boop extends Module {
     bap(msg, user) {
         const random = Tools.getRandomIntFromInterval(0, this.config.bapAnswer.length - 1);
         msg.delete();
-        msg.channel.send(Tools.parseReply(this.config.bapAnswer[random], [user])).then(msg => {
-            msg.delete({ timeout: this.bapDeleteTimeout });
+        msg.channel.send(Tools.parseReply(this.config.bapAnswer[random], [user])).then(message => {
+            message.delete({ timeout: this.bapDeleteTimeout });
         });
 
-        Application.modules.Overload.overload("bap");
+        Application.modules.Overload.overload('bap');
         Application.modules.Discord.setMessageSent();
     }
 
@@ -98,35 +98,36 @@ module.exports = class Boop extends Module {
             const random = Tools.getRandomIntFromInterval(0, this.config.selfBapAnswer.length - 1);
             response = msg.channel.send(Tools.parseReply(this.config.selfBapAnswer[random], [
                 msg.author,
-                Application.modules.Discord.getEmoji("error")
+                Application.modules.Discord.getEmoji('error'),
             ]));
-        } else {
+        }
+        else {
             const random = Tools.getRandomIntFromInterval(0, this.config.canniBapAnswer.length - 1);
             response = msg.channel.send(Tools.parseReply(this.config.canniBapAnswer[random], [
                 msg.author,
-                Application.modules.Discord.getEmoji("error")
+                Application.modules.Discord.getEmoji('error'),
             ]));
         }
 
-        response.then(msg => {
-            msg.delete({ timeout: this.bapDeleteTimeout });
+        response.then(message => {
+            message.delete({ timeout: this.bapDeleteTimeout });
         });
 
-        Application.modules.Overload.overload("bap");
+        Application.modules.Overload.overload('bap');
         Application.modules.Discord.setMessageSent();
     }
 
     wachmannBap(msg, user) {
         const guardCooldownMessage = Tools.parseReply(this.config.bapGuardCooldownAnswer);
 
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.bapGuardType, true, "channel", guardCooldownMessage, undefined, 120000)) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.bapGuardType, true, 'channel', guardCooldownMessage, undefined, 120000)) {
             this.bap(msg, user);
         }
     }
 
     stop() {
         return new Promise(resolve => {
-            this.log.debug("Stopping...");
+            this.log.debug('Stopping...');
             return resolve(this);
         });
     }

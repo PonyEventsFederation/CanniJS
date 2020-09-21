@@ -1,16 +1,16 @@
-"use strict";
+'use strict';
 
 // @IMPORTS
-const Application = require("../../lib/Application");
-const Module = require("../../lib/Module");
-const Promise = require("bluebird");
-const Tools = require("../../lib/Tools");
+const Application = require('../../lib/Application');
+const Module = require('../../lib/Module');
+const Promise = require('bluebird');
+const Tools = require('../../lib/Tools');
 
 module.exports = class Utilities extends Module {
     start() {
         return new Promise(resolve => {
-            this.log.debug("Starting...");
-            Application.modules.Discord.client.on("message", (msg) => {
+            this.log.debug('Starting...');
+            Application.modules.Discord.client.on('message', (msg) => {
                 if (msg.author.bot) {
                     return;
                 }
@@ -25,11 +25,14 @@ module.exports = class Utilities extends Module {
 
                 if (Tools.msg_contains_list(msg, this.config.phrase_bye_night)) {
                     return this.bye_night(msg);
-                } else if (Tools.msg_contains_list(msg, this.config.phrase_bye)) {
+                }
+                else if (Tools.msg_contains_list(msg, this.config.phrase_bye)) {
                     return this.bye(msg);
-                } else if (Tools.msg_contains_word_list(msg, this.config.phrase_hello)) {
+                }
+                else if (Tools.msg_contains_word_list(msg, this.config.phrase_hello)) {
                     return this.hello(msg);
-                } else if (Tools.msg_contains_list(msg, this.config.phrase_hello_morning)) {
+                }
+                else if (Tools.msg_contains_list(msg, this.config.phrase_hello_morning)) {
                     return this.hello_morning(msg);
                 }
 
@@ -40,7 +43,7 @@ module.exports = class Utilities extends Module {
     }
 
     bye_night(msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.byenightType, false, "channel", undefined, undefined, 90000)) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.byenightType, false, 'channel', undefined, undefined, 90000)) {
             const random = Tools.getRandomIntFromInterval(0, this.config.ans_bye_night.length - 1);
             msg.channel.send(Tools.parseReply(this.config.ans_bye_night[random]));
             Application.modules.Discord.setMessageSent();
@@ -48,7 +51,7 @@ module.exports = class Utilities extends Module {
     }
 
     bye(msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.byeType, false, "channel", undefined, undefined, 90000)) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.byeType, false, 'channel', undefined, undefined, 90000)) {
             const random = Tools.getRandomIntFromInterval(0, this.config.ans_bye.length - 1);
             msg.channel.send(Tools.parseReply(this.config.ans_bye[random]));
             Application.modules.Discord.setMessageSent();
@@ -56,7 +59,7 @@ module.exports = class Utilities extends Module {
     }
 
     hello(msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.helloType, false, "channel", undefined, undefined, 90000)) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.helloType, false, 'channel', undefined, undefined, 90000)) {
             const random = Tools.getRandomIntFromInterval(0, this.config.ans_hello.length - 1);
             msg.channel.send(Tools.parseReply(this.config.ans_hello[random]));
             Application.modules.Discord.setMessageSent();
@@ -64,7 +67,7 @@ module.exports = class Utilities extends Module {
     }
 
     hello_morning(msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.hello_morning_Type, false, "channel", undefined, undefined, 90000)) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.hello_morning_Type, false, 'channel', undefined, undefined, 90000)) {
             const random = Tools.getRandomIntFromInterval(0, this.config.ans_hello_morning.length - 1);
             msg.channel.send(Tools.parseReply(this.config.ans_hello_morning[random]));
             Application.modules.Discord.setMessageSent();
@@ -73,7 +76,7 @@ module.exports = class Utilities extends Module {
 
     stop() {
         return new Promise(resolve => {
-            this.log.debug("Stopping...");
+            this.log.debug('Stopping...');
             return resolve(this);
         });
     }

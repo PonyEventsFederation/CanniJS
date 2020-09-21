@@ -1,20 +1,20 @@
-"use strict";
+'use strict';
 
 // @IMPORTS
-const Application = require("../../lib/Application");
-const Module = require("../../lib/Module");
-const Promise = require("bluebird");
-const Tools = require("../../lib/Tools");
+const Application = require('../../lib/Application');
+const Module = require('../../lib/Module');
+const Promise = require('bluebird');
+const Tools = require('../../lib/Tools');
 var smartato_emo;
 
 module.exports = class Potato extends Module {
     start() {
         return new Promise(resolve => {
-            this.log.debug("Starting...");
+            this.log.debug('Starting...');
 
-            smartato_emo = Tools.getEmoji(Application.getClient(), "smartato");
+            smartato_emo = Tools.getEmoji(Application.getClient(), 'smartato');
 
-            Application.modules.Discord.client.on("message", (msg) => {
+            Application.modules.Discord.client.on('message', (msg) => {
                 if (msg.author.bot) {
                     return;
                 }
@@ -29,9 +29,11 @@ module.exports = class Potato extends Module {
 
                 if (Tools.msg_contains_list(msg, this.config.phrase_potato)) {
                     return this.potato(msg);
-                } else if (Tools.msg_contains_list(msg, this.config.phrase_best_potato)) {
+                }
+                else if (Tools.msg_contains_list(msg, this.config.phrase_best_potato)) {
                     return this.bestpotato(msg);
-                } else if (Tools.msg_contains(msg, "potato") || Tools.msg_contains(msg, "smartato")) {
+                }
+                else if (Tools.msg_contains(msg, 'potato') || Tools.msg_contains(msg, 'smartato')) {
                     return this.potatofy(msg);
                 }
             });
@@ -66,7 +68,7 @@ module.exports = class Potato extends Module {
 
     stop() {
         return new Promise(resolve => {
-            this.log.debug("Stopping...");
+            this.log.debug('Stopping...');
             return resolve(this);
         });
     }

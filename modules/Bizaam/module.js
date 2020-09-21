@@ -1,19 +1,19 @@
-"use strict";
+'use strict';
 
 // @IMPORTS
-const Application = require("../../lib/Application");
-const Module = require("../../lib/Module");
-const Promise = require("bluebird");
-const Tools = require("../../lib/Tools");
+const Application = require('../../lib/Application');
+const Module = require('../../lib/Module');
+const Promise = require('bluebird');
+const Tools = require('../../lib/Tools');
 
 module.exports = class Bizaam extends Module {
     start() {
         return new Promise(resolve => {
-            this.log.debug("Starting...");
+            this.log.debug('Starting...');
 
-            this.bizaamEmoji = Application.modules.Discord.getEmoji("bizaam");
+            Application.modules.Discord.client.on('message', (msg) => {
+                this.bizaamEmoji = Application.modules.Discord.getEmoji('bizaam');
 
-            Application.modules.Discord.client.on("message", (msg) => {
                 if (msg.author.bot) {
                     return;
                 }
@@ -26,7 +26,7 @@ module.exports = class Bizaam extends Module {
                     return;
                 }
 
-                if (Tools.msg_contains(msg, "bizaam") && !Tools.msg_contains(msg, "is best pony")) {
+                if (Tools.msg_contains(msg, 'bizaam') && !Tools.msg_contains(msg, 'is best pony')) {
                     return this.bizaam(msg);
                 }
             });
@@ -39,6 +39,7 @@ module.exports = class Bizaam extends Module {
         if (Application.modules.Discord.controlTalkedRecently(msg, this.config.bizaamType)) {
             const random = Tools.getRandomIntFromInterval(0, this.config.bizaamAnswer.length - 1);
             msg.channel.send(Tools.parseReply(this.config.bizaamAnswer[random], [this.bizaamEmoji])).then(sentEmbed => {
+                console.log(this.bizaamEmoji);
                 sentEmbed.react(this.bizaamEmoji);
             });
 
@@ -48,7 +49,7 @@ module.exports = class Bizaam extends Module {
 
     stop() {
         return new Promise(resolve => {
-            this.log.debug("Stopping...");
+            this.log.debug('Stopping...');
             return resolve(this);
         });
     }

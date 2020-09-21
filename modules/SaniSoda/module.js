@@ -1,24 +1,25 @@
-"use strict";
+'use strict';
 
 // @IMPORTS
-const Application = require("../../lib/Application");
-const Module = require("../../lib/Module");
-const Promise = require("bluebird");
-const Tools = require("../../lib/Tools");
+const Application = require('../../lib/Application');
+const Module = require('../../lib/Module');
+const Promise = require('bluebird');
+const Tools = require('../../lib/Tools');
 
 module.exports = class SaniSoda extends Module {
     async start() {
-        this.log.debug("Starting...");
+        this.log.debug('Starting...');
 
         try {
             this.SaniSoda = await Application.getUser(this.config.saniSodaId);
             this.log.info(`Fetched user with username: ${this.SaniSoda.username}`);
-        } catch(exception) {
+        }
+        catch(exception) {
             this.log.error(`Could not fetch user with ID: ${this.config.saniSodaId}`);
             return;
         }
 
-        Application.modules.Discord.client.on("message", (msg) => {
+        Application.modules.Discord.client.on('message', (msg) => {
             if (msg.author.bot) {
                 return;
             }
@@ -32,23 +33,23 @@ module.exports = class SaniSoda extends Module {
             }
 
             if (msg.mentions.has(Application.modules.Discord.client.user)) {
-                if (Tools.msg_contains(msg, "sick")) {
+                if (Tools.msg_contains(msg, 'sick')) {
                     return this.sick(msg);
                 }
 
-                if (Tools.msg_contains(msg, "injured")) {
+                if (Tools.msg_contains(msg, 'injured')) {
                     return this.injured(msg);
                 }
 
-                if (Tools.msg_contains(msg, "hurt")) {
+                if (Tools.msg_contains(msg, 'hurt')) {
                     return this.hurt(msg);
                 }
 
-                if (Tools.msg_contains(msg, "sad")) {
+                if (Tools.msg_contains(msg, 'sad')) {
                     return this.sad(msg);
                 }
 
-                if (Tools.msg_contains(msg, "happy")) {
+                if (Tools.msg_contains(msg, 'happy')) {
                     return this.happy(msg);
                 }
             }
@@ -105,7 +106,7 @@ module.exports = class SaniSoda extends Module {
 
     stop() {
         return new Promise(resolve => {
-            this.log.debug("Stopping...");
+            this.log.debug('Stopping...');
             return resolve(this);
         });
     }

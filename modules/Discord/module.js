@@ -1,16 +1,16 @@
-"use strict";
+'use strict';
 
 // @IMPORTS
-const Application = require("../../lib/Application");
-const Module = require("../../lib/Module");
-const Promise = require("bluebird");
-const DiscordJS = require("discord.js");
-const Tools = require("../../lib/Tools");
+const Application = require('../../lib/Application');
+const Module = require('../../lib/Module');
+const Promise = require('bluebird');
+const DiscordJS = require('discord.js');
+const Tools = require('../../lib/Tools');
 
 module.exports = class Discord extends Module {
     init() {
         return new Promise(resolve => {
-            this.log.debug("Initializing...");
+            this.log.debug('Initializing...');
 
             this.commands = [];
             this.reactions = [];
@@ -20,17 +20,17 @@ module.exports = class Discord extends Module {
             this.messageSent = false;
 
             this.client = new DiscordJS.Client();
-            this.client.on("ready", () => {
-                this.log.info("Discord Bot is ready to rock!");
+            this.client.on('ready', () => {
+                this.log.info('Discord Bot is ready to rock!');
             });
 
-            this.client.on("message", (msg) => {
+            this.client.on('message', (msg) => {
                 this.messageSent = false;
                 return this.processMessage(msg);
             });
 
             this.authToken = this.config.token;
-            if (this.authToken.toLowerCase() === "env") {
+            if (this.authToken.toLowerCase() === 'env') {
                 this.authToken = process.env.BOT_TOKEN;
             }
 
@@ -40,7 +40,7 @@ module.exports = class Discord extends Module {
 
     start() {
         return new Promise(resolve => {
-            this.log.debug("Starting...");
+            this.log.debug('Starting...');
 
             return this.client.login(this.authToken).then(() => {
                 this.firstActivity();
@@ -54,7 +54,7 @@ module.exports = class Discord extends Module {
 
     stop() {
         return new Promise(resolve => {
-            this.log.debug("Stopping...");
+            this.log.debug('Stopping...');
 
             this.client.destroy();
 
@@ -68,11 +68,11 @@ module.exports = class Discord extends Module {
             return;
         }
 
-        this.log.info("Received message " + msg.content);
+        this.log.info('Received message ' + msg.content);
         // first we process the commands
         for (let i = 0; i < this.commands.length; i++) {
             const command = this.commands[i];
-            if ((msg.mentions.has(this.client.user) && msg.content.toLowerCase().includes(command.cmd)) || msg.content.toLowerCase().startsWith("!" + command.cmd)) {
+            if ((msg.mentions.has(this.client.user) && msg.content.toLowerCase().includes(command.cmd)) || msg.content.toLowerCase().startsWith('!' + command.cmd)) {
                 return command.cb(msg);
             }
         }
@@ -91,14 +91,14 @@ module.exports = class Discord extends Module {
     }
 
     getEmoji(type) {
-        const emoji = this.client.emojis.cache.find(emoji => emoji.name.toLowerCase() === type.toLowerCase());
+        const targetEmoji = this.client.emojis.cache.find(emoji => emoji.name.toLowerCase() === type.toLowerCase());
 
-        if (emoji) {
-            return emoji;
+        if (targetEmoji) {
+            return targetEmoji;
         }
 
         Application.log.error(`Emoji ${type} not found`);
-        return "";
+        return '';
     }
 
     setCooldown(userId, type, cooldownTimeout) {
@@ -112,28 +112,29 @@ module.exports = class Discord extends Module {
         return this.talkedRecently.has(userId + type);
     }
 
-    controlTalkedRecently(msg, type, sendMessage = true, target = "channel", cooldownMessage = null, blockUser = false, cooldownTimeout = null) {
-        var cooldownTarget;
+    controlTalkedRecently(msg, type, sendMessage = true, target = 'channel', cooldownMessage = null, blockUser = false, cooldownTimeout = null) {
+        let cooldownTarget;
 
         switch (target) {
-            case "channel":
-                cooldownTarget = msg.channel.id + type;
-                break;
-            case "individual":
-                cooldownTarget = msg.author.id;
-                break;
-            case "message":
-                cooldownTarget = msg.author.id + type;
-                break;
+        case 'channel':
+            cooldownTarget = msg.channel.id + type;
+            break;
+        case 'individual':
+            cooldownTarget = msg.author.id;
+            break;
+        case 'message':
+            cooldownTarget = msg.author.id + type;
+            break;
         }
 
         if (this.talkedRecently.has(cooldownTarget)) {
             // Set the default cooldown message if none is passed from another module.
             if (cooldownMessage == null) {
                 if (Application.modules.DevCommands.auth_dev(msg.author.id)) {
-                    cooldownMessage = Tools.parseReply(this.config.cooldownMessageDev, [msg.author, this.getEmoji("shy")]);
-                } else {
-                    cooldownMessage = Tools.parseReply(this.config.cooldownMessageDefault, [msg.author, this.getEmoji("error")]);
+                    cooldownMessage = Tools.parseReply(this.config.cooldownMessageDev, [msg.author, this.getEmoji('shy')]);
+                }
+                else {
+                    cooldownMessage = Tools.parseReply(this.config.cooldownMessageDefault, [msg.author, this.getEmoji('error')]);
                 }
             }
 
@@ -142,7 +143,8 @@ module.exports = class Discord extends Module {
             }
 
             return false;
-        } else {
+        }
+        else {
             this.talkedRecently.add(cooldownTarget);
             if (cooldownTimeout === null) {
                 cooldownTimeout = this.config.cooldownTimeout;
@@ -162,7 +164,8 @@ module.exports = class Discord extends Module {
 
         if (this.channelMessaged.has(cooldownTarget)) {
             // Do nothing. We don't want to spam everyone all the time.
-        } else {
+        }
+        else {
             msg.channel.send(cooldownMessage);
 
             this.channelMessaged.add(cooldownTarget);
@@ -210,13 +213,13 @@ module.exports = class Discord extends Module {
             return;
         }
 
-        const msg = "Internal systems fully operational";
+        const msg = 'Internal systems fully operational';
         Application.modules.Discord.client.user.setPresence({
-            status: "online",
+            status: 'online',
             afk: false,
             activity: {
-                name: msg
-            }
+                name: msg,
+            },
         });
     }
 };
