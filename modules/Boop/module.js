@@ -6,9 +6,10 @@ const Module = require('../../lib/Module');
 const Promise = require('bluebird');
 const Tools = require('../../lib/Tools');
 const moment = require('moment');
-let path;
+const path = Application.config.rootDir + '/data/impact.gif';
 let boop_dev_on = true;
 let wachmann_id;
+const boopDeleteTimeout = 40000;
 
 module.exports = class Boop extends Module {
     start() {
@@ -19,119 +20,14 @@ module.exports = class Boop extends Module {
             this.messageSent = new Set();
             this.interrupt = { inter: false };
             this.megaon = false;
-            path = Application.config.rootDir + '/data/impact.gif';
-
-            // time in ms
-            this.boopDeleteTimeout = 40000;
 
             if (Tools.test_ENV('WACHMANN_ID')) {
                 wachmann_id = process.env.WACHMANN_ID;
             }
 
             Application.modules.Discord.client.on('message', (msg) => {
-                if (msg.author.bot) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isUserBlocked(msg.author.id)) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isMessageSent()) {
-                    return;
-                }
-
-                if (Tools.msg_starts(msg, 'boop')) {
-                    if (!msg.mentions.everyone && msg.mentions.users.array().length > 0) {
-                        const users = msg.mentions.users.array();
-
-                        if (users.length > this.config.boopLimit) {
-                            const cooldownMessage = Tools.parseReply(this.config.cooldownMessage, [msg.author, Application.modules.Discord.getEmoji('error')]);
-
-                            if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.boopType)) {
-                                Application.modules.Discord.setCooldown(msg.author.id, this.config.boopType, this.config.boopTimeout);
-                                Application.modules.Discord.sendCooldownMessage(msg, msg.author.id + this.config.boopType, cooldownMessage, false);
-                                this.log.info(`${msg.author} added to boop cooldown list.`);
-                            }
-
-                            Application.modules.Discord.setMessageSent();
-                        }
-
-                        if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.boopType)) {
-                            for (let i = 0; i < users.length; i++) {
-                                if (Application.checkSelf(users[i].id)) {
-                                    this.selfBoop(msg);
-                                    continue;
-                                }
-
-                                if (wachmann_id === users[i].id) {
-                                    this.wachmannBoop(msg, users[i]);
-                                    continue;
-                                }
-
-                                this.boop(msg, users[i]);
-                            }
-                        }
-                    }
-                }
-
-                if (this.megaon) {
-                    if (Tools.msg_starts(msg, 'devblock')) {
-                        if (Application.modules.DevCommands.auth_dev(msg.author.id)) {
-                            return this.counter(msg, 'DevBlock');
-                        }
-                    }
-                    else if (Tools.msg_starts(msg, 'devcounter')) {
-                        if (Application.modules.DevCommands.auth_dev(msg.author.id)) {
-                            return this.counter(msg, 'DevCounter');
-                        }
-                    }
-                    if (Tools.msg_starts(msg, 'block')) {
-                        const now = moment();
-                        const val = moment().endOf('day');
-                        const blockTimeout = val.diff(now, 'milliseconds');
-                        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaBoopType, false, 'message', undefined, undefined, blockTimeout)) {
-                            return this.counter(msg, 'Block');
-                        }
-                    }
-                }
-                else if (boop_dev_on) {
-                    if (Tools.msg_starts(msg, 'mega boop') || Tools.msg_starts(msg, 'megaboop')) {
-                        // Calculates the difference between now and midnight in milliseconds.
-                        // Only one megaboop is allowed per day.
-                        const now = moment();
-                        const val = moment().endOf('day');
-                        const megaBoopTimeout = val.diff(now, 'milliseconds');
-
-                        if (!msg.mentions.everyone && msg.mentions.users.array().length === 1) {
-                            const user = msg.mentions.users.array()[0];
-                            if (Application.checkSelf(user.id)) {
-                                return this.megaSelfBoop(msg);
-                            }
-
-                            const cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaBoop, [msg.author]);
-
-                            if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaBoopType, true, 'individual', cooldownMessage, false, megaBoopTimeout)) {
-                                return this.megaBoopLoader(msg, user);
-                            }
-                        }
-                    }
-                    if (Tools.msg_starts(msg, 'master chief dev ultra boop') || Tools.msg_starts(msg, 'master chief dev ultraboop')) {
-                        if (Application.modules.DevCommands.auth_dev_master(msg.author.id)) {
-                            if (!msg.mentions.everyone && msg.mentions.users.array().length === 1) {
-                                const user = msg.mentions.users.array()[0];
-                                if (Application.checkSelf(user.id)) {
-                                    return this.selfDevBoop(msg);
-                                }
-
-                                return this.devboop(msg, user);
-                            }
-
-                        }
-                        else {
-                            return this.devbooprejection(msg);
-                        }
-                    }
+                if (Application.modules.Discord.checkUserAccess(msg.author)) {
+                    this.handle(msg);
                 }
             });
 
@@ -139,11 +35,111 @@ module.exports = class Boop extends Module {
         });
     }
 
+    handle(msg) {
+        if (Tools.msg_starts(msg, 'boop') && !msg.mentions.everyone && msg.mentions.users.array().length > 0) {
+            const users = msg.mentions.users.array();
+
+            if (users.length > this.config.boopLimit) {
+                this.setCooldown(msg);
+            }
+
+            if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.boopType)) {
+                this.processBoops(msg, users);
+            }
+        }
+
+        if (this.megaon) {
+            this.processBlocks(msg);
+        }
+        else if (boop_dev_on) {
+            if (Tools.msg_starts(msg, 'mega boop') || Tools.msg_starts(msg, 'megaboop')) {
+                this.processMegaboops(msg);
+            }
+            if (Tools.msg_starts(msg, 'master chief dev ultra boop') ||
+                Tools.msg_starts(msg, 'master chief dev ultraboop') ||
+                Tools.msg_starts(msg, 'ultraboop')) {
+                this.processUltraBoops(msg);
+            }
+        }
+    }
+
+    processBoops(msg, users) {
+        for (let i = 0; i < users.length; i++) {
+            if (Application.checkSelf(users[i].id)) {
+                this.selfBoop(msg);
+                continue;
+            }
+
+            if (wachmann_id === users[i].id) {
+                this.wachmannBoop(msg, users[i]);
+                continue;
+            }
+
+            this.boop(msg, users[i]);
+        }
+    }
+
+    processBlocks(msg) {
+        if (Application.modules.DevCommands.auth_dev(msg.author.id)) {
+            if (Tools.msg_starts(msg, 'devblock')) {
+                return this.counter(msg, 'DevBlock');
+            }
+            else if (Tools.msg_starts(msg, 'devcounter')) {
+                return this.counter(msg, 'DevCounter');
+            }
+        }
+
+        if (Tools.msg_starts(msg, 'block')) {
+            const now = moment();
+            const val = moment().endOf('day');
+            const blockTimeout = val.diff(now, 'milliseconds');
+            if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaBoopType, false, 'message', undefined, undefined, blockTimeout)) {
+                return this.counter(msg, 'Block');
+            }
+        }
+    }
+
+    processMegaboops(msg) {
+        // Calculates the difference between now and midnight in milliseconds.
+        // Only one megaboop is allowed per day.
+        const now = moment();
+        const val = moment().endOf('day');
+        const megaBoopTimeout = val.diff(now, 'milliseconds');
+
+        if (!msg.mentions.everyone && msg.mentions.users.array().length === 1) {
+            const user = msg.mentions.users.array()[0];
+            if (Application.checkSelf(user.id)) {
+                return this.megaSelfBoop(msg);
+            }
+
+            const cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaBoop, [msg.author]);
+
+            if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaBoopType, true, 'individual', cooldownMessage, false, megaBoopTimeout)) {
+                return this.megaBoopLoader(msg, user);
+            }
+        }
+    }
+
+    processUltraBoops(msg) {
+        if (Application.modules.DevCommands.auth_dev_master(msg.author.id) && !msg.mentions.everyone && msg.mentions.users.array().length === 1) {
+            const user = msg.mentions.users.array()[0];
+
+            if (Application.checkSelf(user.id)) {
+                return this.selfDevBoop(msg);
+            }
+
+            return this.devboop(msg, user);
+        }
+        else {
+            return this.devbooprejection(msg);
+        }
+    }
+
     boop(msg, user) {
         msg.delete();
         const random = Tools.getRandomIntFromInterval(0, this.config.boopAnswer.length - 1);
         msg.channel.send(Tools.parseReply(this.config.boopAnswer[random], [user])).then(message => {
-            message.delete({ timeout: this.boopDeleteTimeout });
+            message.delete({ timeout: boopDeleteTimeout });
         });
 
         Application.modules.Overload.overload('boop');
@@ -163,7 +159,7 @@ module.exports = class Boop extends Module {
         }
 
         response.then(message => {
-            message.delete(this.boopDeleteTimeout);
+            message.delete(boopDeleteTimeout);
         });
 
         Application.modules.Overload.overload('boop');
@@ -198,12 +194,6 @@ module.exports = class Boop extends Module {
         let random, damage, answer = '', limit;
         this.interrupt.inter = false;
         switch (type) {
-        case 'hit':
-            random = Tools.getRandomIntFromInterval(0, this.config.megaBoopAnswer.length - 1);
-            damage = Tools.getRandomIntFromInterval(9000, 12000);
-            answer = this.config.megaBoopAnswer[random];
-            limit = 60;
-            break;
         case 'miss':
             random = Tools.getRandomIntFromInterval(0, this.config.megaBoopAnswer.length - 1);
             answer = this.config.megaBoopMissAnswer[random];
@@ -214,6 +204,12 @@ module.exports = class Boop extends Module {
             damage = Tools.getRandomIntFromInterval(13500, 18000);
             answer = this.config.megaBoopCritAnswer[random];
             limit = 90;
+            break;
+        default:
+            random = Tools.getRandomIntFromInterval(0, this.config.megaBoopAnswer.length - 1);
+            damage = Tools.getRandomIntFromInterval(9000, 12000);
+            answer = this.config.megaBoopAnswer[random];
+            limit = 60;
             break;
         }
 
@@ -331,17 +327,14 @@ module.exports = class Boop extends Module {
     }
 
     statusgenerator(ans, limit, miss = false) {
-        let effect = '', template = '', add = '', res = [];
+        // eslint-disable-next-line prefer-const
+        let res = ans;
+
         if (Tools.chancePercent(limit)) {
-            if (miss) {
-                template = this.config.status_effect_miss_template;
-            }
-            else {
-                template = this.config.status_effect_template;
-            }
+            const template = miss ? this.config.status_effect_miss_template : this.config.status_effect_template;
             const random = Tools.getRandomIntFromInterval(0, this.config.status_effects.length - 1);
-            effect = this.config.status_effects[random];
-            add = Tools.parseReply(template, [effect]);
+            const effect = this.config.status_effects[random];
+            const add = Tools.parseReply(template, [effect]);
 
             let i;
             let len;
@@ -350,10 +343,20 @@ module.exports = class Boop extends Module {
             }
             res[i] = add;
         }
-        else {
-            res = ans;
-        }
+
         return res;
+    }
+
+    setCooldown(msg) {
+        const cooldownMessage = Tools.parseReply(this.config.cooldownMessage, [msg.author, Application.modules.Discord.getEmoji('error')]);
+
+        if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.boopType)) {
+            Application.modules.Discord.setCooldown(msg.author.id, this.config.boopType, this.config.boopTimeout);
+            Application.modules.Discord.sendCooldownMessage(msg, msg.author.id + this.config.boopType, cooldownMessage, false);
+            this.log.info(`${msg.author} added to boop cooldown list.`);
+        }
+
+        Application.modules.Discord.setMessageSent();
     }
 
     stop() {
