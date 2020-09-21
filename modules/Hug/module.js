@@ -12,12 +12,12 @@ module.exports = class Hug extends Module {
         return new Promise(resolve => {
             this.log.debug('Starting...');
 
-            this.hugEmoji = Application.modules.Discord.getEmoji('hug');
-
-            // time in ms
-            this.hugDeleteTimeout = 40000;
-
             Application.modules.Discord.client.on('message', (msg) => {
+                this.hugEmoji = Application.modules.Discord.getEmoji('hug');
+
+                // time in ms
+                this.hugDeleteTimeout = 40000;
+
                 if (msg.author.bot) {
                     return;
                 }
