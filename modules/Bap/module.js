@@ -5,9 +5,6 @@ const Application = require('../../lib/Application');
 const Module = require('../../lib/Module');
 const Promise = require('bluebird');
 const Tools = require('../../lib/Tools');
-// const moment = require('moment');
-let path;
-// var boop_dev_on = true;
 let wachmann_id;
 
 module.exports = class Boop extends Module {
@@ -19,7 +16,6 @@ module.exports = class Boop extends Module {
             this.messageSent = new Set();
             this.interrupt = { inter: false };
             this.megaon = false;
-            path = Application.config.rootDir + '/data/impact.gif';
 
             // time in ms
             this.bapDeleteTimeout = 40000;
