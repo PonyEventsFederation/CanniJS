@@ -184,6 +184,12 @@ module.exports = class Discord extends Module {
         }, blockTimeout);
     }
 
+    checkUserAccess(user) {
+        return !(user.bot
+            || Application.modules.Discord.isUserBlocked(user.id)
+            || Application.modules.Discord.isMessageSent());
+    }
+
     unblockUser(userId) {
         if (this.talkedRecently.has(userId)) {
             this.talkedRecently.delete(userId);
