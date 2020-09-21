@@ -5,16 +5,15 @@ const Application = require('../../lib/Application');
 const Module = require('../../lib/Module');
 const Promise = require('bluebird');
 const Tools = require('../../lib/Tools');
-var smartato_emo;
 
 module.exports = class Potato extends Module {
     start() {
         return new Promise(resolve => {
             this.log.debug('Starting...');
 
-            smartato_emo = Tools.getEmoji(Application.getClient(), 'smartato');
-
             Application.modules.Discord.client.on('message', (msg) => {
+                this.smartato_emo = Tools.getEmoji(Application.getClient(), 'smartato');
+
                 if (msg.author.bot) {
                     return;
                 }
@@ -63,7 +62,7 @@ module.exports = class Potato extends Module {
     }
 
     potatofy(msg) {
-        msg.react(smartato_emo);
+        msg.react(this.smartato_emo);
     }
 
     stop() {
