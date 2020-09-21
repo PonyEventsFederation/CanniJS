@@ -7,6 +7,9 @@ const Promise = require('bluebird');
 const moment = require('moment');
 const Tools = require('../../lib/Tools');
 
+// Set to false in case GalaCon is cancelled.
+const active = true;
+
 module.exports = class CanniTimeToHype extends Module {
     start() {
         return new Promise(resolve => {
@@ -28,24 +31,26 @@ module.exports = class CanniTimeToHype extends Module {
 
     handleWhen(msg) {
         if (Application.modules.Discord.checkUserAccess(msg.author)) {
-            return;
+            if (active) {
+                return this.tellMeWhen(msg);
+            }
+            else {
+                msg.channel.send('Currently not available...');
+                Application.modules.Discord.setMessageSent();
+            }
         }
-
-        // reactivated for Galacon 2021, deactivate afterwards
-
-        return this.tellMeWhen(msg);
-        // msg.channel.send('Currently not available...');
-        // Application.modules.Discord.setMessageSent();
     }
 
     handleMessage(msg) {
         if (Application.modules.Discord.checkUserAccess(msg.author) && msg.mentions.has(Application.modules.Discord.client.user)) {
             if (Tools.msg_contains(msg, 'when is galacon')) {
-                // reactivated for Galacon 2021, deactivate afterwards
-
-                return this.tellMeWhen(msg);
-                // msg.channel.send('Currently not available...');
-                // Application.modules.Discord.setMessageSent();
+                if (active) {
+                    return this.tellMeWhen(msg);
+                }
+                else {
+                    msg.channel.send('Currently not available...');
+                    Application.modules.Discord.setMessageSent();
+                }
             }
         }
     }
@@ -63,8 +68,7 @@ module.exports = class CanniTimeToHype extends Module {
         const duration = this.getHypeDuration();
         const random = Tools.getRandomIntFromInterval(0, this.config.hypeAnswer.length - 1);
 
-        const message = Tools.parseReply(this.config.timeAnswer, [duration.days, duration.hrs, duration.minutes]) + '\n' + this.config.hypeAnswer[random];
-        msg.channel.send(message);
+        msg.channel.send(Tools.parseReply(this.config.timeAnswer, [duration.days, duration.hrs, duration.minutes]) + '\n' + this.config.hypeAnswer[random]);
 
         Application.modules.Discord.setMessageSent();
     }
