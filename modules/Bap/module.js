@@ -67,6 +67,8 @@ module.exports = class Boop extends Module {
 
                                 this.bap(msg, users[i]);
                             }
+
+                            msg.delete();
                         }
                     }
                 }
@@ -78,7 +80,7 @@ module.exports = class Boop extends Module {
 
     bap(msg, user) {
         const random = Tools.getRandomIntFromInterval(0, this.config.bapAnswer.length - 1);
-        msg.delete();
+
         msg.channel.send(Tools.parseReply(this.config.bapAnswer[random], [user])).then(message => {
             message.delete({ timeout: this.bapDeleteTimeout });
         });
