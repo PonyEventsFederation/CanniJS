@@ -5,7 +5,6 @@ const Application = require('../../lib/Application');
 const Module = require('../../lib/Module');
 const Promise = require('bluebird');
 const Tools = require('../../lib/Tools');
-let canni_id;
 let wachmann_id;
 
 module.exports = class InterBotCom extends Module {
@@ -15,7 +14,6 @@ module.exports = class InterBotCom extends Module {
 
             if (Tools.test_ENV('WACHMANN_ID')) {
                 wachmann_id = process.env.WACHMANN_ID;
-                canni_id = Application.getClientId();
             }
 
             Application.modules.Discord.client.on('message', (msg) => {
