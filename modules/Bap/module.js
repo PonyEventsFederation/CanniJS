@@ -41,7 +41,7 @@ module.exports = class Boop extends Module {
                     if (!msg.mentions.everyone && msg.mentions.users.array().length > 0) {
                         const users = msg.mentions.users.array();
 
-                        if (users.length > this.config.boopLimit) {
+                        if (users.length > this.config.bapLimit) {
                             const cooldownMessage = Tools.parseReply(this.config.cooldownMessage, [msg.author]);
 
                             if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.bapType)) {
