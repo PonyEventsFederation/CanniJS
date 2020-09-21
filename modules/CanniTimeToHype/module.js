@@ -13,71 +13,50 @@ module.exports = class CanniTimeToHype extends Module {
             this.log.debug('Starting...');
 
             Application.modules.Discord.addCommand('when', (msg) => {
-                if (Application.modules.Discord.isUserBlocked(msg.author.id)) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isMessageSent()) {
-                    return;
-                }
-
-                // reactivated for Galacon 2021, deactivate afterwards
-
-                return this.tellMeWhen(msg);
-                // msg.channel.send('Currently not available...');
-                // Application.modules.Discord.setMessageSent();
+                this.handleWhen(msg);
             });
 
             Application.modules.Discord.client.on('message', (msg) => {
-                if (Application.modules.Discord.isUserBlocked(msg.author.id)) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isMessageSent()) {
-                    return;
-                }
-
-                if (msg.mentions.has(Application.modules.Discord.client.user)) {
-                    if (Tools.msg_contains(msg, 'when is galacon')) {
-                        // reactivated for Galacon 2021, deactivate afterwards
-
-                        return this.tellMeWhen(msg);
-                        // msg.channel.send('Currently not available...');
-                        // Application.modules.Discord.setMessageSent();
-                    }
-                }
+                this.handleMessage(msg);
             });
 
-            if (!this.config.hypeDate) {
-                this.hypeDate = moment();
-            }
-            else {
-                this.hypeDate = moment(this.config.hypeDate);
-            }
-
-            // reactivated for Galacon 2021, deactivate afterwards
-            this.log.info('Set hype date to ' + this.hypeDate.format());
-            this.hypeInterval = setInterval(() => this.updateHype(), (this.config.updateInterval || 10) * 1000);
-            this.updateHype();
+            this.setHypeDate();
 
             return resolve(this);
         });
     }
 
-    getHypeDuration() {
-        const duration = this.hypeDate.diff(moment());
+    handleWhen(msg) {
+        if (Application.modules.Discord.checkUserAccess(msg.author)) {
+            return;
+        }
 
-        let seconds = parseInt(duration) / 1000;
-        const days = Math.floor(seconds / (3600 * 24));
-        seconds -= days * 3600 * 24;
-        const hrs = Tools.padTime(Math.floor(seconds / 3600));
-        seconds -= hrs * 3600;
-        const minutes = Tools.padTime(Math.floor(seconds / 60));
-        seconds -= minutes * 60;
+        // reactivated for Galacon 2021, deactivate afterwards
 
-        return {
-            days, hrs, minutes, seconds,
-        };
+        return this.tellMeWhen(msg);
+        // msg.channel.send('Currently not available...');
+        // Application.modules.Discord.setMessageSent();
+    }
+
+    handleMessage(msg) {
+        if (Application.modules.Discord.checkUserAccess(msg.author) && msg.mentions.has(Application.modules.Discord.client.user)) {
+            if (Tools.msg_contains(msg, 'when is galacon')) {
+                // reactivated for Galacon 2021, deactivate afterwards
+
+                return this.tellMeWhen(msg);
+                // msg.channel.send('Currently not available...');
+                // Application.modules.Discord.setMessageSent();
+            }
+        }
+    }
+
+    setHypeDate() {
+        this.hypeDate = !this.config.hypeDate ? moment() : moment(this.config.hypeDate);
+
+        // reactivated for Galacon 2021, deactivate afterwards
+        this.log.info('Set hype date to ' + this.hypeDate.format());
+        this.hypeInterval = setInterval(() => this.updateHype(), (this.config.updateInterval || 10) * 1000);
+        this.updateHype();
     }
 
     tellMeWhen(msg) {
@@ -104,6 +83,22 @@ module.exports = class CanniTimeToHype extends Module {
                 name: msg,
             },
         });
+    }
+
+    getHypeDuration() {
+        const duration = this.hypeDate.diff(moment());
+
+        let seconds = parseInt(duration) / 1000;
+        const days = Math.floor(seconds / (3600 * 24));
+        seconds -= days * 3600 * 24;
+        const hrs = Tools.padTime(Math.floor(seconds / 3600));
+        seconds -= hrs * 3600;
+        const minutes = Tools.padTime(Math.floor(seconds / 60));
+        seconds -= minutes * 60;
+
+        return {
+            days, hrs, minutes, seconds,
+        };
     }
 
     stop() {
