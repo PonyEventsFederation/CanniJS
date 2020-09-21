@@ -5,39 +5,24 @@ const Application = require('../../lib/Application');
 const Module = require('../../lib/Module');
 const Promise = require('bluebird');
 const Tools = require('../../lib/Tools');
+const probability = 0.25;
 
 module.exports = class Activity extends Module {
     start() {
         return new Promise(resolve => {
             this.log.debug('Starting...');
-
-            this.propability = 0.25;
-
             this.activitySelect();
 
             Application.modules.Discord.client.on('message', (msg) => {
-                if (msg.author.bot) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isUserBlocked(msg.author.id)) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isMessageSent()) {
-                    return;
-                }
-
-                this.randomizerActivity();
-
+                this.randomizerActivity(msg);
             });
 
             return resolve(this);
         });
     }
 
-    randomizerActivity() {
-        if (Tools.chancePercent(this.propability, true)) {
+    randomizerActivity(msg) {
+        if (Application.modules.Discord.checkUserAccess(msg.author) && Tools.chancePercent(probability, true)) {
             this.activitySelect();
         }
     }
