@@ -19,34 +19,27 @@ module.exports = class Solver extends Module {
             this.smileEmoji = Application.modules.Discord.getEmoji('smile');
 
             Application.modules.Discord.client.on('message', (msg) => {
-                if (msg.author.bot) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isUserBlocked(msg.author.id)) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isMessageSent()) {
-                    return;
-                }
-
-                if (msg.mentions.has(Application.getClient().user)) {
-                    if (Tools.msg_starts_mentioned(msg, 'solve')) {
-                        if (Tools.msg_starts_mentioned(msg, 'solve multi')) {
-                            return this.simple_multi_parse(msg);
-                        }
-                        else if (Tools.msg_starts_mentioned(msg, 'solver info')) {
-                            return this.info(msg);
-                        }
-                        else {
-                            return this.simple_parse(msg);
-                        }
-                    }
+                if (Application.modules.Discord.checkUserAccess(msg.author) && msg.mentions.has(Application.getClient().user)) {
+                    this.handle(msg);
                 }
             });
+
             return resolve(this);
         });
+    }
+
+    handle(msg) {
+        if (Tools.msg_starts_mentioned(msg, 'solve')) {
+            if (Tools.msg_starts_mentioned(msg, 'solve multi')) {
+                return this.simple_multi_parse(msg);
+            }
+            else if (Tools.msg_starts_mentioned(msg, 'solver info')) {
+                return this.info(msg);
+            }
+            else {
+                return this.simple_parse(msg);
+            }
+        }
     }
 
     info(msg) {
