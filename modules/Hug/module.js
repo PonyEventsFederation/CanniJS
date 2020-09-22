@@ -33,11 +33,11 @@ module.exports = class Hug extends Module {
             }
         }
 
-        if (Tools.msg_starts(msg, 'hug')) {
+        if (Tools.strStartsWord(msg.content, 'hug')) {
             this.processHugs(msg);
         }
 
-        if (Tools.msg_starts(msg, 'megahug') || Tools.msg_starts(msg, 'mega hug')) {
+        if (Tools.strStartsWord(msg.content, 'megahug')) {
             this.processMegaHugs(msg);
         }
     }
