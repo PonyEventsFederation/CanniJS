@@ -23,33 +23,26 @@ module.exports = class Ignore extends Module {
             this.load_ignore_ids();
 
             Application.modules.Discord.client.on('message', (msg) => {
-                if (msg.author.bot) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isUserBlocked(msg.author.id)) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isMessageSent()) {
-                    return;
-                }
-
-                if (msg.mentions.has(Application.getClient().user) && guild) {
-                    if (this.is_ignored(msg)) {
-                        Application.modules.Discord.setMessageSent();
-                        return this.ignored_mentioned(msg);
-                    }
-                }
-
-                if (this.is_ignored(msg)) {
-                    Application.modules.Discord.setMessageSent();
-                    return this.ignored(msg);
+                if (Application.modules.Discord.checkUserAccess(msg.author)) {
+                    this.handle(msg);
                 }
             });
 
             return resolve(this);
         });
+    }
+
+    handle(msg) {
+        if (this.is_ignored(msg)) {
+            if (msg.mentions.has(Application.getClient().user) && guild) {
+                Application.modules.Discord.setMessageSent();
+                return this.ignored_mentioned(msg);
+            }
+            else {
+                Application.modules.Discord.setMessageSent();
+                return this.ignored(msg);
+            }
+        }
     }
 
     ignored(msg) {
