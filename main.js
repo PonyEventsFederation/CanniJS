@@ -23,7 +23,6 @@ Application.configure({
 // Application.registerModule('EMPTY');
 Application.registerModule('Discord');
 // Application.registerModule('Python');
-Application.registerModule('Remote');
 Application.registerModule('Overload');
 Application.registerModule('Ignore');
 Application.registerModule('Holiday');
