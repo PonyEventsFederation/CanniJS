@@ -5,7 +5,8 @@ const Application = require('../../lib/Application');
 const Module = require('../../lib/Module');
 const Promise = require('bluebird');
 const Tools = require('../../lib/Tools');
-
+const christmas_date = [12, 25];
+const new_year_date = [1, 1];
 let wachmann_id;
 
 module.exports = class Holiday extends Module {
@@ -17,41 +18,27 @@ module.exports = class Holiday extends Module {
                 wachmann_id = process.env.WACHMANN_ID;
             }
 
-            const christmas_date = [12, 25];
-            const new_year_date = [1, 1];
-
-            this.cannisanta = Application.modules.Discord.getEmoji('CanniSanta');
-            this.silvester = Application.modules.Discord.getEmoji('Silvester');
-
             Application.modules.Discord.client.on('message', (msg) => {
+                this.cannisanta = Application.modules.Discord.getEmoji('CanniSanta');
+                this.silvester = Application.modules.Discord.getEmoji('Silvester');
 
-                if (msg.author.bot) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isUserBlocked(msg.author.id)) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isMessageSent()) {
-                    return;
-                }
-
-                if (Tools.check_date(christmas_date, 1)) {
-                    if (Tools.msg_contains(msg, 'merry christmas')) {
-                        return this.christmas_loader(msg);
-                    }
-                }
-
-                if (Tools.check_date(new_year_date, 0)) {
-                    if (Tools.msg_contains(msg, 'happy new year')) {
-                        return this.new_year_loader(msg);
-                    }
+                if (Application.modules.Discord.checkUserAccess(msg.author)) {
+                    this.handle(msg);
                 }
             });
 
             return resolve(this);
         });
+    }
+
+    handle(msg) {
+        if (Tools.check_date(christmas_date, 1) && Tools.msg_contains(msg, 'merry christmas')) {
+            return this.christmas_loader(msg);
+        }
+
+        if (Tools.check_date(new_year_date, 0) && Tools.msg_contains(msg, 'happy new year')) {
+            return this.new_year_loader(msg);
+        }
     }
 
 
