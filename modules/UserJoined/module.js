@@ -15,7 +15,11 @@ module.exports = class UserJoined extends Module {
                 this.log.info('Member joined on guild ' + member.guild.name);
                 if (member.guild.channels.resolve(this.config.generalChannelId)) {
                     setTimeout(() => {
-                        member.guild.channels.resolve(this.config.generalChannelId).send(Tools.parseReply(this.config.welcomeMessage, [member]));
+                        member.guild.channels.resolve(this.config.generalChannelId).send(
+                            Tools.parseReply(
+                                this.config.welcomeMessage,
+                                [member, this.config.rulesChannelId],
+                            ));
                     }, this.config.welcomeMessageDelay);
                 }
             });
