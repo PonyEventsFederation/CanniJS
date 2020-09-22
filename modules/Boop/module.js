@@ -52,14 +52,8 @@ module.exports = class Boop extends Module {
             this.processBlocks(msg);
         }
         else if (boop_dev_on) {
-            if (Tools.msg_starts(msg, 'mega boop') || Tools.msg_starts(msg, 'megaboop')) {
-                this.processMegaboops(msg);
-            }
-            if (Tools.msg_starts(msg, 'master chief dev ultra boop') ||
-                Tools.msg_starts(msg, 'master chief dev ultraboop') ||
-                Tools.msg_starts(msg, 'ultraboop')) {
-                this.processUltraBoops(msg);
-            }
+            this.processMegaboops(msg);
+            this.processUltraBoops(msg);
         }
     }
 
@@ -100,38 +94,44 @@ module.exports = class Boop extends Module {
     }
 
     processMegaboops(msg) {
-        // Calculates the difference between now and midnight in milliseconds.
-        // Only one megaboop is allowed per day.
-        const now = moment();
-        const val = moment().endOf('day');
-        const megaBoopTimeout = val.diff(now, 'milliseconds');
+        if (Tools.msg_starts(msg, 'mega boop') || Tools.msg_starts(msg, 'megaboop')) {
+            // Calculates the difference between now and midnight in milliseconds.
+            // Only one megaboop is allowed per day.
+            const now = moment();
+            const val = moment().endOf('day');
+            const megaBoopTimeout = val.diff(now, 'milliseconds');
 
-        if (!msg.mentions.everyone && msg.mentions.users.array().length === 1) {
-            const user = msg.mentions.users.array()[0];
-            if (Application.checkSelf(user.id)) {
-                return this.megaSelfBoop(msg);
-            }
+            if (!msg.mentions.everyone && msg.mentions.users.array().length === 1) {
+                const user = msg.mentions.users.array()[0];
+                if (Application.checkSelf(user.id)) {
+                    return this.megaSelfBoop(msg);
+                }
 
-            const cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaBoop, [msg.author]);
+                const cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaBoop, [msg.author]);
 
-            if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaBoopType, true, 'individual', cooldownMessage, false, megaBoopTimeout)) {
-                return this.megaBoopLoader(msg, user);
+                if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaBoopType, true, 'individual', cooldownMessage, false, megaBoopTimeout)) {
+                    return this.megaBoopLoader(msg, user);
+                }
             }
         }
     }
 
     processUltraBoops(msg) {
-        if (Application.modules.DevCommands.auth_dev_master(msg.author.id) && !msg.mentions.everyone && msg.mentions.users.array().length === 1) {
-            const user = msg.mentions.users.array()[0];
+        if (Tools.msg_starts(msg, 'master chief dev ultra boop') ||
+        Tools.msg_starts(msg, 'master chief dev ultraboop') ||
+        Tools.msg_starts(msg, 'ultraboop')) {
+            if (Application.modules.DevCommands.auth_dev_master(msg.author.id) && !msg.mentions.everyone && msg.mentions.users.array().length === 1) {
+                const user = msg.mentions.users.array()[0];
 
-            if (Application.checkSelf(user.id)) {
-                return this.selfDevBoop(msg);
+                if (Application.checkSelf(user.id)) {
+                    return this.selfDevBoop(msg);
+                }
+
+                return this.devboop(msg, user);
             }
-
-            return this.devboop(msg, user);
-        }
-        else {
-            return this.devbooprejection(msg);
+            else {
+                return this.devbooprejection(msg);
+            }
         }
     }
 
