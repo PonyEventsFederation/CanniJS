@@ -12,19 +12,7 @@ module.exports = class MentionCanni extends Module {
             this.log.debug('Starting...');
 
             Application.modules.Discord.client.on('message', (msg) => {
-                if (msg.author.bot) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isUserBlocked(msg.author.id)) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isMessageSent()) {
-                    return;
-                }
-
-                if (msg.mentions.has(Application.modules.Discord.client.user)) {
+                if (Application.modules.Discord.checkUserAccess(msg.author) && msg.mentions.has(Application.modules.Discord.client.user)) {
                     return this.CanniIsMentioned(msg);
                 }
             });
