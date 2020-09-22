@@ -1,45 +1,33 @@
-"use strict";
+'use strict';
 
 // @IMPORTS
-const Application = require("../../lib/Application");
-const Module = require("../../lib/Module");
-const Promise = require("bluebird");
-const Tools = require("../../lib/Tools");
+const Application = require('../../lib/Application');
+const Module = require('../../lib/Module');
+const Promise = require('bluebird');
+const Tools = require('../../lib/Tools');
 
-var total_overload = 0;
-var overload = {};
-var types = [];
-var total_delay = 0;
-var type_delay = 0;
-var overload_on = false;
+let total_overload = 0;
+let overload = {};
+let types = [];
+let total_delay = 0;
+let type_delay = 0;
+let overload_on = false;
 
 module.exports = class Overload extends Module {
     start() {
         return new Promise(resolve => {
-            this.log.debug("Starting...");
+            this.log.debug('Starting...');
 
             this.overload = function(type, num = 1) {
                 return Overload.add_to_overload(type, num);
-                // use Application.modules.Overload.overload("type");
+                // use Application.modules.Overload.overload('type');
             };
 
             types = this.config.types;
             this.load_overloader();
 
-            Application.modules.Discord.client.on("message", (msg) => {
-                if (msg.author.bot) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isUserBlocked(msg.author.id)) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isMessageSent()) {
-                    return;
-                }
-
-                if(this.check_overload(msg)) {
+            Application.modules.Discord.client.on('message', (msg) => {
+                if(Application.modules.Discord.checkUserAccess(msg.author) && this.check_overload(msg)) {
                     Application.modules.Discord.setMessageSent();
                     return;
                 }
@@ -52,7 +40,8 @@ module.exports = class Overload extends Module {
     check_overload(msg) {
         if (overload_on) {
             return true;
-        } else if (this.check_total(this.config.total_limit) || this.check_types(this.config.type_limit)) {
+        }
+        else if (this.check_total(this.config.total_limit) || this.check_types(this.config.type_limit)) {
             this.activate_overload(msg);
             return true;
         }
@@ -87,11 +76,11 @@ module.exports = class Overload extends Module {
         const online = this.config.ans_online_again;
         const answer = this.config.ans_overload;
         this.reset_all();
-        Application.getClient().user.setStatus("idle");
+        Application.getClient().user.setStatus('idle');
         Tools.listSender(msg.channel, answer, [2000, 4000, 4000], [this.config.downtime]).then(function() {
-            Application.getClient().user.setStatus("dnd");
+            Application.getClient().user.setStatus('dnd');
             setTimeout(function() {
-                Application.getClient().user.setPresence({ status: "online" });
+                Application.getClient().user.setPresence({ status: 'online' });
                 overload_on = false;
                 msg.channel.send(Tools.parseReply(online));
             }, downtime_ms);
@@ -119,7 +108,7 @@ module.exports = class Overload extends Module {
 
     stop() {
         return new Promise(resolve => {
-            this.log.debug("Stopping...");
+            this.log.debug('Stopping...');
             return resolve(this);
         });
     }

@@ -1,5 +1,6 @@
 {
     "generalChannelId": "602434888880095244",
-    "welcomeMessage": "( ͡° ͜ʖ (\\  *BOOPS* %s\nWelcome to the official GalaCon Discord server!",
+    "rulesChannelId": "602436162447212554",
+    "welcomeMessage": "( ͡° ͜ʖ (\\  *BOOPS* %s\nWelcome to the official GalaCon Discord server!\nBe sure to check out our <#%s>.",
     "welcomeMessageDelay": 1000
 }
