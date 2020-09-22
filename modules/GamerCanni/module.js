@@ -12,29 +12,23 @@ module.exports = class RockPaperScissors extends Module {
             this.log.debug('Starting...');
 
             Application.modules.Discord.client.on('message', (msg) => {
-                if (msg.author.bot) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isUserBlocked(msg.author.id)) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isMessageSent()) {
-                    return;
-                }
-
-                if (msg.mentions.has(Application.modules.Discord.client.user)) {
-                    if (Tools.msg_contains(msg, 'let\'s play a game') || Tools.msg_contains(msg, 'let\'s play a game')) {
-                        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.playGameType)) {
-                            return this.letsPlay(msg);
-                        }
-                    }
+                if (Application.modules.Discord.checkUserAccess(msg.author)) {
+                    this.handle(msg);
                 }
             });
 
             return resolve(this);
         });
+    }
+
+    handle(msg) {
+        if (msg.mentions.has(Application.modules.Discord.client.user)) {
+            if (Tools.msg_contains(msg, 'let\'s play a game') || Tools.msg_contains(msg, 'let\'s play a game')) {
+                if (Application.modules.Discord.controlTalkedRecently(msg, this.config.playGameType)) {
+                    return this.letsPlay(msg);
+                }
+            }
+        }
     }
 
     sleep(milliseconds) {
