@@ -30,7 +30,7 @@ module.exports = class Potato extends Module {
         else if (Tools.msg_contains_list(msg, this.config.phrase_best_potato)) {
             return this.potato(msg, this.config.bestpotatoType, this.config.ans_best_potato);
         }
-        else if (Tools.msg_contains(msg, 'potato') || Tools.msg_contains(msg, 'smartato')) {
+        else if ((Tools.msg_contains(msg, 'potato') || Tools.msg_contains(msg, 'smartato')) && !msg.author.bot) {
             return this.potatofy(msg);
         }
     }
@@ -46,7 +46,9 @@ module.exports = class Potato extends Module {
     }
 
     potatofy(msg) {
-        msg.react(this.smartato_emo);
+        if (Application.modules.Discord.checkUserAccess(msg.author)) {
+            msg.react(this.smartato_emo);
+        }
     }
 
     stop() {
