@@ -18,7 +18,7 @@ module.exports = class Compliment extends Module {
                 this.hugEmoji = Application.modules.Discord.getEmoji('hug');
 
                 if (Application.modules.Discord.checkUserAccess(msg.author) && msg.mentions.has(Application.getClient().user)) {
-                    this.handleCompliments(msg);
+                    this.handle(msg);
                 }
             });
 
@@ -26,7 +26,7 @@ module.exports = class Compliment extends Module {
         });
     }
 
-    handleCompliments(msg) {
+    handle(msg) {
         if (Tools.msg_starts_mentioned(msg, 'compliment')) {
             if (!msg.mentions.everyone && msg.mentions.users.array().length > 0) {
                 const users = msg.mentions.users.array();
@@ -39,17 +39,18 @@ module.exports = class Compliment extends Module {
                         }
                         continue;
                     }
+
                     if (users[i].id === msg.author.id) {
                         if (Application.modules.DevCommands.auth_dev(msg.author.id)) {
                             this.compliment_dev(msg);
                         }
                         else {
-                            this.compliment_self(msg);
+                            this.compliment(msg, this.config.selfcomplimentType, config.ans_self_compliment_template, msg.author);
                         }
                         continue;
                     }
 
-                    this.compliment_user(users[i], msg);
+                    this.compliment(msg, this.config.usercomplimentType, config.ans_user_compliment_template, users[i]);
                 }
             }
         }
@@ -58,29 +59,17 @@ module.exports = class Compliment extends Module {
                 return this.compliment_dev(msg);
             }
             else {
-                return this.compliment_self(msg);
+                return this.compliment(msg, this.config.selfcomplimentType, config.ans_self_compliment_template, msg.author);
             }
         }
     }
 
-    compliment_self(msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.selfcomplimentType, true, 'message', undefined, undefined, 120000)) {
+    compliment(msg, type, answerType, target) {
+        if (Application.modules.Discord.controlTalkedRecently(msg, type, true, 'message', undefined, undefined, 120000)) {
             this.getCompliment().then(function(out) {
                 msg.channel.send(
-                    Tools.parseReply(config.ans_self_compliment_template,
-                        [msg.author, Tools.capitalizeFirstLetter(out['compliment'])],
-                    ));
-            });
-            Application.modules.Discord.setMessageSent();
-        }
-    }
-
-    compliment_user(user, msg) {
-        if (Application.modules.Discord.controlTalkedRecently(msg, this.config.usercomplimentType, true, 'message', undefined, undefined, 120000)) {
-            this.getCompliment().then(function(out) {
-                msg.channel.send(
-                    Tools.parseReply(config.ans_user_compliment_template,
-                        [user, Tools.capitalizeFirstLetter(out['compliment'])],
+                    Tools.parseReply(answerType,
+                        [target, Tools.capitalizeFirstLetter(out['compliment'])],
                     ));
             });
             Application.modules.Discord.setMessageSent();
@@ -94,9 +83,6 @@ module.exports = class Compliment extends Module {
         }
     }
 
-    getCompliment() {
-        return fetch('https://complimentr.com/api').then(res => res.json()).catch(err => console.error(err));
-    }
 
     compliment_dev(msg) {
         msg.channel.send(Tools.parseReply(this.config.ans_compliment_dev, [msg.author])).then(function() {
@@ -106,6 +92,10 @@ module.exports = class Compliment extends Module {
             }, config.complimentDevTimeout);
         });
         Application.modules.Discord.setMessageSent();
+    }
+
+    getCompliment() {
+        return fetch('https://complimentr.com/api').then(res => res.json()).catch(err => console.error(err));
     }
 
     stop() {
