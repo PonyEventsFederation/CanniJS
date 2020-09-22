@@ -33,54 +33,54 @@ module.exports = class DevC extends Module {
             this.load_ids();
 
             Application.modules.Discord.client.on('message', (msg) => {
-                if (msg.author.bot) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isUserBlocked(msg.author.id)) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isMessageSent()) {
-                    return;
-                }
-
-                if (msg.mentions.has(Application.getClient().user) && guild) {
-                    if (this.auth_dev_master(msg.author.id)) {
-                        if (Tools.msg_contains(msg, 'add dev')) {
-                            return this.addDev(msg);
-                        }
-
-                        if (Tools.msg_contains(msg, 'remove dev')) {
-                            return this.removeDev(msg);
-                        }
-                    }
-
-                    if (this.auth_dev_master(msg.author.id) || this.auth_dev(msg.author.id)) {
-                        if (Tools.msg_contains(msg, 'status report')) {
-                            return this.sReport(msg);
-                        }
-
-                        if (Tools.msg_contains(msg, 'list devs')) {
-                            return this.listDevs(msg);
-                        }
-
-                        if (Tools.msg_contains(msg, 'list master devs')) {
-                            return this.listMasterDevs(msg);
-                        }
-
-                        if (Tools.msg_contains(msg, 'member id')) {
-                            return this.memberId(msg);
-                        }
-                        if (Tools.msg_contains(msg, 'channel id')) {
-                            return this.channelId(msg);
-                        }
-                    }
-                }
+                this.handle(msg);
             });
 
             return resolve(this);
         });
+    }
+
+    handle(msg) {
+        if (Application.modules.Discord.checkUserAccess(msg.author) && msg.mentions.has(Application.getClient().user) && guild) {
+            if (this.auth_dev_master(msg.author.id)) {
+                this.processMasterCommands(msg);
+            }
+
+            if (this.auth_dev_master(msg.author.id) || this.auth_dev(msg.author.id)) {
+                this.processDevCommands(msg);
+            }
+        }
+    }
+
+    processMasterCommands(msg) {
+        if (Tools.msg_contains(msg, 'add dev')) {
+            return this.addDev(msg);
+        }
+
+        if (Tools.msg_contains(msg, 'remove dev')) {
+            return this.removeDev(msg);
+        }
+    }
+
+    processDevCommands(msg) {
+        if (Tools.msg_contains(msg, 'status report')) {
+            return this.sReport(msg);
+        }
+
+        if (Tools.msg_contains(msg, 'list devs')) {
+            return this.listDevs(msg);
+        }
+
+        if (Tools.msg_contains(msg, 'list master devs')) {
+            return this.listMasterDevs(msg);
+        }
+
+        if (Tools.msg_contains(msg, 'member id')) {
+            return this.memberId(msg);
+        }
+        if (Tools.msg_contains(msg, 'channel id')) {
+            return this.channelId(msg);
+        }
     }
 
     addDev(msg) {
@@ -176,8 +176,6 @@ module.exports = class DevC extends Module {
         catch (e) {
             throw new Error('config of module ... contains invalid json data: ' + e.toString());
         }
-
-
     }
 
     add_master_dev(item) {
