@@ -36,7 +36,7 @@ module.exports = class Boop extends Module {
     }
 
     handle(msg) {
-        if (Tools.msg_starts(msg, 'boop') && !msg.mentions.everyone && msg.mentions.users.array().length > 0) {
+        if (Tools.strStartsWord(msg.content, 'boop') && !msg.mentions.everyone && msg.mentions.users.array().length > 0) {
             const users = msg.mentions.users.array();
 
             if (users.length > this.config.boopLimit) {
@@ -75,15 +75,15 @@ module.exports = class Boop extends Module {
 
     processBlocks(msg) {
         if (Application.modules.DevCommands.auth_dev(msg.author.id)) {
-            if (Tools.msg_starts(msg, 'devblock')) {
+            if (Tools.strStartsWord(msg.content, 'devblock')) {
                 return this.counter(msg, 'DevBlock');
             }
-            else if (Tools.msg_starts(msg, 'devcounter')) {
+            else if (Tools.strStartsWord(msg.content, 'devcounter')) {
                 return this.counter(msg, 'DevCounter');
             }
         }
 
-        if (Tools.msg_starts(msg, 'block')) {
+        if (Tools.strStartsWord(msg.content, 'block')) {
             const now = moment();
             const val = moment().endOf('day');
             const blockTimeout = val.diff(now, 'milliseconds');
@@ -94,7 +94,7 @@ module.exports = class Boop extends Module {
     }
 
     processMegaboops(msg) {
-        if (Tools.msg_starts(msg, 'mega boop') || Tools.msg_starts(msg, 'megaboop')) {
+        if (Tools.strStartsWord(msg.content, 'megaboop')) {
             // Calculates the difference between now and midnight in milliseconds.
             // Only one megaboop is allowed per day.
             const now = moment();

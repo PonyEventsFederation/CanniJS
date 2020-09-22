@@ -28,7 +28,7 @@ module.exports = class Boop extends Module {
     }
 
     handle(msg) {
-        if (Application.modules.Discord.checkUserAccess(msg.author) && Tools.msg_starts(msg, 'bap')) {
+        if (Application.modules.Discord.checkUserAccess(msg.author) && Tools.strStartsWord(msg.content, 'bap')) {
             if (!msg.mentions.everyone && msg.mentions.users.array().length > 0) {
                 const users = msg.mentions.users.array();
 
