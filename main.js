@@ -42,7 +42,7 @@ Application.registerModule('MentionCanni');
 Application.registerModule('DevCommands');
 Application.registerModule('Solver');
 Application.registerModule('GamerCanni');
-Application.registerModule('Utilities');
+Application.registerModule('Greetings');
 Application.registerModule('Compliment');
 Application.registerModule('Hype');
 Application.registerModule('RoutineMessages');
