@@ -21,18 +21,7 @@ module.exports = class RoutineMessages extends Module {
             interval = this.config.m_time_imterval;
 
             Application.modules.Discord.client.on('message', (msg) => {
-                if (msg.author.bot) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isUserBlocked(msg.author.id)) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isMessageSent()) {
-                    return;
-                }
-                if (inactive && target) {
+                if (Application.modules.Discord.checkUserAccess(msg.author) && inactive && target) {
                     if (this.checkTime()) {
                         inactive = false;
                         this.startMaintenance();
