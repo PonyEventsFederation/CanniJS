@@ -1,16 +1,16 @@
-"use strict";
+'use strict';
 
 // @IMPORTS
-const Application = require("../../lib/Application");
-const Module = require("../../lib/Module");
-const Promise = require("bluebird");
+const Application = require('../../lib/Application');
+const Module = require('../../lib/Module');
+const Promise = require('bluebird');
 const DiscordJS = require('discord.js');
-const Tools = require("../../lib/Tools");
+const Tools = require('../../lib/Tools');
 
 module.exports = class Discord extends Module {
     init() {
-        return new Promise(async (resolve, reject) => {
-            this.log.debug("Initializing...");
+        return new Promise(resolve => {
+            this.log.debug('Initializing...');
 
             this.commands = [];
             this.reactions = [];
@@ -21,7 +21,7 @@ module.exports = class Discord extends Module {
 
             this.client = new DiscordJS.Client();
             this.client.on('ready', () => {
-                this.log.info("Discord Bot is ready to rock!");
+                this.log.info('Discord Bot is ready to rock!');
             });
 
             this.client.on('message', (msg) => {
@@ -39,22 +39,22 @@ module.exports = class Discord extends Module {
     }
 
     start() {
-        return new Promise((resolve, reject) => {
-            this.log.debug("Starting...");
+        return new Promise(resolve => {
+            this.log.debug('Starting...');
 
             return this.client.login(this.authToken).then(() => {
                 this.firstActivity();
                 return resolve(this);
-            }, (err) => {
+            }, err => {
                 this.log.error(err);
                 return resolve(this);
-            })
+            });
         });
     }
 
     stop() {
-        return new Promise((resolve, reject) => {
-            this.log.debug("Stopping...");
+        return new Promise(resolve => {
+            this.log.debug('Stopping...');
 
             this.client.destroy();
 
@@ -68,11 +68,11 @@ module.exports = class Discord extends Module {
             return;
         }
 
-        this.log.info("Received message " + msg.content);
+        this.log.info('Received message ' + msg.content);
         // first we process the commands
         for (let i = 0; i < this.commands.length; i++) {
             const command = this.commands[i];
-            if ((msg.isMemberMentioned(this.client.user) && msg.content.toLowerCase().includes(command.cmd)) || msg.content.toLowerCase().startsWith("!" + command.cmd)) {
+            if ((msg.mentions.has(this.client.user) && msg.content.toLowerCase().includes(command.cmd)) || msg.content.toLowerCase().startsWith('!' + command.cmd)) {
                 return command.cb(msg);
             }
         }
@@ -83,22 +83,22 @@ module.exports = class Discord extends Module {
     }
 
     addCommand(cmd, cb) {
-        this.commands.push({cmd, cb});
+        this.commands.push({ cmd, cb });
     }
 
     addReaction(text, type, cb) {
-        this.reactions.push({text, type, cb});
+        this.reactions.push({ text, type, cb });
     }
 
     getEmoji(type) {
-        var emoji = this.client.emojis.find(emoji => emoji.name.toLowerCase() === type.toLowerCase());
+        const targetEmoji = this.client.emojis.cache.find(emoji => emoji.name.toLowerCase() === type.toLowerCase());
 
-        if (emoji) {
-            return emoji;
+        if (targetEmoji) {
+            return targetEmoji;
         }
 
         Application.log.error(`Emoji ${type} not found`);
-        return "";
+        return '';
     }
 
     setCooldown(userId, type, cooldownTimeout) {
@@ -113,18 +113,18 @@ module.exports = class Discord extends Module {
     }
 
     controlTalkedRecently(msg, type, sendMessage = true, target = 'channel', cooldownMessage = null, blockUser = false, cooldownTimeout = null) {
-        var cooldownTarget;
+        let cooldownTarget;
 
         switch (target) {
-            case 'channel':
-                cooldownTarget = msg.channel.id + type;
-                break;
-            case 'individual':
-                cooldownTarget = msg.author.id;
-                break;
-            case 'message':
-                cooldownTarget = msg.author.id + type;
-                break;
+        case 'channel':
+            cooldownTarget = msg.channel.id + type;
+            break;
+        case 'individual':
+            cooldownTarget = msg.author.id;
+            break;
+        case 'message':
+            cooldownTarget = msg.author.id + type;
+            break;
         }
 
         if (this.talkedRecently.has(cooldownTarget)) {
@@ -143,7 +143,8 @@ module.exports = class Discord extends Module {
             }
 
             return false;
-        } else {
+        }
+        else {
             this.talkedRecently.add(cooldownTarget);
             if (cooldownTimeout === null) {
                 cooldownTimeout = this.config.cooldownTimeout;
@@ -163,7 +164,8 @@ module.exports = class Discord extends Module {
 
         if (this.channelMessaged.has(cooldownTarget)) {
             // Do nothing. We don't want to spam everyone all the time.
-        } else {
+        }
+        else {
             msg.channel.send(cooldownMessage);
 
             this.channelMessaged.add(cooldownTarget);
@@ -180,6 +182,12 @@ module.exports = class Discord extends Module {
         setTimeout(() => {
             this.userBlocked.delete(userId);
         }, blockTimeout);
+    }
+
+    checkUserAccess(user) {
+        return !(user.bot
+            || Application.modules.Discord.isUserBlocked(user.id)
+            || Application.modules.Discord.isMessageSent());
     }
 
     unblockUser(userId) {
@@ -211,7 +219,13 @@ module.exports = class Discord extends Module {
             return;
         }
 
-        const msg = "Internal systems fully operational";
-        Application.modules.Discord.client.user.setActivity(msg);
+        const msg = 'Internal systems fully operational';
+        Application.modules.Discord.client.user.setPresence({
+            status: 'online',
+            afk: false,
+            activity: {
+                name: msg,
+            },
+        });
     }
 };

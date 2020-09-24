@@ -1,44 +1,29 @@
-"use strict";
+'use strict';
 
 // @IMPORTS
-const Application = require("../../lib/Application");
-const Module = require("../../lib/Module");
-const Promise = require("bluebird");
-const Tools = require("../../lib/Tools");
+const Application = require('../../lib/Application');
+const Module = require('../../lib/Module');
+const Promise = require('bluebird');
+const Tools = require('../../lib/Tools');
+const probability = 0.25;
 
 module.exports = class Activity extends Module {
     start() {
-        return new Promise((resolve, reject) => {
-            this.log.debug("Starting...");
-
-            this.propability = 0.25;
-
+        return new Promise(resolve => {
+            this.log.debug('Starting...');
             this.activitySelect();
 
             Application.modules.Discord.client.on('message', (msg) => {
-                if (msg.author.bot) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isUserBlocked(msg.author.id)) {
-                    return;
-                }
-
-                if (Application.modules.Discord.isMessageSent()) {
-                    return;
-                }
-
-                this.randomizerActivity();
-
+                this.randomizerActivity(msg);
             });
 
             return resolve(this);
         });
     }
 
-    randomizerActivity() {
-        if (Tools.chancePercent(this.propability,true)) {
-            this.activitySelect()
+    randomizerActivity(msg) {
+        if (Application.modules.Discord.checkUserAccess(msg.author) && Tools.chancePercent(probability, true)) {
+            this.activitySelect();
         }
     }
 
@@ -46,15 +31,21 @@ module.exports = class Activity extends Module {
         if (!Application.modules.Discord.isReady()) {
             return;
         }
-        let random = Tools.getRandomIntFromInterval(0, this.config.activity.length - 1);
-        Application.modules.Discord.client.user.setActivity(this.config.activity[random]);
+        const random = Tools.getRandomIntFromInterval(0, this.config.activity.length - 1);
+        Application.modules.Discord.client.user.setPresence({
+            status: 'online',
+            afk: false,
+            activity: {
+                name: this.config.activity[random],
+            },
+        });
     }
 
 
     stop() {
-        return new Promise((resolve, reject) => {
-            this.log.debug("Stopping...");
+        return new Promise(resolve => {
+            this.log.debug('Stopping...');
             return resolve(this);
-        })
+        });
     }
 };
