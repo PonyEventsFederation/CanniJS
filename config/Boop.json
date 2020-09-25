@@ -6,13 +6,20 @@
         "%s Nu-uh! Don't boop me..... *boops back*. %s"
     ],
     "selfBoopAnswer": [
-        "Teehee. Chris isn't looking~. %s\n*( ͡° ͜ʖ (\\ Canni quickly boops her own snoot.*"
+        "Teehee. Berry isn't looking~. %s\n*( ͡° ͜ʖ (\\ Canni quickly boops her own snoot.*"
     ],
     "megaBoopAnswer": [
-        ["All right! Get ready! Here comes my super powerful, and totally unblockable megaboop!", "Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n*Canni Bot's megaboop hits you for %s damage.*"]
+        [
+            "All right! Get ready! Here comes my super powerful, and totally unblockable megaboop!",
+            "Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n*Canni Bot's megaboop hits you for %s damage.*"
+        ]
     ],
     "megaBoopMissAnswer": [
-        ["All right! Get ready! Here comes my super powerful, and totally unblockable megaboop!", "Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n*Canni Bot's megaboop misses you.*", "Oh no, I missed!"]
+        [
+            "All right! Get ready! Here comes my super powerful, and totally unblockable megaboop!",
+            "Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n*Canni Bot's megaboop misses you.*",
+            "Oh no, I missed!"
+        ]
     ],
     "megaBoopCritAnswer": [
         ["All right! Get ready! Here comes my super powerful, and totally unblockable megaboop!", "Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n**Canni Bot's megaboop critically hits you for %s damage.**"]
