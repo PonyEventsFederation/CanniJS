@@ -5,12 +5,14 @@
     "howAreYouAnswer": [
         "%s I'm okay, thank you for asking!",
         "%s I am absolutely great!",
-        "%s I'm a bit sad that it's not GalaCon yet."
+        "%s I'm a bit sad that it's not GalaCon yet.",
+        "%s I'm still a little sleepy.",
+        "%s I'm running a bit low on Fanta."
     ],
     "broHoofAnswer": [
         "%s /)*(\\"
     ],
-    "chrisBrokeMeAnswer": "%s I'm not sure. I think ChrisFhey might've broken something again...",
+    "chrisBrokeMeAnswer": "%s I'm not sure. I think Berry might've broken something again...",
     "xrayBrokeMeAnswer": "%s I'm not sure. I think Xray messed up something with the Python environment again...",
     "remoteAnswer": "%s Sometimes I feel like I´m being remote controlled...",
     "loveCanniType": "loveCanni",
