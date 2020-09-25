@@ -23,6 +23,12 @@ module.exports = class CanniTimeToHype extends Module {
                 this.handleMessage(msg);
             });
 
+            Application.modules.Discord.client.on('ready', () => {
+                setInterval(() => {
+                    this.updateHype();
+                }, (this.config.updateInterval || 10) * 1000);
+            });
+
             this.setHypeDate();
 
             return resolve(this);
@@ -74,19 +80,13 @@ module.exports = class CanniTimeToHype extends Module {
     }
 
     updateHype() {
-        if (!Application.modules.Discord.isReady()) {
-            return;
-        }
-
         const duration = this.getHypeDuration();
         const msg = `Time to Galacon: ${duration.days} days, ${duration.hrs}:${duration.minutes} left! Hype!`;
-        Application.modules.Discord.client.user.setActivity({
+
+        Application.modules.Discord.client.user.setActivity(msg, {
             status: 'online',
             afk: false,
-            activity: {
-                name: msg,
-            },
-        });
+        }).then().catch(console.error);
     }
 
     getHypeDuration() {
