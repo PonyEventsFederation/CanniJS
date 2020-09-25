@@ -1,7 +1,8 @@
 {
     "bapAnswer": [
         ":newspaper2: *BAPS* %s",
-        "*Canni sneaks up behind her target and...*\n:newspaper2: *BAPS* %s"
+        "*Canni sneaks up behind her target and...*\n:newspaper2: *BAPS* %s",
+        "*Canni swings her newspaper at %s. \n:newspaper2: *BAP*"
     ],
     "bapethAnswer": [
         ":newspaper2: *BAPETH* %s",
