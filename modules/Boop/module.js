@@ -147,20 +147,22 @@ module.exports = class Boop extends Module {
     }
 
     selfBoop(msg) {
-        let response;
-        msg.delete();
         if (Tools.chancePercent(5)) {
             const random = Tools.getRandomIntFromInterval(0, this.config.selfBoopAnswer.length - 1);
-            response = msg.channel.send(Tools.parseReply(this.config.selfBoopAnswer[random], [Application.modules.Discord.getEmoji('excited')]));
+            const answer = Tools.parseReply(this.config.selfBoopAnswer[random], [Application.modules.Discord.getEmoji('excited')]);
+            msg.channel.send(answer).then(message => {
+                message.delete({ timeout: boopDeleteTimeout });
+            });
         }
         else {
             const random = Tools.getRandomIntFromInterval(0, this.config.canniBoopAnswer.length - 1);
-            response = msg.channel.send(Tools.parseReply(this.config.canniBoopAnswer[random], [msg.author, Application.modules.Discord.getEmoji('shy')]));
+            const answer = Tools.parseReply(this.config.canniBoopAnswer[random], [msg.author, Application.modules.Discord.getEmoji('shy')]);
+            msg.channel.send(answer).then(message => {
+                message.delete({ timeout: boopDeleteTimeout });
+            });
         }
 
-        response.then(message => {
-            message.delete(boopDeleteTimeout);
-        });
+        msg.delete();
 
         Application.modules.Overload.overload('boop');
         Application.modules.Discord.setMessageSent();
