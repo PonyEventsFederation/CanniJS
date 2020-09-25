@@ -3,7 +3,8 @@
         "( ͡° ͜ʖ (\\  *BOOPS* %s"
     ],
     "canniBoopAnswer": [
-        "%s Nu-uh! Don't boop me..... *boops back*. %s"
+        "%s Nu-uh! Don't boop me... *boops back*. %s",
+        "%s Canni is not for booping. %s"
     ],
     "selfBoopAnswer": [
         "Teehee. Berry isn't looking~. %s\n*( ͡° ͜ʖ (\\ Canni quickly boops her own snoot.*"
@@ -22,15 +23,21 @@
         ]
     ],
     "megaBoopCritAnswer": [
-        ["All right! Get ready! Here comes my super powerful, and totally unblockable megaboop!", "Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n**Canni Bot's megaboop critically hits you for %s damage.**"]
+        [
+            "All right! Get ready! Here comes my super powerful, and totally unblockable megaboop!",
+            "Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n**Canni Bot's megaboop critically hits you for %s damage.**"
+        ]
     ],
     "megaSelfBoopAnswer": [
         "%s I'm sorry, but I can't do that. \nMy creators added a failsafe so that I don't accidentally damage myself. %s"
     ],
     "megaBoopDevBlock": ["**The ultimate Dev Megaboop Annihilation nullifies Canni Bot's megaboop!**","Hey... %s you can´t just use your %s to counter my megaboop... Not fair..."],
-    "megaBoopBlock": ["Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n**You block a part of the megaboop!**\n*Canni Bot's megaboop hits you now only for %s damage.*"],
+    "megaBoopBlock": [
+        "Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n**You block a part of the megaboop!**\n*Canni Bot's megaboop hits you now only for %s damage.*"
+    ],
     "hyperBoopAnswer": [
-        ["All right! Get ready! Here comes my super powerful, and totally unblockable megaaaaaaaaaaaaaaa.............................",
+        [
+            "All right! Get ready! Here comes my super powerful, and totally unblockable megaaaaaaaaaaaaaaa.............................",
             "**Warning!**",
             "Megaboop is overloading.",
             "Hypercharge has been activated!",
