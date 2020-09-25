@@ -98,7 +98,10 @@
     ],
     "status_effect_template": "*The megaboop gave you the following temporary status effect:\n\n%s*",
     "status_effect_miss_template": "*The megaboop missed but gave you a status effect anyway:\n\n%s*",
-    "dev_ultra_boop_rejection": ["%s Silly you... You don´t have the permission to do that..."],
+    "dev_ultra_boop_rejection": [
+        "%s Silly you... You don´t have the permission to do that...",
+        "%s Oh no. Only my developers are authorised to do that."
+    ],
     "dev_ultra_boop": [
         [
             "Processing request...",
