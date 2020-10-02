@@ -3,6 +3,8 @@
 const Application = require('./lib/Application');
 const stage = (process.env.STAGE || process.env.NODE_ENV || 'dev').toLowerCase();
 
+if (stage == 'dev') require('dotenv').config();
+
 Application.configure({
     rootDir: __dirname,
     modules_path: __dirname + '/modules',
