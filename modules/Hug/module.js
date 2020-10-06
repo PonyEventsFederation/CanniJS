@@ -114,7 +114,7 @@ module.exports = class Hug extends Module {
     }
 
     setCooldown(msg) {
-        const cooldownMessage = Tools.parseReply(this.config.cooldownMessage, [msg.author]);
+        const cooldownMessage = Tools.parseReply(this.config.cooldownMessage, [msg.author, Application.modules.Discord.getEmoji('error')]);
 
         if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.bapType)) {
             Application.modules.Discord.setCooldown(msg.author.id, this.config.bapType, this.config.bapTimeout);
