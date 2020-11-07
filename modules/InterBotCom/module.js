@@ -30,7 +30,7 @@ module.exports = class InterBotCom extends Module {
 
     check_wachmann_interaction(msg) {
         if (msg.mentions.has(Application.getClient().user)) {
-            if (Tools.msg_contains(msg, 'hey, don´t boop me.')) {
+            if (Tools.msg_contains(msg, 'hey, don\'t boop me.')) {
                 setTimeout(function() {
                     msg.channel.send(Tools.parseReply(this.config.ans_boop_guard_response, [msg.author]));
                 }.bind(this), 2000);
