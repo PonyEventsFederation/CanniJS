@@ -215,7 +215,7 @@ module.exports = class Boop extends Module {
             break;
         }
 
-        answer = this.statusgenerator(answer, limit, type === 'miss');
+        // answer = this.statusgenerator(answer, limit, type === 'miss');
 
         let init_delay = 1000;
         let delay = 3000;
