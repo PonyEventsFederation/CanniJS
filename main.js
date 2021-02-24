@@ -23,10 +23,11 @@ Application.configure({
     ],
 });
 
+// Activity module is used to assign custom statuses to Canni when Galacon doesn't happen.
+// Application.registerModule('Activity');
+
 // resources
-// Application.registerModule('EMPTY');
 Application.registerModule('Discord');
-// Application.registerModule('Python');
 Application.registerModule('Overload');
 Application.registerModule('Ignore');
 Application.registerModule('Holiday');
@@ -51,10 +52,7 @@ Application.registerModule('Compliment');
 Application.registerModule('Hype');
 Application.registerModule('RoutineMessages');
 Application.registerModule('InterBotCom');
-// Application.registerModule('SaniSoda');
-// Application.registerModule('Activity');
 Application.registerModule('NoMessageProcessor');
-
 
 Application.run();
 
