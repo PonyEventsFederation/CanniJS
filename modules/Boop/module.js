@@ -215,7 +215,7 @@ module.exports = class Boop extends Module {
             break;
         }
 
-        // answer = this.statusgenerator(answer, limit, type === 'miss');
+        answer = this.statusgenerator(answer, limit, type === 'miss');
 
         let init_delay = 1000;
         let delay = 3000;
@@ -226,7 +226,6 @@ module.exports = class Boop extends Module {
         }
 
         this.counterWindow(delay + init_delay);
-
         setTimeout(function() {
             if (Array.isArray(answer)) {
                 Tools.listSender(msg.channel, answer, [delay, 2000, 1000], [user, damage], this.interrupt);
@@ -329,8 +328,7 @@ module.exports = class Boop extends Module {
     }
 
     statusgenerator(ans, limit, miss = false) {
-        // eslint-disable-next-line prefer-const
-        let res = ans;
+        let res = [];
 
         if (Tools.chancePercent(limit)) {
             const template = miss ? this.config.status_effect_miss_template : this.config.status_effect_template;
@@ -344,6 +342,9 @@ module.exports = class Boop extends Module {
                 res[i] = ans[i];
             }
             res[i] = add;
+        }
+        else {
+            res = ans;
         }
 
         return res;
