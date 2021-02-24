@@ -3,6 +3,8 @@
 const Application = require('./lib/Application');
 const stage = (process.env.STAGE || process.env.NODE_ENV || 'dev').toLowerCase();
 
+require('events').defaultMaxListeners = 50;
+
 if (stage == 'dev') require('dotenv').config();
 
 Application.configure({
