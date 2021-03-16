@@ -1,10 +1,26 @@
 {
-    "name": "CanniJS",
+    "name": "cannijs",
     "version": "1.0.0",
-    "description": "",
+    "description": "Galacon's very own Canni Discord bot",
     "main": "main.js",
-    "author": "",
+    "author": {
+        "name": "Christopher",
+        "url": "https://github.com/ChrisFhey"
+    },
+    "contributors": [
+        {
+            "name": "Xray",
+            "url": "https://github.com/Xraydylan"
+        },
+        {
+            "name": "Alexander Liu",
+            "url": "https://github.com/autumnblazey"
+        }
+    ],
+    "bugs": "https://github.com/PonyEventsFederation/CanniJS/issues",
     "license": "MIT",
+    "repository": "github:PonyEventsFederation/CanniJS",
+    "private": true,
     "dependencies": {
         "algebrite": "^1.2.1",
         "bluebird": "^3.5.5",
