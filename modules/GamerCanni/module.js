@@ -39,8 +39,7 @@ module.exports = class RockPaperScissors extends Module {
         if (!emojis.length) {
             return Promise.resolve();
         }
-        msg.react(emojis[0]);
-        return this.sleep(300).then(() => this.reactMultiple(msg, emojis.slice(1)));
+        msg.react(emojis.shift()).then(() => this.reactMultiple(msg, emojis));
     }
 
     getEmojiName(emoji) {

@@ -31,7 +31,7 @@
     "megaSelfBoopAnswer": [
         "%s I'm sorry, but I can't do that. \nMy creators added a failsafe so that I don't accidentally damage myself. %s"
     ],
-    "megaBoopDevBlock": ["**The ultimate Dev Megaboop Annihilation nullifies Canni Bot's megaboop!**","Hey... %s you can´t just use your %s to counter my megaboop... Not fair..."],
+    "megaBoopDevBlock": ["**The ultimate Dev Megaboop Annihilation nullifies Canni Bot's megaboop!**","Hey... %s you can't just use your %s to counter my megaboop... Not fair..."],
     "megaBoopBlock": [
         "Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n**You block a part of the megaboop!**\n*Canni Bot's megaboop hits you now only for %s damage.*"
     ],
@@ -99,7 +99,7 @@
     "status_effect_template": "*The megaboop gave you the following temporary status effect:\n\n%s*",
     "status_effect_miss_template": "*The megaboop missed but gave you a status effect anyway:\n\n%s*",
     "dev_ultra_boop_rejection": [
-        "%s Silly you... You don´t have the permission to do that...",
+        "%s Silly you... You don't have the permission to do that...",
         "%s Oh no. Only my developers are authorised to do that."
     ],
     "dev_ultra_boop": [
@@ -123,9 +123,9 @@
     ],
     "dev_ultra_boop_impact":"Incoming!\n\n( ͡° ͜ʖ (\\  *ULTRABOOPS* %s",
     "dev_ultra_boop_postimpact":"**Canni Bot's Master Chief Dev Ultraboop hits you for *infinite* damage.**",
-    "dev_self_boop": ["%s\nWarning!\nThis operation can´t be performed!"],
+    "dev_self_boop": ["%s\nWarning!\nThis operation can't be performed!"],
     "dev_ultra_boop_rejection_type":"dev_ultra_boop_rejection_type",
     "boop_guard_type": "boop_guard_type",
-    "ans_boop_guard_cooldown": "I think he doesn´t want to be disturbed right now..."
+    "ans_boop_guard_cooldown": "I think he doesn't want to be disturbed right now..."
 
 }
