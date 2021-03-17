@@ -35,13 +35,6 @@ module.exports = class RockPaperScissors extends Module {
         return new Promise(resolve => setTimeout(resolve, milliseconds));
     }
 
-    reactMultiple(msg, emojis) {
-        if (!emojis.length) {
-            return Promise.resolve();
-        }
-        msg.react(emojis.shift()).then(() => this.reactMultiple(msg, emojis));
-    }
-
     getEmojiName(emoji) {
         switch (emoji) {
         case '👊':
@@ -87,7 +80,9 @@ module.exports = class RockPaperScissors extends Module {
         const canniChoice = this.getEmojiName(emojis[Math.floor(Math.random() * emojis.length)]);
 
         msg.channel.send(Tools.parseReply(flavourText, [msg.author, gameName, Application.modules.Discord.getEmoji('excited')])).then(sentEmbed => {
-            this.reactMultiple(sentEmbed, emojis);
+            for (let i = 0; i < emojis.length; i++) {
+                sentEmbed.react(emojis[i]);
+            }
 
             const filter = (reaction, user) => {
                 return emojis.includes(reaction.emoji.name) && user.id === msg.author.id;
