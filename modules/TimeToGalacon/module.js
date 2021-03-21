@@ -25,11 +25,11 @@ module.exports = class CanniTimeToHype extends Module {
 
             Application.modules.Discord.client.on('ready', () => {
                 setInterval(() => {
-                    this.updateHype();
+                    this.updateGalaconDate();
                 }, (this.config.updateInterval || 10) * 1000);
             });
 
-            this.setHypeDate();
+            this.setGalaconDate();
 
             return resolve(this);
         });
@@ -61,26 +61,26 @@ module.exports = class CanniTimeToHype extends Module {
         }
     }
 
-    setHypeDate() {
-        this.hypeDate = !this.config.hypeDate ? moment().tz('Europe/Berlin') : moment(this.config.hypeDate).tz('Europe/Berlin');
+    setGalaconDate() {
+        this.galaconDate = !this.config.galaconDate ? moment().tz('Europe/Berlin') : moment(this.config.galaconDate).tz('Europe/Berlin');
 
         // reactivated for Galacon 2021, deactivate afterwards
-        this.log.info('Set hype date to ' + this.hypeDate.format());
-        this.hypeInterval = setInterval(() => this.updateHype(), (this.config.updateInterval || 10) * 1000);
-        this.updateHype();
+        this.log.info('Set galacon date to ' + this.galaconDate.format());
+        this.galaconInterval = setInterval(() => this.updateGalaconDate(), (this.config.updateInterval || 10) * 1000);
+        this.updateGalaconDate();
     }
 
     tellMeWhen(msg) {
-        const duration = this.getHypeDuration();
-        const random = Tools.getRandomIntFromInterval(0, this.config.hypeAnswer.length - 1);
+        const duration = this.getTimeRemaining();
+        const random = Tools.getRandomIntFromInterval(0, this.config.galaconAnswer.length - 1);
 
-        msg.channel.send(Tools.parseReply(this.config.timeAnswer, [duration.days, duration.hrs, duration.minutes]) + '\n' + this.config.hypeAnswer[random]);
+        msg.channel.send(Tools.parseReply(this.config.timeAnswer, [duration.days, duration.hrs, duration.minutes]) + '\n' + this.config.galaconAnswer[random]);
 
         Application.modules.Discord.setMessageSent();
     }
 
-    updateHype() {
-        const duration = this.getHypeDuration();
+    updateGalaconDate() {
+        const duration = this.getTimeRemaining();
         const msg = `Time to Galacon: ${duration.days} days, ${duration.hrs}:${duration.minutes} left! Hype!`;
 
         Application.modules.Discord.client.user.setActivity(msg, {
@@ -89,8 +89,8 @@ module.exports = class CanniTimeToHype extends Module {
         }).then().catch(console.error);
     }
 
-    getHypeDuration() {
-        const duration = this.hypeDate.diff(moment().tz('Europe/Berlin'));
+    getTimeRemaining() {
+        const duration = this.galaconDate.diff(moment().tz('Europe/Berlin'));
 
         let seconds = parseInt(duration) / 1000;
         const days = Math.floor(seconds / (3600 * 24));
@@ -109,7 +109,7 @@ module.exports = class CanniTimeToHype extends Module {
         return new Promise(resolve => {
             this.log.debug('Stopping...');
 
-            clearInterval(this.hypeInterval);
+            clearInterval(this.galaconInterval);
 
             return resolve(this);
         });
