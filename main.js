@@ -34,7 +34,7 @@ Application.registerModule('Holiday');
 Application.registerModule('Potato');
 Application.registerModule('UserJoined');
 Application.registerModule('Help');
-Application.registerModule('CanniTimeToHype');
+Application.registerModule('TimeToGalacon');
 Application.registerModule('Boop');
 Application.registerModule('Bap');
 Application.registerModule('Hug');
