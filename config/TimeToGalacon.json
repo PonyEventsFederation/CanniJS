@@ -1,9 +1,9 @@
 {
     "timeAnswer": "There are %s days, %s hours, and %s minutes left until the next GalaCon!",
-    "hypeAnswer": [
+    "galaconAnswer": [
         "This is taking forever!",
         "Donate all your hard earned money bills!"
     ],
-    "hypeDate": "2021-07-24",
+    "galaconDate": "2022-07-30",
     "updateInterval": 10
 }
