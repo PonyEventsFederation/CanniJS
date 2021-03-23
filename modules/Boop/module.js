@@ -5,7 +5,7 @@ const Application = require('../../lib/Application');
 const Module = require('../../lib/Module');
 const Promise = require('bluebird');
 const Tools = require('../../lib/Tools');
-const moment = require('moment-timezone');
+const moment = require('moment');
 const path = Application.config.rootDir + '/data/impact.gif';
 let boop_dev_on = true;
 let wachmann_id;
@@ -84,10 +84,8 @@ module.exports = class Boop extends Module {
         }
 
         if (Tools.strStartsWord(msg.content, 'block')) {
-            const now = moment().tz('Europe/Berlin');
-            let val = moment().tz('Europe/Berlin');
-            val = val.endOf('day');
-
+            const now = moment();
+            const val = moment().endOf('day');
             const blockTimeout = val.diff(now, 'milliseconds');
             if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaBoopType, false, 'message', undefined, undefined, blockTimeout)) {
                 return this.counter(msg, 'Block');
@@ -99,11 +97,10 @@ module.exports = class Boop extends Module {
         if (Tools.strStartsWord(msg.content, 'megaboop')) {
             // Calculates the difference between now and midnight in milliseconds.
             // Only one megaboop is allowed per day.
-            const now = moment().tz('Europe/Berlin');
-            let val = moment().tz('Europe/Berlin');
-            val = val.endOf('day');
-
+            const now = moment();
+            const val = moment().endOf('day');
             const megaBoopTimeout = val.diff(now, 'milliseconds');
+
             if (!msg.mentions.everyone && msg.mentions.users.array().length === 1) {
                 const user = msg.mentions.users.array()[0];
                 if (Application.checkSelf(user.id)) {
