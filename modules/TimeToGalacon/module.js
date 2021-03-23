@@ -4,7 +4,7 @@
 const Application = require('../../lib/Application');
 const Module = require('../../lib/Module');
 const Promise = require('bluebird');
-const moment = require('moment-timezone');
+const moment = require('moment');
 const Tools = require('../../lib/Tools');
 
 // Set to false in case GalaCon is cancelled.
@@ -63,7 +63,6 @@ module.exports = class CanniTimeToHype extends Module {
 
     setGalaconDate() {
         this.galaconDate = !this.config.galaconDate ? moment().tz('Europe/Berlin') : moment(this.config.galaconDate).tz('Europe/Berlin');
-
         // reactivated for Galacon 2021, deactivate afterwards
         this.log.info('Set galacon date to ' + this.galaconDate.format());
         this.galaconInterval = setInterval(() => this.updateGalaconDate(), (this.config.updateInterval || 10) * 1000);
@@ -91,7 +90,6 @@ module.exports = class CanniTimeToHype extends Module {
 
     getTimeRemaining() {
         const duration = this.galaconDate.diff(moment().tz('Europe/Berlin'));
-
         let seconds = parseInt(duration) / 1000;
         const days = Math.floor(seconds / (3600 * 24));
         seconds -= days * 3600 * 24;

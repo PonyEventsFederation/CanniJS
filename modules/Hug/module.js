@@ -5,7 +5,7 @@ const Application = require('../../lib/Application');
 const Module = require('../../lib/Module');
 const Promise = require('bluebird');
 const Tools = require('../../lib/Tools');
-const moment = require('moment-timezone');
+const moment = require('moment');
 const hugDeleteTimeout = 40000;
 
 module.exports = class Hug extends Module {
@@ -71,8 +71,8 @@ module.exports = class Hug extends Module {
     }
 
     processMegaHugs(msg) {
-        const now = moment().tz('Europe/Berlin');
-        const val = moment().tz('Europe/Berlin').endOf('day');
+        const now = moment();
+        const val = moment().endOf('day');
         const megaHugTimeout = val.diff(now, 'milliseconds');
 
         if (!msg.mentions.everyone && msg.mentions.users.array().length === 1) {
