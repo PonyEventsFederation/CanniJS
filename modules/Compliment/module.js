@@ -33,10 +33,16 @@ module.exports = class Compliment extends Module {
 
                 for (let i = 0; i < users.length; i++) {
                     if (Application.checkSelf(users[i].id)) {
-                        const id = Tools.get_id_from_mention(msg.content.split(' ').filter(Boolean)[2]);
-                        if (msg.mentions.users.array().length === 1 && Application.checkSelf(id)) {
-                            this.compliment_bot(msg);
+                        try {
+                            const id = Tools.get_id_from_mention(msg.content.split(' ').filter(Boolean)[2]);
+                            if (msg.mentions.users.array().length === 1 && Application.checkSelf(id)) {
+                                this.compliment_bot(msg);
+                            }
                         }
+                        catch (error) {
+                            // this.log.error(error);
+                        }
+
                         continue;
                     }
 
