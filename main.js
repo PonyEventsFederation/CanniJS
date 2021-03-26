@@ -23,36 +23,50 @@ Application.configure({
     ],
 });
 
-// Activity module is used to assign custom statuses to Canni when Galacon doesn't happen.
-// Application.registerModule('Activity');
-
 // resources
-Application.registerModule('Discord');
-Application.registerModule('Overload');
-Application.registerModule('Ignore');
-Application.registerModule('Holiday');
-Application.registerModule('Potato');
-Application.registerModule('UserJoined');
-Application.registerModule('Help');
-Application.registerModule('TimeToGalacon');
-Application.registerModule('Boop');
-Application.registerModule('Bap');
-Application.registerModule('Hug');
-Application.registerModule('Fanta');
-Application.registerModule('Bizaam');
-Application.registerModule('Assfart');
-Application.registerModule('BestPony');
-Application.registerModule('WorstPony');
-Application.registerModule('MentionCanni');
-Application.registerModule('DevCommands');
-Application.registerModule('Solver');
-Application.registerModule('GamerCanni');
-Application.registerModule('Greetings');
-Application.registerModule('Compliment');
-Application.registerModule('Hype');
-Application.registerModule('RoutineMessages');
-Application.registerModule('InterBotCom');
-Application.registerModule('NoMessageProcessor');
+
+const modules = [
+    'Activity',
+    'Discord',
+    'Overload',
+    'Ignore',
+    'Holiday',
+    'Potato',
+    'UserJoined',
+    'Help',
+    'TimeToGalacon',
+    'Boop',
+    'Bap',
+    'Hug',
+    'Fanta',
+    'Bizaam',
+    'Assfart',
+    'BestPony',
+    'WorstPony',
+    'MentionCanni',
+    'DevCommands',
+    'Solver',
+    'GamerCanni',
+    'Greetings',
+    'Compliment',
+    'Hype',
+    'RoutineMessages',
+    'InterBotCom',
+    'NoMessageProcessor',
+];
+
+// remove all disabled modules
+const disabledModules = process.env.DISABLED_MODULES ? process.env.DISABLED_MODULES.split(',').map(m => m.trim()) : [];
+disabledModules.forEach(module => {
+    const i = modules.indexOf(module);
+    i !== -1 && modules.splice(i, 1);
+});
+
+// add all enabled modules
+const enabledModules = process.env.ENABLED_MODULES ? process.env.ENABLED_MODULES.split(',').map(m => m.trim()) : [];
+enabledModules.forEach(module => !modules.includes(module) && modules.push(module));
+
+modules.forEach(module => Application.registerModule(module));
 
 Application.run();
 
