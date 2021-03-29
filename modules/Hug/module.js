@@ -2,6 +2,7 @@
 
 // @IMPORTS
 const Application = require('../../lib/Application');
+const Database = require('../../lib/Database');
 const Module = require('../../lib/Module');
 const Promise = require('bluebird');
 const Tools = require('../../lib/Tools');
@@ -82,11 +83,20 @@ module.exports = class Hug extends Module {
                 return this.megaHug(msg, this.config.megaSelfHugAnswer, msg.author);
             }
 
-            const cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaHug, [msg.author]);
+            Database.getTimeout(msg.author.id, 'megahug').then((results) => {
+                if (results.length == 0) {
+                    Database.setTimeout(msg.author.id, 'megahug');
+                    return this.megaHug(msg, this.config.megaHugAnswer, user);
+                }
+                else {
+                    const cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaHug, [msg.author]);
+                    msg.channel.send(cooldownMessage);
+                }
+            }).catch((err) => {
+                this.log.error('Promise rejection error: ' + err);
+            });
 
-            if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaHugType, true, 'message', cooldownMessage, false, megaHugTimeout)) {
-                return this.megaHug(msg, this.config.megaHugAnswer, user);
-            }
+            Application.modules.Discord.setMessageSent();
         }
     }
 
