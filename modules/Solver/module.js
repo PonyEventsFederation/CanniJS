@@ -3,10 +3,10 @@
 // @IMPORTS
 const Application = require('../../lib/Application');
 
-const worker = require('worker');
 const Module = require('../../lib/Module');
 const Promise = require('bluebird');
 const Tools = require('../../lib/Tools');
+const solveworkerpool = require('./solve_worker');
 
 // eslint-disable-next-line prefer-const
 let calc_runing = {};
@@ -83,7 +83,6 @@ module.exports = class Solver extends Module {
                 const obj = value[1];
                 const id = value[2];
                 obj.end_calc(id);
-                value[3].kill();
                 msg.channel.send(Tools.parseReply(config.simple_solve, [msg.author, res])).catch(function(error) {
                     if (error.toString().toLowerCase().includes('must be 2000 or fewer in length')) {
                         msg.channel.send('I\'m sorry. The result of your calculation is too long to be printed in Discord.');
@@ -107,7 +106,6 @@ module.exports = class Solver extends Module {
                 const obj = value[1];
                 const id = value[2];
                 obj.end_calc(id);
-                value[3].kill();
                 if (res === '') {
                     msg.channel.send(Tools.parseReply(config.solver_no_output, [msg.author]));
                 }
@@ -129,8 +127,7 @@ module.exports = class Solver extends Module {
     }
 
     prepareMulti(pre) {
-        // eslint-disable-next-line prefer-const
-        let data = [];
+        const data = [];
         let append_string = '';
         let append_status = 0;
         let i;
@@ -165,25 +162,11 @@ module.exports = class Solver extends Module {
     }
 
     async single(data, obj, id) {
-        const wor = worker.spawn('solve_worker.js');
-        setTimeout(function() {
-            if (obj.final_check_calc(id)) {
-                wor.kill();
-                Application.log.info(`Killed single worker after reaching its timeout of ${Application.modules.Solver.config.single_timeout / 1000} seconds.`);
-            }
-        }, this.config.single_timeout);
-        return [await wor.run('do_calc', [data]), obj, id, wor];
+        return [await solveworkerpool('single', data), obj, id];
     }
 
     async multi(data, obj, id) {
-        const wor = worker.spawn('solve_worker.js');
-        setTimeout(function() {
-            if (obj.final_check_calc(id)) {
-                wor.kill();
-                Application.log.info(`Killed multi worker after reaching its timeout of ${Application.modules.Solver.multi_timeout / 1000} seconds.`);
-            }
-        }, this.config.multi_timeout);
-        return [await wor.run('do_multi_calc', [data]), obj, id, wor];
+        return [await solveworkerpool('multi', data), obj, id];
     }
 
     stop() {
