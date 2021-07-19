@@ -13,7 +13,7 @@
             "url": "https://github.com/Xraydylan"
         },
         {
-            "name": "Alexander Liu",
+            "name": "Autumn",
             "url": "https://github.com/autumnblazey"
         }
     ],
@@ -22,22 +22,22 @@
     "repository": "github:PonyEventsFederation/CanniJS",
     "private": true,
     "dependencies": {
-        "algebrite": "^1.2.1",
-        "bluebird": "^3.5.5",
-        "discord.js": "^12.5.1",
-        "html-entities": "^1.2.1",
-        "merge": "^1.2.1",
-        "moment": "^2.24.0",
-        "moment-timezone": "^0.5.26",
+        "algebrite": "^1.4.0",
+        "bluebird": "^3.7.2",
+        "discord.js": "^12.5.3",
+        "html-entities": "^2.3.2",
+        "merge": "^2.1.1",
+        "moment": "^2.29.1",
+        "moment-timezone": "^0.5.33",
         "mysql": "^2.18.1",
         "node-fetch": "^2.6.1",
-        "striptags": "^3.1.1",
+        "striptags": "^3.2.0",
         "winston": "^1.1.2",
         "worker": "^0.4.0"
     },
     "devDependencies": {
-        "dotenv": "^8.2.0",
-        "eslint": "^7.16.0",
-        "nodemon": "^2.0.4"
+        "dotenv": "^10.0.0",
+        "eslint": "^7.31.0",
+        "nodemon": "^2.0.12"
     }
 }

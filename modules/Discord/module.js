@@ -29,10 +29,11 @@ module.exports = class Discord extends Module {
                 return this.processMessage(msg);
             });
 
-            // process message again when its updated
-            this.client.on('messageUpdate', (_, newmsg) => {
-                this.client.emit('message', newmsg);
-            });
+            // // process message again when its updated
+            // // disabled cause it caused more problems than it was worth
+            // this.client.on('messageUpdate', (_, newmsg) => {
+            //     this.client.emit('message', newmsg);
+            // });
 
             this.authToken = this.config.token;
             if (this.authToken.toLowerCase() === 'env') {
