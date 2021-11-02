@@ -21,6 +21,9 @@
     "license": "MIT",
     "repository": "github:PonyEventsFederation/CanniJS",
     "private": true,
+    "engines": {
+        "node": "16.x"
+    },
     "dependencies": {
         "algebrite": "^1.4.0",
         "bluebird": "^3.7.2",
