@@ -51,7 +51,7 @@ module.exports = class Hug extends Module {
                 this.setCooldown(msg);
             }
 
-            if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.hugType)) {
+            else if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.hugType)) {
                 for (let i = 0; i < users.length; i++) {
                     // Hug targeted at Canni.
                     if (Application.checkSelf(users[i].id)) {
