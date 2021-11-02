@@ -70,10 +70,6 @@ modules.forEach(module => Application.registerModule(module));
 
 Application.run();
 
-process.on('SIGINT', function() {
-    Application.stop();
-});
-
-process.on('exit', function() {
-    Application.stop();
-});
+process.on('SIGINT', () => Application.stop());
+process.on('SIGTERM', () => Application.stop());
+process.on('exit', () => Application.stop());
