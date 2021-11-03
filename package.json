@@ -22,7 +22,7 @@
     "repository": "github:PonyEventsFederation/CanniJS",
     "private": true,
     "engines": {
-        "node": "16.x"
+        "node": "14.x"
     },
     "dependencies": {
         "algebrite": "^1.4.0",
