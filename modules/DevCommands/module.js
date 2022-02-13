@@ -2,6 +2,7 @@
 
 // @IMPORTS
 const Application = require('../../lib/Application');
+const config = require("../../config/application/config.json");
 const Module = require('../../lib/Module');
 const Promise = require('bluebird');
 const Tools = require('../../lib/Tools');
@@ -122,7 +123,7 @@ module.exports = class DevC extends Module {
 
     memberId(msg) {
         if (msg.channel.type !== 'dm') {
-            msg.delete();
+            setTimeout(() => msg.delete(), config.deleteDelay);
         }
         let user;
         if (!msg.mentions.everyone && msg.mentions.users.array().length === 2) {
@@ -134,7 +135,7 @@ module.exports = class DevC extends Module {
 
     channelId(msg) {
         if (msg.channel.type !== 'dm') {
-            msg.delete();
+            setTimeout(() => msg.delete(), config.deleteDelay);
         }
         msg.channel.send(Tools.parseReply(this.config.ans_channel_id, [msg.channel.id])).then(message => message.delete(8000));
         Application.modules.Discord.setMessageSent();

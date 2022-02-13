@@ -2,6 +2,7 @@
 
 // @IMPORTS
 const Application = require('../../lib/Application');
+const config = require("../../config/application/config.json");
 const Database = require('../../lib/Database');
 const Module = require('../../lib/Module');
 const Promise = require('bluebird');
@@ -118,7 +119,7 @@ module.exports = class Hug extends Module {
             message.delete({ timeout: hugDeleteTimeout });
         });
 
-        msg.delete();
+        setTimeout(() => msg.delete(), config.deleteDelay);
         Application.modules.Overload.overload('hug');
         Application.modules.Discord.setMessageSent();
     }

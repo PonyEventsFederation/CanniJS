@@ -2,6 +2,7 @@
 
 // @IMPORTS
 const Application = require('../../lib/Application');
+const config = require("../../config/application/config.json");
 const Database = require('../../lib/Database');
 const Module = require('../../lib/Module');
 const Promise = require('bluebird');
@@ -140,7 +141,8 @@ module.exports = class Boop extends Module {
     }
 
     boop(msg, user) {
-        msg.delete();
+        setTimeout(() => msg.delete(), config.deleteDelay);
+
         const random = Tools.getRandomIntFromInterval(0, this.config.boopAnswer.length - 1);
         msg.channel.send(Tools.parseReply(this.config.boopAnswer[random], [user])).then(message => {
             message.delete({ timeout: boopDeleteTimeout });
@@ -166,7 +168,7 @@ module.exports = class Boop extends Module {
             });
         }
 
-        msg.delete();
+        setTimeout(() => msg.delete(), config.deleteDelay);
 
         Application.modules.Overload.overload('boop');
         Application.modules.Discord.setMessageSent();
