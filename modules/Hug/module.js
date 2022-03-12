@@ -16,7 +16,7 @@ module.exports = class Hug extends Module {
             this.log.debug('Starting...');
 
             Application.modules.Discord.client.on('message', (msg) => {
-                this.hugEmoji = Application.modules.Discord.getEmoji('hug');
+                this.hugEmoji = Application.modules.Discord.getEmoji('gc_cannihug');
 
                 if (Application.modules.Discord.checkUserAccess(msg.author)) {
                     this.handle(msg);
@@ -125,7 +125,7 @@ module.exports = class Hug extends Module {
     }
 
     setCooldown(msg) {
-        const cooldownMessage = Tools.parseReply(this.config.cooldownMessage, [msg.author, Application.modules.Discord.getEmoji('error')]);
+        const cooldownMessage = Tools.parseReply(this.config.cooldownMessage, [msg.author, Application.modules.Discord.getEmoji('gc_cannierror')]);
 
         if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.bapType)) {
             Application.modules.Discord.setCooldown(msg.author.id, this.config.bapType, this.config.bapTimeout);

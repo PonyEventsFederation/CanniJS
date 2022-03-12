@@ -15,7 +15,7 @@ module.exports = class Compliment extends Module {
             config = this.config;
 
             Application.modules.Discord.client.on('message', (msg) => {
-                this.hugEmoji = Application.modules.Discord.getEmoji('hug');
+                this.hugEmoji = Application.modules.Discord.getEmoji('gc_cannihug');
 
                 if (Application.modules.Discord.checkUserAccess(msg.author) && msg.mentions.has(Application.getClient().user)) {
                     this.handle(msg);

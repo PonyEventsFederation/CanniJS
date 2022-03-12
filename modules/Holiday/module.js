@@ -19,8 +19,8 @@ module.exports = class Holiday extends Module {
             }
 
             Application.modules.Discord.client.on('message', (msg) => {
-                this.cannisanta = Application.modules.Discord.getEmoji('CanniSanta');
-                this.silvester = Application.modules.Discord.getEmoji('Silvester');
+                this.cannisanta = Application.modules.Discord.getEmoji('gc_cannisanta');
+                this.silvester = Application.modules.Discord.getEmoji('gc_cannisilvester');
 
                 if (Application.modules.Discord.checkUserAccess(msg.author)) {
                     this.handle(msg);

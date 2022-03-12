@@ -13,7 +13,7 @@ module.exports = class Hype extends Module {
             this.log.debug('Starting...');
 
             Application.modules.Discord.client.on('message', (msg) => {
-                this.bizaamEmoji = Application.modules.Discord.getEmoji('bizaam');
+                this.bizaamEmoji = Application.modules.Discord.getEmoji('gc_cannibizaam');
                 if (Application.modules.Discord.checkUserAccess(msg.author) && Tools.strContainsWord(msg.content, 'hype')) {
                     return this.hype(msg);
                 }

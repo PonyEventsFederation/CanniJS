@@ -27,7 +27,7 @@ module.exports = class NoMessageProcessor extends Module {
         // When no message was sent, Canni either says she doesn't understand, or boops someone at random if she's not mentioned.
         if (msg.mentions.has(Application.getClient().user)) {
             if (!remote_on || remote_target !== msg.channel) {
-                msg.channel.send(Tools.parseReply(this.config.stillLearningAnswer, [Application.modules.Discord.getEmoji('shy')]));
+                msg.channel.send(Tools.parseReply(this.config.stillLearningAnswer, [Application.modules.Discord.getEmoji('gc_cannishy')]));
             }
         }
         else {

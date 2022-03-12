@@ -79,7 +79,7 @@ module.exports = class RockPaperScissors extends Module {
 
         const canniChoice = this.getEmojiName(emojis[Math.floor(Math.random() * emojis.length)]);
 
-        msg.channel.send(Tools.parseReply(flavourText, [msg.author, gameName, Application.modules.Discord.getEmoji('excited')])).then(sentEmbed => {
+        msg.channel.send(Tools.parseReply(flavourText, [msg.author, gameName, Application.modules.Discord.getEmoji('gc_canniexcited')])).then(sentEmbed => {
             for (let i = 0; i < emojis.length; i++) {
                 sentEmbed.react(emojis[i]);
             }
@@ -96,7 +96,7 @@ module.exports = class RockPaperScissors extends Module {
                 this.log.info('User chose ' + userChoice);
             }).catch(() => {
                 this.log.info('User decided not to play');
-                msg.reply(Tools.parseReply(this.config.didNotPlayAnswer, [Application.modules.Discord.getEmoji('shy')]));
+                msg.reply(Tools.parseReply(this.config.didNotPlayAnswer, [Application.modules.Discord.getEmoji('gc_cannishy')]));
             });
         });
 
@@ -155,13 +155,13 @@ module.exports = class RockPaperScissors extends Module {
     resultMessage(msg, canniChoice, result) {
         switch (result) {
         case 'tie':
-            msg.channel.send(Tools.parseReply(this.config.tieMessage, [msg.author, canniChoice, Application.modules.Discord.getEmoji('hello')]));
+            msg.channel.send(Tools.parseReply(this.config.tieMessage, [msg.author, canniChoice, Application.modules.Discord.getEmoji('gc_cannihello')]));
             break;
         case 'playerWin':
-            msg.channel.send(Tools.parseReply(this.config.playerWinMessage, [msg.author, canniChoice, Application.modules.Discord.getEmoji('bizaam')]));
+            msg.channel.send(Tools.parseReply(this.config.playerWinMessage, [msg.author, canniChoice, Application.modules.Discord.getEmoji('gc_cannibizaam')]));
             break;
         case 'canniWin':
-            msg.channel.send(Tools.parseReply(this.config.canniWinMessage, [msg.author, canniChoice, Application.modules.Discord.getEmoji('smile')]));
+            msg.channel.send(Tools.parseReply(this.config.canniWinMessage, [msg.author, canniChoice, Application.modules.Discord.getEmoji('gc_cannismile')]));
             break;
         }
 

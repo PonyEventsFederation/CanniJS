@@ -23,7 +23,7 @@ module.exports = class BestPony extends Module {
 
     handle(msg) {
         if (Tools.msg_contains(msg, 'who is best pony')) {
-            this.whoIsBestPony(msg, this.config.bestPonyType, this.config.bestPonyAnswer1, 'bizaam');
+            this.whoIsBestPony(msg, this.config.bestPonyType, this.config.bestPonyAnswer1, 'gc_cannibizaam');
         }
         else if (Tools.msg_contains(msg, 'canni is best pony') || Tools.msg_contains(msg, 'canni soda is best pony')) {
             this.whoIsBestPony(msg, this.config.canniBestPonyType, this.config.bestPonyAnswer2);

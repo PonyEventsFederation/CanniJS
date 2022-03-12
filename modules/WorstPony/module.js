@@ -38,7 +38,7 @@ module.exports = class WorstPony extends Module {
     forgiveUser(msg) {
         if (Application.modules.Discord.isUserBlocked(msg.author.id)) {
             const random = Tools.getRandomIntFromInterval(0, this.config.forgiveUserAnswer.length - 1);
-            msg.channel.send(Tools.parseReply(this.config.forgiveUserAnswer[random], [msg.author, Application.modules.Discord.getEmoji('love')]));
+            msg.channel.send(Tools.parseReply(this.config.forgiveUserAnswer[random], [msg.author, Application.modules.Discord.getEmoji('gc_cannilove')]));
 
             Application.modules.Discord.unblockUser(msg.author.id);
         }

@@ -102,14 +102,14 @@ module.exports = class Boop extends Module {
             const random = Tools.getRandomIntFromInterval(0, this.config.selfBapAnswer.length - 1);
             response = msg.channel.send(Tools.parseReply(this.config.selfBapAnswer[random], [
                 msg.author,
-                Application.modules.Discord.getEmoji('error'),
+                Application.modules.Discord.getEmoji('gc_cannierror'),
             ]));
         }
         else {
             const random = Tools.getRandomIntFromInterval(0, answerType.length - 1);
             response = msg.channel.send(Tools.parseReply(answerType[random], [
                 msg.author,
-                Application.modules.Discord.getEmoji('error'),
+                Application.modules.Discord.getEmoji('gc_cannierror'),
             ]));
         }
 

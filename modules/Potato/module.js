@@ -12,7 +12,7 @@ module.exports = class Potato extends Module {
             this.log.debug('Starting...');
 
             Application.modules.Discord.client.on('message', (msg) => {
-                this.smartato_emo = Tools.getEmoji(Application.getClient(), 'smartato');
+                this.smartato_emo = Tools.getEmoji(Application.getClient(), 'gc_smartato');
 
                 if (Application.modules.Discord.checkUserAccess(msg.author)) {
                     this.handle(msg);

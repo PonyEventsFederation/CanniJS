@@ -16,7 +16,7 @@ module.exports = class Solver extends Module {
         return new Promise(resolve => {
             this.log.debug('Starting...');
 
-            this.smileEmoji = Application.modules.Discord.getEmoji('smile');
+            this.smileEmoji = Application.modules.Discord.getEmoji('gc_cannismile');
 
             Application.modules.Discord.client.on('message', (msg) => {
                 if (Application.modules.Discord.checkUserAccess(msg.author) && msg.mentions.has(Application.getClient().user)) {

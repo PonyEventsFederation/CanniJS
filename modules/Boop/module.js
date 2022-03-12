@@ -155,14 +155,14 @@ module.exports = class Boop extends Module {
     selfBoop(msg) {
         if (Tools.chancePercent(5)) {
             const random = Tools.getRandomIntFromInterval(0, this.config.selfBoopAnswer.length - 1);
-            const answer = Tools.parseReply(this.config.selfBoopAnswer[random], [Application.modules.Discord.getEmoji('excited')]);
+            const answer = Tools.parseReply(this.config.selfBoopAnswer[random], [Application.modules.Discord.getEmoji('gc_canniexcited')]);
             msg.channel.send(answer).then(message => {
                 message.delete({ timeout: boopDeleteTimeout });
             });
         }
         else {
             const random = Tools.getRandomIntFromInterval(0, this.config.canniBoopAnswer.length - 1);
-            const answer = Tools.parseReply(this.config.canniBoopAnswer[random], [msg.author, Application.modules.Discord.getEmoji('shy')]);
+            const answer = Tools.parseReply(this.config.canniBoopAnswer[random], [msg.author, Application.modules.Discord.getEmoji('gc_cannishy')]);
             msg.channel.send(answer).then(message => {
                 message.delete({ timeout: boopDeleteTimeout });
             });
@@ -246,7 +246,7 @@ module.exports = class Boop extends Module {
 
     megaSelfBoop(msg) {
         const random = Tools.getRandomIntFromInterval(0, this.config.megaSelfBoopAnswer.length - 1);
-        msg.channel.send(Tools.parseReply(this.config.megaSelfBoopAnswer[random], [msg.author, Application.modules.Discord.getEmoji('hello')]));
+        msg.channel.send(Tools.parseReply(this.config.megaSelfBoopAnswer[random], [msg.author, Application.modules.Discord.getEmoji('gc_cannihello')]));
 
         Application.modules.Overload.overload('boop');
         Application.modules.Discord.setMessageSent();
@@ -357,7 +357,7 @@ module.exports = class Boop extends Module {
     }
 
     setCooldown(msg) {
-        const cooldownMessage = Tools.parseReply(this.config.cooldownMessage, [msg.author, Application.modules.Discord.getEmoji('error')]);
+        const cooldownMessage = Tools.parseReply(this.config.cooldownMessage, [msg.author, Application.modules.Discord.getEmoji('gc_cannierror')]);
 
         if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.boopType)) {
             Application.modules.Discord.setCooldown(msg.author.id, this.config.boopType, this.config.boopTimeout);
