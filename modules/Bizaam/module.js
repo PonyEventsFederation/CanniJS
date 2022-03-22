@@ -14,7 +14,7 @@ module.exports = class Bizaam extends Module {
             Application.modules.Discord.client.on('message', (msg) => {
                 this.bizaamEmoji = Application.modules.Discord.getEmoji('gc_cannibizaam');
 
-                if (Application.modules.Discord.checkUserAccess(msg.author) && Tools.msg_contains(msg, 'bizaam') && !Tools.msg_contains(msg, 'is best pony')) {
+                if (Application.modules.Discord.checkUserAccess(msg.author) && /\bb+i+z+a+m+\b/i.test(msg.content) && !Tools.msg_contains(msg, 'is best pony')) {
                     return this.bizaam(msg);
                 }
             });
