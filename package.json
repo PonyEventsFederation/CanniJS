@@ -30,7 +30,7 @@
         "discord.js": "^12.5.3",
         "html-entities": "^2.3.2",
         "merge": "^2.1.1",
-        "moment": "^2.29.1",
+        "moment": "^2.29.2",
         "moment-timezone": "^0.5.33",
         "mysql": "^2.18.1",
         "node-fetch": "^2.6.1",
