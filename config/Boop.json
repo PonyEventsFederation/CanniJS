@@ -126,6 +126,6 @@
     "dev_self_boop": ["%s\nWarning!\nThis operation can't be performed!"],
     "dev_ultra_boop_rejection_type":"dev_ultra_boop_rejection_type",
     "boop_guard_type": "boop_guard_type",
-    "ans_boop_guard_cooldown": "I think he doesn't want to be disturbed right now..."
-
+    "ans_boop_guard_cooldown": "I think he doesn't want to be disturbed right now...",
+    "command_use_not_allowed_cooldown_response": "Also, I'm not allowed to boop %s..."
 }

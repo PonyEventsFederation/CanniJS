@@ -39,21 +39,24 @@ module.exports = class Boop extends Module {
 
     handle(msg) {
         if (Tools.strStartsWord(msg.content, 'boop') && !msg.mentions.everyone && msg.mentions.users.array().length > 0) {
-            const users = msg.mentions.users.array();
+            const users = msg.mentions.members?.array() || [];
 
             if (users.length > this.config.boopLimit) {
-                this.setCooldown(msg);
+                this.setCooldown(msg, users);
             }
 
             if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.boopType)) {
                 this.processBoops(msg, users);
+                // todo
             }
         }
 
         if (this.megaon) {
             this.processBlocks(msg);
+            // todo?
         }
         else if (boop_dev_on) {
+            // todo
             this.processMegaboops(msg);
             this.processUltraBoops(msg);
         }
@@ -356,13 +359,25 @@ module.exports = class Boop extends Module {
         return res;
     }
 
-    setCooldown(msg) {
+    setCooldown(msg, users) {
         const cooldownMessage = Tools.parseReply(this.config.cooldownMessage, [msg.author, Application.modules.Discord.getEmoji('gc_cannierror')]);
 
         if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.boopType)) {
             Application.modules.Discord.setCooldown(msg.author.id, this.config.boopType, this.config.boopTimeout);
             Application.modules.Discord.sendCooldownMessage(msg, msg.author.id + this.config.boopType, cooldownMessage, false);
             this.log.info(`${msg.author} added to boop cooldown list.`);
+
+            const no_command_users = users.filter(u => !Tools.allows_command_use(u));
+            const word = no_command_users.length === 1 ? no_command_users[0].toString()
+                : no_command_users.length === 2 ? no_command_users.map(u => u.toString()).join(' and ')
+                    : no_command_users.length > 2 ? no_command_users.map(u => u.toString()).slice(0, -1).join(', ') + ', and ' + no_command_users.slice(-1).toString()
+                        : false;
+            if (!word) return;
+
+            msg.channel.send(
+                Tools.parseReply(this.config.command_use_not_allowed_cooldown_response, [word]),
+                { allowedMentions: { users: [] } },
+            );
         }
 
         Application.modules.Discord.setMessageSent();
