@@ -206,12 +206,12 @@ module.exports = class Boop extends Module {
         this.interrupt.inter = false;
         switch (type) {
         case 'miss':
-            random = Tools.getRandomIntFromInterval(0, this.config.megaBoopAnswer.length - 1);
+            random = Tools.getRandomIntFromInterval(0, this.config.megaBoopMissAnswer.length - 1);
             answer = this.config.megaBoopMissAnswer[random];
             limit = 20;
             break;
         case 'crit':
-            random = Tools.getRandomIntFromInterval(0, this.config.megaBoopAnswer.length - 1);
+            random = Tools.getRandomIntFromInterval(0, this.config.megaBoopCritAnswer.length - 1);
             damage = Tools.getRandomIntFromInterval(13500, 18000);
             answer = this.config.megaBoopCritAnswer[random];
             limit = 90;
