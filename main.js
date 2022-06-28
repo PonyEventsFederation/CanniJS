@@ -1,4 +1,3 @@
-
 'use strict';
 // @IMPORTS
 const Application = require('./lib/Application');
