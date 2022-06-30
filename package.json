@@ -28,6 +28,7 @@
         "algebrite": "^1.4.0",
         "bluebird": "^3.7.2",
         "discord.js": "^12.5.3",
+        "dotenv": "^16.0.1",
         "html-entities": "^2.3.2",
         "merge": "^2.1.1",
         "moment": "^2.29.1",
@@ -35,12 +36,10 @@
         "mysql": "^2.18.1",
         "node-fetch": "^2.6.1",
         "striptags": "^3.2.0",
-        "winston": "^1.1.2",
-        "worker": "^0.4.0"
+        "winston": "^1.1.2"
     },
     "devDependencies": {
         "@types/node": "^17.0.21",
-        "dotenv": "^10.0.0",
         "eslint": "^7.31.0",
         "nodemon": "^2.0.12"
     }
