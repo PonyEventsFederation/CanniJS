@@ -29,18 +29,18 @@
         "bluebird": "^3.7.2",
         "discord.js": "^12.5.3",
         "dotenv": "^16.0.1",
-        "html-entities": "^2.3.2",
+        "html-entities": "^2.3.3",
         "merge": "^2.1.1",
-        "moment": "^2.29.1",
-        "moment-timezone": "^0.5.33",
+        "moment": "^2.29.3",
+        "moment-timezone": "^0.5.34",
         "mysql": "^2.18.1",
-        "node-fetch": "^2.6.1",
+        "node-fetch": "^2.6.7",
         "striptags": "^3.2.0",
         "winston": "^1.1.2"
     },
     "devDependencies": {
-        "@types/node": "^17.0.21",
-        "eslint": "^7.31.0",
-        "nodemon": "^2.0.12"
+        "@types/node": "^18.0.0",
+        "eslint": "^8.18.0",
+        "nodemon": "^2.0.18"
     }
 }
