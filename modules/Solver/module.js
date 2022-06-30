@@ -3,13 +3,10 @@
 // @IMPORTS
 const Application = require('../../lib/Application');
 
-const worker = require('worker');
 const Module = require('../../lib/Module');
 const Promise = require('bluebird');
 const Tools = require('../../lib/Tools');
-
-// eslint-disable-next-line prefer-const
-let calc_runing = {};
+const solveinworker = require('./solve_worker');
 
 module.exports = class Solver extends Module {
     start() {
@@ -47,43 +44,11 @@ module.exports = class Solver extends Module {
         Application.modules.Discord.setMessageSent();
     }
 
-    log_calc(id) {
-        // console.log('Calc logged');
-        calc_runing[id.toString()] = true;
-    }
-
-    end_calc(id) {
-        // console.log('Calc ended');
-        calc_runing[id.toString()] = false;
-    }
-
-    remove_calc(id) {
-        // console.log('Calc removed');
-        delete calc_runing[id.toString()];
-    }
-
-    final_check_calc(id) {
-        if (calc_runing[id.toString()]) {
-            this.remove_calc(id);
-            return true;
-        }
-        else {
-            this.remove_calc(id);
-            return false;
-        }
-    }
-
     simple_parse(msg) {
         const config = this.config;
         const alg = msg.content.split('solve');
         if (alg.length > 1 && alg[1] !== '') {
-            this.log_calc(msg.id);
-            this.single(alg[1], this, msg.id).then(function(value) {
-                const res = value[0];
-                const obj = value[1];
-                const id = value[2];
-                obj.end_calc(id);
-                value[3].kill();
+            this.single(alg[1]).then(function(res) {
                 msg.channel.send(Tools.parseReply(config.simple_solve, [msg.author, res])).catch(function(error) {
                     if (error.toString().toLowerCase().includes('must be 2000 or fewer in length')) {
                         msg.channel.send('I\'m sorry. The result of your calculation is too long to be printed in Discord.');
@@ -102,12 +67,7 @@ module.exports = class Solver extends Module {
         const config = this.config;
         const alg = msg.content.split('multi');
         if (alg.length > 1 && alg[1] !== '') {
-            this.multi(this.prepareMulti(alg[1].split(',')), this, msg.id).then(function(value) {
-                const res = value[0];
-                const obj = value[1];
-                const id = value[2];
-                obj.end_calc(id);
-                value[3].kill();
+            this.multi(this.prepareMulti(alg[1].split(','))).then(function(res) {
                 if (res === '') {
                     msg.channel.send(Tools.parseReply(config.solver_no_output, [msg.author]));
                 }
@@ -129,8 +89,7 @@ module.exports = class Solver extends Module {
     }
 
     prepareMulti(pre) {
-        // eslint-disable-next-line prefer-const
-        let data = [];
+        const data = [];
         let append_string = '';
         let append_status = 0;
         let i;
@@ -164,26 +123,12 @@ module.exports = class Solver extends Module {
         return data;
     }
 
-    async single(data, obj, id) {
-        const wor = worker.spawn('solve_worker.js');
-        setTimeout(function() {
-            if (obj.final_check_calc(id)) {
-                wor.kill();
-                Application.log.info(`Killed single worker after reaching its timeout of ${Application.modules.Solver.config.single_timeout / 1000} seconds.`);
-            }
-        }, this.config.single_timeout);
-        return [await wor.run('do_calc', [data]), obj, id, wor];
+    async single(data) {
+        return await solveinworker('single', data);
     }
 
-    async multi(data, obj, id) {
-        const wor = worker.spawn('solve_worker.js');
-        setTimeout(function() {
-            if (obj.final_check_calc(id)) {
-                wor.kill();
-                Application.log.info(`Killed multi worker after reaching its timeout of ${Application.modules.Solver.multi_timeout / 1000} seconds.`);
-            }
-        }, this.config.multi_timeout);
-        return [await wor.run('do_multi_calc', [data]), obj, id, wor];
+    async multi(data) {
+        return await solveinworker('multi', data);
     }
 
     stop() {
