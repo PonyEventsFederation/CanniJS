@@ -47,7 +47,7 @@ module.exports = {
 			error,
 			{
 				code: 100,
-				tabWidth: 4,
+				tabWidth: 3,
 				ignoreRegExpLiterals: true,
 				ignoreStrings: true,
 				ignoreTemplateLiterals: true,

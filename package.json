@@ -3,7 +3,7 @@
     "private": true,
     "description": "Galacon's very own Canni Discord bot",
     "scripts": {
-        "lint": "eslint lib modules"
+        "lint": "eslint main.js lib modules"
     },
     "repository": {
         "type": "git",
