@@ -1,8 +1,10 @@
 /** @typedef {import("tslog").Logger} Logger */
+/** @typedef {(logger: import("tslog").Logger) => Promise<void>} Start */
+/** @typedef {() => Promise<void>} Stop */
 /**
  * @typedef {{
- *    start?: (logger: import("tslog").Logger) => Promise<void>;
- *    stop?: () => Promise<void>;
+ *    start?: Start;
+ *    stop?: Stop;
  * }} Module
  */
 
@@ -23,4 +25,14 @@ export function define_module(mod) {
 		},
 		get_logger: () => logger
 	};
+}
+
+/** @param {Start} start */
+export function define_start(start) {
+	return start;
+}
+
+/** @param {Stop} stop */
+export function define_stop(stop) {
+	return stop;
 }
