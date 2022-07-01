@@ -91,6 +91,15 @@ module.exports = {
 		],
 		"no-shadow": off,
 		"no-trailing-spaces": error,
+		"no-unused-vars": [
+			error,
+			{
+				varsIgnorePattern: "^_",
+				argsIgnorePattern: "^_",
+				destructuredArrayIgnorePattern: "^_",
+				caughtErrorsIgnorePattern: "^_"
+			}
+		],
 		"no-var": error,
 		"object-curly-spacing": [
 			error,
