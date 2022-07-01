@@ -2,6 +2,9 @@ import { define_module, define_start, define_stop } from "../module.mjs";
 import { Client } from "discord.js";
 import * as texts from "../texts/discord.mjs";
 
+/** @typedef {import("discord.js").ClientEvents} ClientEvents */
+/** @typedef {import("discord.js").GuildEmoji} GuildEmoji */
+
 let token = process.env["BOT_TOKEN"];
 const client = new Client();
 let ready = false;
@@ -44,8 +47,6 @@ function set_bot_token(_token) {
 	token = _token;
 }
 
-
-/** @typedef {import("discord.js").ClientEvents} ClientEvents */
 /**
  * @typedef {{
  *    <T extends keyof ClientEvents>(
@@ -71,7 +72,18 @@ function is_ready() {
 
 // add_command
 // add_reaction
-// get_emoji
+
+/**
+ * finds and returns a guild emoji.
+ * Purposefully does not support finding by name.
+ *
+ * @param {string} id
+ * @return {GuildEmoji | undefined}
+ */
+function get_emoji(id) {
+	return client.emojis.resolve(id) || undefined;
+}
+
 // set_cooldown
 // has_cooldown
 // control_talked_recently
@@ -99,5 +111,6 @@ export const discord = define_module({
 	set_bot_token,
 	on,
 	once,
-	is_ready
+	is_ready,
+	get_emoji
 });
