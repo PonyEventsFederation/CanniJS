@@ -22,6 +22,7 @@ export function get_logger(name, param_overrides = {}) {
 	return new Logger({
 		name,
 		displayFunctionName: false,
+		minLevel: is_production() ? "info" : "silly",
 		...param_overrides
 	});
 }
