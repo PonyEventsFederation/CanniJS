@@ -1,17 +1,19 @@
 ---
 name: Feature request
-about: Suggest an idea for this project
-title: "[Feature] Feature request"
+about: Suggest an idea for Canni
+title: "[Feature] Title here"
 labels: enhancement
-assignees: ChrisFhey
-
+assignees: autumnblazey
 ---
 
 ### Describe the feature
-A clear and concise description of what you want to happen.
+
+A clear and concise description of what you want to happen
 
 ### Why would you like this feature to be added?
-A clear and concise description of your reasoning for adding this feature.
+
+A clear and concise description of your reasoning for adding this feature
 
 ### Additional context
-Add any other context or screenshots about the feature request here.
+
+Add any other context or screenshots about the feature request here
