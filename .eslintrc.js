@@ -11,9 +11,14 @@ module.exports = {
 		es6: true
 	},
 	parserOptions: {
-		ecmaVersion: 2020
+		ecmaVersion: 2020,
+		sourceType: "module"
 	},
 	rules: {
+		"arrow-spacing": [
+			error,
+			{ before: true, after: true }
+		],
 		"brace-style": [
 			error,
 			"1tbs",
@@ -43,6 +48,10 @@ module.exports = {
 			error,
 			"tab"
 		],
+		"keyword-spacing": [
+			error,
+			{ before: true, after: true }
+		],
 		"max-len": [
 			error,
 			{
@@ -65,7 +74,11 @@ module.exports = {
 		"no-console": warn,
 		"no-empty-function": error,
 		"no-floating-decimal": error,
-		"no-inline-comments": error,
+		"no-inline-comments": [
+			error,
+			// jsdoc comments
+			{ ignorePattern: "@type" }
+		],
 		"no-lonely-if": error,
 		"no-multi-spaces": error,
 		"no-multiple-empty-lines": [
@@ -122,6 +135,10 @@ module.exports = {
 		"spaced-comment": [
 			error,
 			always
+		],
+		"switch-colon-spacing": [
+			error,
+			{ before: false, after: true }
 		],
 		"yoda": [
 			error,
