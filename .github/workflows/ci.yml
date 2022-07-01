@@ -1,0 +1,55 @@
+---
+name: CI
+on:
+  push:
+    branches:
+    - "**"
+  pull_request:
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: checkout code
+      uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # 3.0.2
+
+    - name: setup node
+      uses: actions/setup-node@eeb10cff27034e7acf239c5d29f62154018672fd # 3.3.0
+      with:
+        node-version: v14.19.3
+        cache: npm
+
+    - name: update npm
+      run: npm i -g npm@8.13.2
+
+    - name: install dependencies
+      run: npm ci
+
+    - name: build
+      run: npm run build
+
+
+  lint:
+    name: lint
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: checkout code
+      uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # 3.0.2
+
+    - name: setup node
+      uses: actions/setup-node@eeb10cff27034e7acf239c5d29f62154018672fd # 3.3.0
+      with:
+        node-version: v14.19.3
+        cache: npm
+
+    - name: update npm
+      run: npm i -g npm@8.13.2
+
+    - name: install dependencies
+      run: npm ci
+
+    - name: lint
+      run: npm run lint

@@ -4,7 +4,7 @@
 	"description": "Galacon's very own Canni Discord bot",
 	"scripts": {
 		"lint": "eslint main.js lib modules src",
-		"check": "tsc -p jsconfig.json"
+		"build": "tsc -p jsconfig.json"
 	},
 	"repository": {
 		"type": "git",
@@ -12,7 +12,8 @@
 	},
 	"license": "MIT",
 	"engines": {
-		"node": "14.x"
+		"node": "14.19.3",
+		"npm": "8.x"
 	},
 	"dependencies": {
 		"algebrite": "^1.4.0",
