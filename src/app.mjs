@@ -52,8 +52,8 @@ async function start_modules() {
 			const logger = get_logger(mod_name);
 			logger.debug(`starting module ${mod_name}...`);
 			await mod.start(logger);
-			logger.debug(`module ${mod_name} started`);
 		}
+		logger.debug(`module ${mod_name} started`);
 	}
 }
 
@@ -67,8 +67,8 @@ async function stop_modules() {
 			const logger = mod.get_logger();
 			logger.debug(`stopping module ${mod_name}...`);
 			await mod.stop();
-			logger.debug(`module ${mod_name} stopped`);
 		}
+		logger.debug(`module ${mod_name} stopped`);
 	}
 }
 
