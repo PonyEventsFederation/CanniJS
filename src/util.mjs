@@ -1,5 +1,7 @@
 import { Logger } from "tslog";
 
+/** @typedef {import("tslog").ISettingsParam} LoggerSettings */
+
 const env = process.env["NODE_ENV"] === "production"
 	? "production"
 	: "development";
@@ -12,20 +14,27 @@ export function is_production() {
 	return env === "production";
 }
 
-/** @type {{ [k: string]: Logger | undefined }} */
-const loggers = {};
-
 /**
  * @param {string} name
- * @return {Logger}
+ * @param {LoggerSettings} param_overrides
  */
-export function get_logger(name) {
-	let logger = loggers[name];
-	if (logger) return logger;
-
-	logger = new Logger({
-		name
+export function get_logger(name, param_overrides = {}) {
+	return new Logger({
+		name,
+		displayFunctionName: false,
+		...param_overrides
 	});
-	loggers[name] = logger;
-	return logger;
 }
+
+export const console_log_logger = get_logger("console", {
+	overwriteConsole: true,
+	logLevelsColors: [
+		"bgRedBright",
+		"bgRedBright",
+		"bgRedBright",
+		"bgRedBright",
+		"bgRedBright",
+		"bgRedBright",
+		"bgRedBright"
+	]
+});

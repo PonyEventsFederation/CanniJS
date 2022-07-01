@@ -1,8 +1,18 @@
-import { Logger } from "tslog";
+import "dotenv/config";
 
-const logger = new Logger({
-	name: "meep",
-	displayFunctionName: false
-});
+import * as app from "./app.mjs";
 
-logger.info("meeep");
+await app.run();
+
+console.log("a");
+
+function stop() {
+	// go to newline just so that i can get rid of that `^C` thing misaligning things
+	// because that AAGH bothers me so incredibly much - Autumn
+	process.stdout.write("\n");
+	app.stop();
+}
+
+process.on("SIGINT", stop);
+process.on("SIGTERM", stop);
+process.on("exit", stop);
