@@ -91,6 +91,7 @@ module.exports = {
 		],
 		"no-shadow": off,
 		"no-trailing-spaces": error,
+		"no-undef": off,
 		"no-unused-vars": [
 			error,
 			{
