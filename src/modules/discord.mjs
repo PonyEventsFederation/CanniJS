@@ -160,6 +160,7 @@ function block_user(user_id, time) {
 	}
 
 	const timeout = setTimeout(() => delete blocked_users[user_id], time);
+	timeout.unref();
 	blocked_users[user_id] = timeout;
 }
 
@@ -210,6 +211,7 @@ const message_access_timeout = setTimeout(() => {
 		if (!msg?.deref()) delete message_access[id];
 	});
 }, message_access_refresh_idle);
+message_access_timeout.unref();
 
 /** @param {Message} msg */
 function message_send_access_available(msg) {
