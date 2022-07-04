@@ -57,12 +57,10 @@ export function get_logger(name, param_overrides = {}) {
 }
 
 /**
- * @returns undefined, but a helper to type the variable as `Logger` without having
- * to manually type out the definitions
+ * this is undefined, but a helper constant to type the variable as `Logger`
+ * without having to manually type out the definitions all the time
  */
-export function logger_var() {
-	return /** @type {Logger} */ (/** @type {unknown} */ (undefined));
-}
+export const logger_var_init = /** @type {Logger} */ (/** @type {unknown} */ (undefined));
 
 export const console_log_logger = get_logger("console", {
 	overwriteConsole: true,
