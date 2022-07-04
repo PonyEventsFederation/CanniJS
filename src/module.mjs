@@ -1,3 +1,4 @@
+import { logger_var_init } from "./util.mjs";
 /** @typedef {import("tslog").Logger} Logger */
 /** @typedef {(logger: import("tslog").Logger) => Promise<void>} Start */
 /** @typedef {() => Promise<void>} Stop */
@@ -14,8 +15,7 @@ export function define_module(mod) {
 		? mod()
 		: mod;
 
-	/** @type {Logger} */
-	let logger = /** @type {any} */ (undefined);
+	let logger = logger_var_init;
 
 	return {
 		...initialised,
