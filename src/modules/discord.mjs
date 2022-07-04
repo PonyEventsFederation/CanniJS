@@ -1,10 +1,7 @@
 import { Client } from "discord.js";
 import { define_module, define_start, define_stop } from "../module.mjs";
 import * as texts from "../texts/discord.mjs";
-import { logger_var_init } from "../util.mjs";
-
-// todo add_command
-// todo add_reaction
+import { is_development, logger_var_init } from "../util.mjs";
 
 // todo set_cooldown
 // todo has_cooldown
@@ -16,13 +13,16 @@ import { logger_var_init } from "../util.mjs";
 /** @typedef {import("discord.js").Message} Message */
 /** @typedef {import("discord.js").User} User */
 
+/** @typedef {(m: Message, rest_of_args: string) => void} CommandHandler */
+
 let token = process.env["BOT_TOKEN"];
 const client = new Client();
 let ready = false;
 
 let logger = logger_var_init;
 
-// const commands = [];
+/** @type {Record<string, CommandHandler>} */
+const commands = {};
 // const reactions = [];
 // const channel_messaged = new Set;
 // const talked_recently = new Set;
@@ -37,8 +37,29 @@ const start = define_start(async _logger => {
 		logger.info("discord is ready!");
 	});
 
-	client.on("message", _msg => {
-		// todo do something with this
+	client.on("message", msg => {
+		logger.debug("received message");
+		logger.debug(`   id: ${msg.id}`);
+		logger.debug(`   content: ${msg.content}`);
+		logger.debug(`   author: ${msg.author}`);
+		logger.debug(`   author id: ${msg.author.id}`);
+
+		const prefix = "!";
+		let content = msg.content;
+
+		if (!content.startsWith(prefix)) return;
+		content = content.substring(prefix.length);
+
+		const next_arg_i = content.indexOf(" ");
+		let next_arg = "";
+		if (next_arg_i < 0) next_arg = content;
+		else {
+			next_arg = content.substring(0, next_arg_i);
+			content = content.substring(next_arg_i + 1);
+		}
+
+		const cmd = commands[next_arg];
+		if (cmd) cmd(msg, content);
 	});
 
 	if (!token) {
@@ -57,7 +78,6 @@ const stop = define_stop(async () => {
 	client.destroy();
 	ready = false;
 });
-
 
 /** @param {string} _token */
 function set_bot_token(_token) {
@@ -83,6 +103,25 @@ const discord_api = {
 	set_bot_token,
 	is_ready,
 	get_emoji
+};
+
+/**
+ * @param {string} cmd
+ * @param {CommandHandler} handler
+ */
+function add_command(cmd, handler) {
+	if (commands[cmd]) {
+		const err_msg = `duplicate command registered: ${cmd}`;
+
+		// only throw error in development
+		if (is_development()) throw new Error(err_msg);
+		else logger.fatal(err_msg);
+	}
+	commands[cmd] = handler;
+}
+
+const command_fns = {
+	add_command
 };
 
 /**
@@ -148,7 +187,7 @@ function is_user_blocked(user_id) {
 function check_access(msg) {
 	return !msg.author.bot
 		&& !is_user_blocked(msg.author.id)
-		&& get_message_send_access(msg);
+		&& message_send_access_available(msg);
 }
 
 const user_access = {
@@ -166,9 +205,17 @@ const message_access_refresh_idle = 1000 * 60 * 30;
 
 const message_access_timeout = setTimeout(() => {
 	Object.entries(message_access).forEach(([id, msg]) => {
+		// if the message is GC'd, that means no one is holding onto it anymore
+		// (not even d.js cache) and there is no need to keep track of it anymore
 		if (!msg?.deref()) delete message_access[id];
 	});
 }, message_access_refresh_idle);
+
+/** @param {Message} msg */
+function message_send_access_available(msg) {
+	message_access_timeout.refresh();
+	return !message_access[msg.id];
+}
 
 /** @param {Message} msg */
 function get_message_send_access(msg) {
@@ -181,6 +228,7 @@ function get_message_send_access(msg) {
 }
 
 const message_reply_control = {
+	message_send_access_available,
 	get_message_send_access
 };
 
@@ -198,6 +246,7 @@ export const discord = define_module({
 	start,
 	stop,
 	...discord_api,
+	...command_fns,
 	...event,
 	...user_access,
 	...message_reply_control
