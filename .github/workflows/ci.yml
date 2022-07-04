@@ -18,7 +18,7 @@ jobs:
     - name: setup node
       uses: actions/setup-node@eeb10cff27034e7acf239c5d29f62154018672fd # 3.3.0
       with:
-        node-version: v14.19.3
+        node-version: v18.4.0
         cache: npm
 
     - name: update npm
@@ -42,7 +42,7 @@ jobs:
     - name: setup node
       uses: actions/setup-node@eeb10cff27034e7acf239c5d29f62154018672fd # 3.3.0
       with:
-        node-version: v14.19.3
+        node-version: v18.4.0
         cache: npm
 
     - name: update npm
