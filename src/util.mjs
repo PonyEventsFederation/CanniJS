@@ -22,8 +22,8 @@ export function is_production() {
  *
  * @template T
  * @typedef {{
- *    gc: T;
- *    autumn?: T;
+ *    gc: () => T;
+ *    autumn?: () => T;
  * }} ConfigValue
  */
 
@@ -39,8 +39,8 @@ const cfg = process.env["CFG"];
  * @return {T}
  */
 export function define_value(val) {
-	if (cfg === "autumn" && val.autumn) return val.autumn;
-	else return val.gc;
+	if (cfg === "autumn" && val.autumn) return val.autumn();
+	else return val.gc();
 }
 
 /**

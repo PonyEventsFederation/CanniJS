@@ -41,7 +41,7 @@ const start = define_start(async _logger => {
 		logger.debug("received message");
 		logger.debug(`   id: ${msg.id}`);
 		logger.debug(`   content: ${msg.content}`);
-		logger.debug(`   author: ${msg.author}`);
+		logger.debug(`   author: ${msg.author.username}#${msg.author.discriminator}`);
 		logger.debug(`   author id: ${msg.author.id}`);
 
 		const prefix = "!";
@@ -124,21 +124,12 @@ const command_fns = {
 	add_command
 };
 
-/**
- * @typedef {{
- *    <T extends keyof ClientEvents>(
- *       event: T,
- *       listener: (...args: ClientEvents[T]) => void
- *    ): void
- * }} ClientEventCallback
- */
-
-/** @type {ClientEventCallback} */
+/** @type {(...args: Parameters<Client["on"]>) => void} */
 function on(event, listener) {
 	client.on(event, listener);
 }
 
-/** @type {ClientEventCallback} */
+/** @type {(...args: Parameters<Client["once"]>) => void} */
 function once(event, listener) {
 	client.once(event, listener);
 }
