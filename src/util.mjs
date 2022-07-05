@@ -43,6 +43,16 @@ export function define_value(val) {
 	else return val.gc();
 }
 
+const dev_level = process.env["NO_SILLY"]
+	? "trace"
+	: "silly";
+const prod_level = process.env["SILLY"]
+	? "silly"
+	: "info";
+const minLevel = is_production()
+	? prod_level
+	: dev_level;
+
 /**
  * @param {string} name
  * @param {LoggerSettings} param_overrides
@@ -50,8 +60,8 @@ export function define_value(val) {
 export function get_logger(name, param_overrides = {}) {
 	return new Logger({
 		name,
+		minLevel,
 		displayFunctionName: false,
-		minLevel: is_production() ? "info" : "silly",
 		...param_overrides
 	});
 }
