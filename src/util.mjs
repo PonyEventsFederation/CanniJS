@@ -31,7 +31,7 @@ const cfg = process.env["CFG"];
 
 /**
  * Defines a value that changes automatically based on the `CFG` environment variable
- * to dynamically swap out entire configs to make it easier to swap hardcoded IDs for
+ * to dynamically swap out entire configs to make it easier to swap hardcoded values for
  * development purposes
  *
  * @template T
