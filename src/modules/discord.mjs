@@ -53,8 +53,10 @@ const start = define_start(async _logger => {
 
 		const next_arg_i = content.indexOf(" ");
 		let next_arg = "";
-		if (next_arg_i < 0) next_arg = content;
-		else {
+		if (next_arg_i < 0) {
+			next_arg = content;
+			content = "";
+		} else {
 			next_arg = content.substring(0, next_arg_i);
 			content = content.substring(next_arg_i + 1);
 		}
