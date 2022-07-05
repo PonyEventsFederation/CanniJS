@@ -11,6 +11,7 @@ import { is_development, logger_var_init } from "../util.mjs";
 /** @typedef {import("discord.js").ClientEvents} ClientEvents */
 /** @typedef {import("discord.js").GuildEmoji} GuildEmoji */
 /** @typedef {import("discord.js").Message} Message */
+/** @typedef {import("discord.js").PresenceData} PresenceData */
 /** @typedef {import("discord.js").User} User */
 
 /** @typedef {(m: Message, rest_of_args: string) => void} CommandHandler */
@@ -70,7 +71,13 @@ const start = define_start(async _logger => {
 	}
 
 	await client.login(token);
-	await first_activity();
+	await set_presence({
+		status: "online",
+		afk: false,
+		activity: {
+			name: texts.first_activity
+		}
+	});
 	ready = true;
 });
 
@@ -99,10 +106,18 @@ function get_emoji(id) {
 	return client.emojis.resolve(id) || undefined;
 }
 
+/**
+ * @param {PresenceData} data
+ */
+async function set_presence(data) {
+	return await client.user?.setPresence(data);
+}
+
 const discord_api = {
 	set_bot_token,
 	is_ready,
-	get_emoji
+	get_emoji,
+	set_presence
 };
 
 /**
@@ -124,12 +139,20 @@ const command_fns = {
 	add_command
 };
 
-/** @type {(...args: Parameters<Client["on"]>) => void} */
+/**
+ * @template {keyof ClientEvents} T
+ * @param {T} event
+ * @param {(...args: ClientEvents[T]) => void} listener
+ */
 function on(event, listener) {
 	client.on(event, listener);
 }
 
-/** @type {(...args: Parameters<Client["once"]>) => void} */
+/**
+ * @template {keyof ClientEvents} T
+ * @param {T} event
+ * @param {(...args: ClientEvents[T]) => void} listener
+ */
 function once(event, listener) {
 	client.once(event, listener);
 }
@@ -224,16 +247,6 @@ const message_reply_control = {
 	message_send_access_available,
 	get_message_send_access
 };
-
-async function first_activity() {
-	await client.user?.setPresence({
-		status: "online",
-		afk: false,
-		activity: {
-			name: texts.first_activity
-		}
-	});
-}
 
 export const discord = define_module({
 	start,
