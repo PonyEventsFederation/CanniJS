@@ -4,6 +4,8 @@ import { get_module } from "../app.mjs";
 import * as cfg from "../cfg/time-to-galacon.mjs";
 import * as texts from "../texts/time-to-galacon.mjs";
 import utcToZonedTime from "date-fns-tz/utcToZonedTime";
+import zonedTimeToUtc from "date-fns-tz/zonedTimeToUtc";
+import getTimezoneOffset from "date-fns-tz/getTimezoneOffset";
 import {
 	differenceInDays,
 	differenceInHours,
@@ -44,8 +46,9 @@ function handle_message(_msg) {
 }
 
 async function update_status() {
-	// const now = utcToZonedTime(new Date(), "europe/berlin");
-	const now = new Date();
+	const now = zonedTimeToUtc(new Date(), cfg.tz);
+	// const now = new Date();
+
 	let remaining = cfg.galacon_date;
 
 	const days = differenceInDays(remaining, now);
