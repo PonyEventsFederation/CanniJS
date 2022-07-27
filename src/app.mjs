@@ -10,11 +10,7 @@ const modules = {
 	time_to_galacon
 };
 
-/**
- * @type {{
- *    [k in keyof typeof modules]: Module
- * }}
- */
+/** @type {{ [k in keyof typeof modules]: Module }} */
 // eslint-disable-next-line no-unused-vars
 const typecheck = modules;
 

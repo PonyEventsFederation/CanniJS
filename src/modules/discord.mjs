@@ -18,6 +18,10 @@ import { is_development, logger_var_init } from "../util.mjs";
 
 let token = process.env["BOT_TOKEN"];
 const client = new Client();
+/**
+ * true when the entire bot is ready.
+ * @type {boolean | "module initialised" | "discord event received"}
+ */
 let ready = false;
 
 let logger = logger_var_init;
@@ -36,6 +40,7 @@ const start = define_start(async _logger => {
 	logger = _logger;
 	client.on("ready", () => {
 		logger.info("discord is ready!");
+		ready = (ready === "module initialised") || "discord event received";
 	});
 
 	client.on("message", msg => {
@@ -80,7 +85,7 @@ const start = define_start(async _logger => {
 			name: texts.first_activity
 		}
 	});
-	ready = true;
+	ready = (ready === "discord event received") || "module initialised";
 });
 
 const stop = define_stop(async () => {
@@ -94,7 +99,7 @@ function set_bot_token(_token) {
 }
 
 function is_ready() {
-	return ready;
+	return ready === true;
 }
 
 /**
@@ -115,16 +120,9 @@ async function set_presence(data) {
 	return await client.user?.setPresence(data);
 }
 
-const discord_api = {
-	set_bot_token,
-	is_ready,
-	get_emoji,
-	set_presence
-};
-
 /**
- * @param {string} cmd
- * @param {CommandHandler} handler
+ * @param {string} cmd the command, eg. "when" for commands like "!when"
+ * @param {CommandHandler} handler a handler to handle when this command is invoked.
  */
 function add_command(cmd, handler) {
 	if (commands[cmd]) {
@@ -136,10 +134,6 @@ function add_command(cmd, handler) {
 	}
 	commands[cmd] = handler;
 }
-
-const command_fns = {
-	add_command
-};
 
 /**
  * @template {keyof ClientEvents} T
@@ -159,14 +153,11 @@ function once(event, listener) {
 	client.once(event, listener);
 }
 
-const event = {
-	on,
-	once
-};
-
 /**
- * @param {string} user_id
- * @param {number} time
+ * blocks the user from interacting for a set period of time. This is
+ * checked by `check_access`.
+ * @param {string} user_id ID of user to block
+ * @param {number} time A time (in milliseconds) that the user will automatically be unblocked after
  */
 function block_user(user_id, time) {
 	const existing = blocked_users[user_id];
@@ -207,13 +198,6 @@ function check_access(msg) {
 		&& message_send_access_available(msg);
 }
 
-const user_access = {
-	block_user,
-	unblock_user,
-	is_user_blocked,
-	check_access
-};
-
 /**
  * the amount of time no activity should have happened in galacon for this to run
  * 30 minutes (is arbitrary)
@@ -245,17 +229,30 @@ function get_message_send_access(msg) {
 	return true;
 }
 
-const message_reply_control = {
-	message_send_access_available,
-	get_message_send_access
-};
-
 export const discord = define_module({
 	start,
 	stop,
-	...discord_api,
-	...command_fns,
-	...event,
-	...user_access,
-	...message_reply_control
+
+	// discord api related
+	set_bot_token,
+	is_ready,
+	get_emoji,
+	set_presence,
+
+	// functions related to commands
+	add_command,
+
+	// event
+	on,
+	once,
+
+	// user access
+	block_user,
+	unblock_user,
+	is_user_blocked,
+	check_access,
+
+	// message reply control
+	message_send_access_available,
+	get_message_send_access
 });

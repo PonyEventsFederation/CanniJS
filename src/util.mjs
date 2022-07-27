@@ -18,7 +18,7 @@ export function is_production() {
  * Configuration values. `gc` returns the value used in production (in galacon server), and
  * every other value are values used in development by various maintainers. The default galacon
  * value will be returned if the requested value is not provided. Regular maintainers feel free to
- * add needed types here, update `define_config_value`, and commit it. Ask Autumn if need help.
+ * add needed types here, update {@link define_value}, and commit it. Ask Autumn if need help.
  *
  * @template T
  * @typedef {{
@@ -27,12 +27,11 @@ export function is_production() {
  * }} ConfigValue
  */
 
-const cfg = process.env["CFG"];
+const cfg = process.env["CFG"]?.toLowerCase();
 
 /**
  * Defines a value that changes automatically based on the `CFG` environment variable
- * to dynamically swap out entire configs to make it easier to swap hardcoded values for
- * development purposes
+ * to dynamically swap out hardcoded values for development purposes. See {@link ConfigValue}
  *
  * @template T
  * @param {ConfigValue<T>} val
