@@ -3,17 +3,7 @@ import { logger_var_init } from "../util.mjs";
 import { get_module } from "../app.mjs";
 import * as cfg from "../cfg/time-to-galacon.mjs";
 import * as texts from "../texts/time-to-galacon.mjs";
-import utcToZonedTime from "date-fns-tz/utcToZonedTime";
-import zonedTimeToUtc from "date-fns-tz/zonedTimeToUtc";
-import getTimezoneOffset from "date-fns-tz/getTimezoneOffset";
-import {
-	differenceInDays,
-	differenceInHours,
-	differenceInMinutes,
-	subDays,
-	subHours,
-	subMinutes
-} from "date-fns";
+import { Temporal } from "@js-temporal/polyfill";
 
 /** @typedef {import("discord.js").Message} Message */
 
@@ -46,25 +36,15 @@ function handle_message(_msg) {
 }
 
 async function update_status() {
-	const now = zonedTimeToUtc(new Date(), cfg.tz);
-	// const now = new Date();
+	const now = Temporal.Now.instant()
+		.toZonedDateTimeISO(Temporal.Now.timeZone())
+		.withTimeZone(Temporal.Now.timeZone())
+		.toPlainDateTime();
 
-	let remaining = cfg.galacon_date;
-
-	const days = differenceInDays(remaining, now);
-	remaining = subDays(remaining, days);
-
-	const hours_n = differenceInHours(remaining, now);
-	remaining = subHours(remaining, hours_n);
-
-	const minutes_n = differenceInMinutes(remaining, now);
-	remaining = subMinutes(remaining, minutes_n);
-
-	const hours = hours_n.toString().padStart(2, "0");
-	const minutes = minutes_n.toString().padStart(2, "0");
-
-	const status_msg = texts.status_msg(days, hours, minutes);
+	const diff = now.until(cfg.galacon_date);
+	const status_msg = texts.status_msg(diff.days, diff.hours, diff.minutes);
 	logger.debug(`new message: ${status_msg}`);
+
 	await get_module("discord").set_presence({
 		status: "online",
 		afk: false,

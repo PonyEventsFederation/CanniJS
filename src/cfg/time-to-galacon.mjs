@@ -1,15 +1,18 @@
-import zonedTimeToUtc from "date-fns-tz/zonedTimeToUtc";
+import { Temporal } from "@js-temporal/polyfill";
 import { define_value } from "../util.mjs";
 
 /**
  * timezone that the times should be displayed in
  */
-export const tz = "europe/berlin";
+export const tz = new Temporal.TimeZone("europe/berlin");
 
-export const galacon_date = zonedTimeToUtc(
-	new Date(Date.UTC(2022, 7 - 1, 30)),
-	tz
-);
+/**
+ * date of the next galacon.
+ */
+export const galacon_date = new Temporal.PlainDateTime(2022, 7, 30)
+	.toZonedDateTime(tz)
+	.withTimeZone(Temporal.Now.timeZone())
+	.toPlainDateTime();
 
 /**
  * update interval for the bot's status message in seconds.
