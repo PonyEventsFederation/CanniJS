@@ -26,7 +26,6 @@ export function is_production() {
  *    autumn?: () => T;
  * }} ConfigValue
  */
-
 const cfg = process.env["CFG"]?.toLowerCase();
 
 /**

@@ -1,7 +1,6 @@
-import { get_logger } from "./util.mjs";
-
 import { discord } from "./modules/discord.mjs";
 import { time_to_galacon } from "./modules/time-to-galacon.mjs";
+import { get_logger } from "./util.mjs";
 
 /** @typedef {import("./module.mjs").Module} Module */
 

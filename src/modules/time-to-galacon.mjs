@@ -1,9 +1,9 @@
-import { define_start, define_module } from "../module.mjs";
-import { logger_var_init } from "../util.mjs";
+import { Temporal } from "@js-temporal/polyfill";
 import { get_module } from "../app.mjs";
 import * as cfg from "../cfg/time-to-galacon.mjs";
+import { define_module, define_start } from "../module.mjs";
 import * as texts from "../texts/time-to-galacon.mjs";
-import { Temporal } from "@js-temporal/polyfill";
+import { logger_var_init } from "../util.mjs";
 
 /** @typedef {import("discord.js").Message} Message */
 
