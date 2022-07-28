@@ -65,14 +65,6 @@ jobs:
     - name: checkout code
       uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # 3.0.2
 
-    - name: install pnpm
-      uses: pnpm/action-setup@35ab4267a1a21c8e8cb1c087cf1642e891ff57bd # v2.2.1
-
-    - name: install node
-      uses: actions/setup-node@eeb10cff27034e7acf239c5d29f62154018672fd # 3.3.0
-      with:
-        node-version: v18.4.0
-
     - name: build container
       run: podman build . -t canni --format docker
 
