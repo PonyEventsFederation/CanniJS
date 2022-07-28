@@ -81,5 +81,8 @@ jobs:
 
     - name: push container to heroku
       run: |
-        podman tag canni registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/bot
-        podman push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/bot
+        podman tag canni registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/canni
+        podman push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/canni
+
+    - name: release
+      run: heroku container:release canni
