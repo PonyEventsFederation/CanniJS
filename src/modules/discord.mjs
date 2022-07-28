@@ -1,7 +1,7 @@
 import { Client } from "discord.js";
 import { define_module, define_start, define_stop } from "../module.mjs";
-import * as texts from "../texts/discord.mjs";
 import { is_development, logger_var_init } from "../util.mjs";
+import * as texts from "./discord.texts.mjs";
 
 // todo set_cooldown
 // todo has_cooldown
