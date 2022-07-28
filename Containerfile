@@ -35,4 +35,6 @@ COPY .eslintrc.js .eslintrc.js
 
 RUN pnpm lint
 
+RUN pnpm prune --prod && pnpm store prune
+
 CMD ["node", "src/index.mjs"]
