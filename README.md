@@ -4,6 +4,7 @@ Canni Discord bot for the GalaCon server!
 
 ## development
 
-- `npm i` to install dependencies
-- `npm run build` checks the code for type errors (but doesn't actually build anything). The typescript config used is pretty strict, and will error if something is implicitly typed as `any` because lack of type annotations (in jsdoc comments)
-- `npm run lint` lints the code
+- requirements: node v18.4.0, [pnpm](https://pnpm.io)
+- `pnpm i` to install dependencies
+- `pnpm run build` checks the code for type errors (but doesn't actually build anything). The typescript config used is pretty strict, and will error if something is implicitly typed as `any` because lack of type annotations (in jsdoc comments)
+- `pnpm run lint` lints the code
