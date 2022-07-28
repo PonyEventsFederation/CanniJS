@@ -12,8 +12,7 @@
 	},
 	"license": "MIT",
 	"engines": {
-		"node": "18.4.0",
-		"npm": "8.x"
+		"node": "18.4.0"
 	},
 	"dependencies": {
 		"@js-temporal/polyfill": "^0.4.2",
