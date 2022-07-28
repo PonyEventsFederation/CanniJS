@@ -41,4 +41,6 @@ RUN pnpm prune --prod && pnpm store prune
 
 COPY LICENSE LICENSE
 
+ENV NODE_ENV production
+
 CMD ["node", "src/index.mjs"]
