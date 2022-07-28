@@ -21,20 +21,24 @@ WORKDIR /home/canni/app
 
 COPY package.json package.json
 COPY pnpm-lock.yaml pnpm-lock.yaml
-COPY LICENSE LICENSE
 
 RUN pnpm i --frozen-lockfile
 
 COPY jsconfig.json jsconfig.json
-COPY src src
 COPY data data
+COPY src src
 
-RUN pnpm build
+RUN pnpm build \
+	# cleanup
+	&& rm jsconfig.json
 
 COPY .eslintrc.js .eslintrc.js
-
-RUN pnpm lint
+RUN pnpm lint \
+	# cleanup
+	&& rm .eslintrc.js
 
 RUN pnpm prune --prod && pnpm store prune
+
+COPY LICENSE LICENSE
 
 CMD ["node", "src/index.mjs"]

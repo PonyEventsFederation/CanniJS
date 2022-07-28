@@ -1,1 +1,0 @@
-canni: node main.js
