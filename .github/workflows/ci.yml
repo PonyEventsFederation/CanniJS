@@ -77,7 +77,7 @@ jobs:
       run: podman build . -t canni
 
     - name: authenticate to heroku docker registry
-      run: podman login -u ${{ secrets.HEROKU_API_USERNAME }} -p ${{ secrets.HEROKU_API_KEY }}
+      run: podman login -u ${{ secrets.HEROKU_API_USERNAME }} -p ${{ secrets.HEROKU_API_KEY }} registry.heroku.com
 
     - name: push container to heroku
       run: |
