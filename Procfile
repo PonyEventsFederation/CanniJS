@@ -1,1 +1,1 @@
-worker: node main.js
+canni: node main.js
