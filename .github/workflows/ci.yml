@@ -74,7 +74,7 @@ jobs:
         node-version: v18.4.0
 
     - name: build container
-      run: podman build . -t canni
+      run: podman build . -t canni --format docker
 
     - name: authenticate to heroku docker registry
       run: podman login -u ${{ secrets.HEROKU_API_USERNAME }} -p ${{ secrets.HEROKU_API_KEY }} registry.heroku.com
