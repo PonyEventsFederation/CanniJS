@@ -85,4 +85,4 @@ jobs:
         podman push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/canni
 
     - name: release
-      run: heroku container:release canni
+      run: heroku container:release -a ${{ secrets.HEROKU_APP_NAME }} canni
