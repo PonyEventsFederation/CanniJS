@@ -1,4 +1,5 @@
 import { Logger } from "tslog";
+import { randomBytes } from "crypto";
 
 /** @typedef {import("tslog").ISettingsParam} LoggerSettings */
 
@@ -82,3 +83,26 @@ export const console_log_logger = get_logger("console", {
 		"bgRedBright"
 	]
 });
+
+export function random() {
+	return randomBytes(1)[0];
+}
+
+export function random_in_interval(min = 0, max = 100, int = true) {
+	const range = max - min;
+
+	let generated = random();
+	generated = generated * range / 256;
+	generated = generated + min;
+	if (int) generated = Math.floor(generated);
+
+	return generated;
+}
+
+/**
+ * @template T
+ * @param {Array<T>} arr
+ */
+export function random_from_array(arr) {
+	return arr[random_in_interval(0, arr.length)];
+}

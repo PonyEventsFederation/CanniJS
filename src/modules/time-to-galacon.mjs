@@ -13,8 +13,8 @@ const start = define_start(async _logger => {
 	logger = _logger;
 
 	const discord = get_module("discord");
-	discord.add_command("when", msg => handle_when(msg));
-	discord.on("message", msg => handle_message(msg));
+	discord.add_command("when", handle_when);
+	discord.on("message", handle_message);
 	discord.on("ready", () => {
 		const interval = setInterval(update_status, cfg.update_interval_in_secs * 1000);
 		interval.unref();
@@ -22,27 +22,26 @@ const start = define_start(async _logger => {
 });
 
 /**
- * @param {Message} _msg
+ * @param {Message} msg
  */
-function handle_when(_msg) {
-	// a
+function handle_when(msg) {
+	const ttg = get_time_to_galacon();
+
+	msg.channel.send(texts.when_command_response(ttg.days, ttg.hours, ttg.minutes));
 }
 
 /**
- * @param {Message} _msg
+ * @param {Message} msg
  */
-function handle_message(_msg) {
-	// a
+function handle_message(msg) {
+	if (msg.content.toLowerCase().includes(texts.when_is_galacon_trigger)) {
+		handle_when(msg);
+	}
 }
 
 async function update_status() {
-	const now = Temporal.Now.instant()
-		.toZonedDateTimeISO(Temporal.Now.timeZone())
-		.withTimeZone(Temporal.Now.timeZone())
-		.toPlainDateTime();
-
-	const diff = now.until(cfg.galacon_date);
-	const status_msg = texts.status_msg(diff.days, diff.hours, diff.minutes);
+	const ttg = get_time_to_galacon();
+	const status_msg = texts.status_msg(ttg.days, ttg.hours, ttg.minutes);
 	logger.debug(`new message: ${status_msg}`);
 
 	await get_module("discord").set_presence({
@@ -52,6 +51,16 @@ async function update_status() {
 			name: status_msg
 		}
 	});
+}
+
+function get_time_to_galacon() {
+	const tz = Temporal.Now.timeZone();
+	const now = Temporal.Now.instant()
+		.toZonedDateTimeISO(tz)
+		.withTimeZone(tz)
+		.toPlainDateTime();
+
+	return now.until(cfg.galacon_date);
 }
 
 export const time_to_galacon = define_module({
