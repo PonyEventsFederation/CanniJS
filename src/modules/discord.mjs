@@ -225,11 +225,12 @@ function message_send_access_available(msg) {
 /** @param {Message} msg */
 function get_message_send_access(msg) {
 	message_access_timeout.refresh();
+
 	const access = message_access[msg.id];
 	if (access) return false;
 
 	message_access[msg.id] = new WeakRef(msg);
-	return true;
+	return !msg.author.bot;
 }
 
 export const discord = define_module({
