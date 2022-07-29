@@ -27,7 +27,7 @@ const start = define_start(async _logger => {
  */
 function handle_when(msg) {
 	if (!app.get_module("discord").get_message_send_access(msg)) return;
-	msg.channel.send(get_response());
+	msg.channel.send(get_cmd_response());
 }
 
 /**
@@ -37,18 +37,18 @@ function handle_message(msg) {
 	if (!app.get_module("discord").get_message_send_access(msg)) return;
 
 	if (msg.content.toLowerCase().includes(texts.when_is_galacon_trigger)) {
-		msg.channel.send(get_response());
+		msg.channel.send(get_cmd_response());
 	}
 }
 
-function get_response() {
+function get_cmd_response() {
 	const ttg = get_time_to_galacon();
-	return texts.when_command_response(ttg.days, ttg.hours, ttg.minutes);
+	return texts.when_command_response(ttg);
 }
 
 async function update_status() {
 	const ttg = get_time_to_galacon();
-	const status_msg = texts.status_msg(ttg.days, ttg.hours, ttg.minutes);
+	const status_msg = texts.status_msg(ttg);
 	logger.debug(`new message: ${status_msg}`);
 
 	await get_module("discord").set_presence({
