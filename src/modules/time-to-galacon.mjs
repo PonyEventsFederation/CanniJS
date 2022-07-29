@@ -2,6 +2,7 @@ import { Temporal } from "@js-temporal/polyfill";
 import { get_module } from "../app.mjs";
 import { define_module, define_start } from "../module.mjs";
 import { logger_var_init } from "../util.mjs";
+import * as app from "../app.mjs";
 import * as cfg from "./time-to-galacon.cfg.mjs";
 import * as texts from "./time-to-galacon.texts.mjs";
 
@@ -25,18 +26,24 @@ const start = define_start(async _logger => {
  * @param {Message} msg
  */
 function handle_when(msg) {
-	const ttg = get_time_to_galacon();
-
-	msg.channel.send(texts.when_command_response(ttg.days, ttg.hours, ttg.minutes));
+	if (!app.get_module("discord").get_message_send_access(msg)) return;
+	msg.channel.send(get_response());
 }
 
 /**
  * @param {Message} msg
  */
 function handle_message(msg) {
+	if (!app.get_module("discord").get_message_send_access(msg)) return;
+
 	if (msg.content.toLowerCase().includes(texts.when_is_galacon_trigger)) {
-		handle_when(msg);
+		msg.channel.send(get_response());
 	}
+}
+
+function get_response() {
+	const ttg = get_time_to_galacon();
+	return texts.when_command_response(ttg.days, ttg.hours, ttg.minutes);
 }
 
 async function update_status() {
