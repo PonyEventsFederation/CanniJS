@@ -68,7 +68,7 @@ jobs:
       uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # 3.0.2
 
     - name: build container
-      run: podman build . -t canni --format docker
+      run: podman build . -t canni --format docker --squash
 
     - name: authenticate to heroku docker registry
       run: podman login -u ${{ secrets.HEROKU_API_USERNAME }} -p ${{ secrets.HEROKU_API_KEY }} registry.heroku.com
