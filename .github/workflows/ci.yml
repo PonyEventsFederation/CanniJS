@@ -60,6 +60,7 @@ jobs:
     needs:
     - build
     - lint
+    if: ${{ github.event_name != 'pull_request' }}
     # if: ${{ github.ref == 'refs/heads/master' }}
 
     steps:
