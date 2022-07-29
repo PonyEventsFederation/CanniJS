@@ -44,6 +44,9 @@ const start = define_start(async _logger => {
 	});
 
 	client.on("message", msg => {
+		// ignore bots
+		if (msg.author.bot) return;
+
 		logger.debug("received message");
 		logger.debug(`   id: ${msg.id}`);
 		logger.debug(`   content: ${msg.content}`);
