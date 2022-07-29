@@ -131,7 +131,8 @@ function add_command(cmd, handler) {
 	if (commands[cmd]) {
 		const err_msg = `duplicate command registered: ${cmd}`;
 
-		// only throw error in development
+		// only throw error in dev
+		// don't crash the app if it somehow made it to deploy
 		if (is_development()) throw new Error(err_msg);
 		else logger.fatal(err_msg);
 	}
