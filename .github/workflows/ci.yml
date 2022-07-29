@@ -60,7 +60,7 @@ jobs:
     needs:
     - build
     - lint
-    if: ${{ github.ref == 'refs/heads/master' }}
+    # if: ${{ github.ref == 'refs/heads/master' }}
 
     steps:
     - name: checkout code
