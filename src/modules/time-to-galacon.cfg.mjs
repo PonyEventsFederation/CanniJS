@@ -7,11 +7,24 @@ import { define_value } from "../util.mjs";
 export const tz = new Temporal.TimeZone("europe/berlin");
 
 /**
- * date of the next galacon.
+ * timezone that the bot is running in
  */
-export const galacon_date = new Temporal.PlainDateTime(2022, 7, 30)
+export const local_tz = Temporal.Now.timeZone();
+
+/**
+ * datetime of the next galacon
+ */
+export const galacon_start_date = new Temporal.PlainDateTime(2022, 7, 30, 10)
 	.toZonedDateTime(tz)
-	.withTimeZone(Temporal.Now.timeZone())
+	.withTimeZone(local_tz)
+	.toPlainDateTime();
+
+/**
+ * datetime until the end of ending ceremonies of galacon
+ */
+export const galacon_end_date = new Temporal.PlainDateTime(2022, 7, 31, 19)
+	.toZonedDateTime(tz)
+	.withTimeZone(local_tz)
 	.toPlainDateTime();
 
 /**

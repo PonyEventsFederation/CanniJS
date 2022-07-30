@@ -42,13 +42,23 @@ function handle_message(msg) {
 }
 
 function get_cmd_response() {
-	const ttg = get_time_to_galacon();
-	return texts.when_command_response(ttg);
+	const time_details = get_galacon_time_details();
+
+	return "before_galacon" in time_details
+		? texts.when_command_res_before(time_details.before_galacon)
+		: "during_galacon" in time_details
+			? texts.when_command_res_during(time_details.during_galacon)
+			: texts.when_command_res_after(time_details.after_galacon);
 }
 
 async function update_status() {
-	const ttg = get_time_to_galacon();
-	const status_msg = texts.status_msg(ttg);
+	const time_details = get_galacon_time_details();
+
+	const status_msg = "before_galacon" in time_details
+		? texts.status_msg_before(time_details.before_galacon)
+		: "during_galacon" in time_details
+			? texts.status_msg_during(time_details.during_galacon)
+			: texts.status_msg_after(time_details.after_galacon);
 	logger.debug(`new message: ${status_msg}`);
 
 	await get_module("discord").set_presence({
@@ -60,14 +70,37 @@ async function update_status() {
 	});
 }
 
-function get_time_to_galacon() {
-	const tz = Temporal.Now.timeZone();
+/**
+ * @return {{
+ *    before_galacon: Temporal.Duration;
+ * } | {
+ *    during_galacon: Temporal.Duration;
+ * } | {
+ * 	after_galacon: Temporal.Duration;
+ * }}
+ * Should be always returning positive, if it isn't returning positive then there is a bug
+ */
+function get_galacon_time_details() {
 	const now = Temporal.Now.instant()
-		.toZonedDateTimeISO(tz)
-		.withTimeZone(tz)
+		.toZonedDateTimeISO(cfg.local_tz)
+		.withTimeZone(cfg.local_tz)
 		.toPlainDateTime();
 
-	return now.until(cfg.galacon_date);
+	if (Temporal.PlainDateTime.compare(now, cfg.galacon_start_date) < 0) {
+		// before
+		logger.debug("now is before galacon");
+		return { before_galacon: now.until(cfg.galacon_start_date) };
+	}
+
+	if (Temporal.PlainDateTime.compare(now, cfg.galacon_end_date)) {
+		// during
+		logger.debug("now is during galacon");
+		return { during_galacon: now.until(cfg.galacon_end_date) };
+	}
+
+	// after
+	logger.debug("now is after galacon");
+	return { after_galacon: now.since(cfg.galacon_end_date) };
 }
 
 export const time_to_galacon = define_module({
