@@ -28,7 +28,7 @@ export function status_msg_during(tte) {
  */
 export function status_msg_after(tseg) {
 	const [d, h, m] = get_dhm_processed(tseg);
-	return `Time since Galacon Ended: ${d} days, ${h}${m}`;
+	return `Time since Galacon Ended: ${d} days, ${h}:${m}`;
 }
 
 /**

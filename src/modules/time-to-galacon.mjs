@@ -92,7 +92,7 @@ function get_galacon_time_details() {
 		return { before_galacon: now.until(cfg.galacon_start_date) };
 	}
 
-	if (Temporal.PlainDateTime.compare(now, cfg.galacon_end_date)) {
+	if (Temporal.PlainDateTime.compare(now, cfg.galacon_end_date) < 0) {
 		// during
 		logger.debug("now is during galacon");
 		return { during_galacon: now.until(cfg.galacon_end_date) };
