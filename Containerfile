@@ -41,6 +41,12 @@ RUN pnpm prune --prod && pnpm store prune
 
 COPY LICENSE LICENSE
 
+# OLD BOT HERE
+COPY config config
+COPY lib lib
+COPY modules modules
+COPY main.js main.js
+
 ENV NODE_ENV production
 
 CMD ["node", "src/index.mjs"]
