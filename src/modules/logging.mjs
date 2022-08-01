@@ -1,52 +1,24 @@
-import { define_value } from "../util.mjs";
-import { define_module, define_start } from "../module.mjs";
-import { get_logs, logger_var_init } from "../logger.mjs";
-import * as app from "../app.mjs";
-import * as texts from "./logging.texts.mjs";
 import { MessageAttachment } from "discord.js";
+import * as app from "../app.mjs";
+import { get_logs, logger_var_init } from "../logger.mjs";
+import { define_module, define_start } from "../module.mjs";
+import * as cfg from "./logging.cfg.mjs";
+import * as texts from "./logging.texts.mjs";
 
 let logger = logger_var_init;
 
-/**
- * @typedef {{
- *    roles?: Array<string>;
- *    users?: Array<string>;
- * }} Authorisation
- */
-const authorisation = define_value({
-	gc: () => /** @type {Authorisation} */({
-		roles: [
-			// botmaster
-			"606867822441791512",
-			// mod
-			"623927417056002073",
-			// admin
-			"602442933416755201"
-		],
-		users: [
-			// Autumn c:
-			"379800645571575810"
-		]
-	}),
-	autumn: () => ({
-		users: [
-			// Autumn c:
-			"379800645571575810"
-		]
-	})
-});
-
 // no access if none specified
+const B = Boolean;
 /** @param {string} role */
-const role_access = (role) => Boolean(authorisation.roles && authorisation.roles.includes(role));
+const role_access = (role) => B(cfg.authorisation.roles && cfg.authorisation.roles.includes(role));
 /** @param {string} user */
-const user_access = (user) => Boolean(authorisation.users && authorisation.users.includes(user));
+const user_access = (user) => B(cfg.authorisation.users && cfg.authorisation.users.includes(user));
 
 const start = define_start(async _logger => {
 	logger = _logger;
 
 	app.get_module("discord").add_command("logs", async (msg, arg) => {
-		logger.info(`user ${msg.author.username}#${msg.author.discriminator} (id ${msg.author.id}) requested logs with format ${arg}`);
+		logger.info(`user ${msg.author.username}#${msg.author.discriminator} (id ${msg.author.id}) requested logs with format "${arg}"`);
 		arg = arg.toLowerCase();
 
 		if (!role_access(msg.author.id) && !user_access(msg.author.id)) {
