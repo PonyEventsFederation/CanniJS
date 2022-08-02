@@ -2,12 +2,14 @@ import { get_logger } from "./logger.mjs";
 import { discord } from "./modules/discord.mjs";
 import { logging } from "./modules/logging.mjs";
 import { time_to_galacon } from "./modules/time-to-galacon.mjs";
+import { run_old } from "./modules/run-old.mjs";
 
 /** @typedef {import("./module.mjs").Module} Module */
 
 const modules = {
 	discord,
 	logging,
+	run_old,
 	time_to_galacon
 };
 
