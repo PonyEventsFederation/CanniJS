@@ -32,7 +32,7 @@ const modules = [
 	"Ignore",
 	"Holiday",
 	"Potato",
-	"UserJoined",
+	// "UserJoined",
 	"Help",
 	// "TimeToGalacon",
 	"Boop",
