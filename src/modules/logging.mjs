@@ -7,13 +7,6 @@ import * as texts from "./logging.texts.mjs";
 
 let logger = logger_var_init;
 
-// no access if none specified
-const B = Boolean;
-/** @param {string} role */
-const role_access = (role) => B(cfg.authorisation.roles && cfg.authorisation.roles.includes(role));
-/** @param {string} user */
-const user_access = (user) => B(cfg.authorisation.users && cfg.authorisation.users.includes(user));
-
 const start = define_start(async _logger => {
 	logger = _logger;
 
@@ -21,7 +14,13 @@ const start = define_start(async _logger => {
 		logger.info(`user ${msg.author.username}#${msg.author.discriminator} (id ${msg.author.id}) requested logs with format "${arg}"`);
 		arg = arg.toLowerCase();
 
-		if (!role_access(msg.author.id) && !user_access(msg.author.id)) {
+		const roles = cfg.authorisation.roles;
+		const users = cfg.authorisation.users;
+
+		if (
+			!(roles && roles.find(r => Boolean(msg.member?.roles.cache.has(r))))
+			&& !(users && users.includes(msg.author.id))
+		) {
 			await msg.channel.send(texts.no_access);
 			return;
 		}
