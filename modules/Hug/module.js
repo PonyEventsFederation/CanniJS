@@ -82,17 +82,11 @@ module.exports = class Hug extends Module {
 				return this.megaHug(msg, this.config.megaSelfHugAnswer, msg.author);
 			}
 
-			Database.getTimeout(msg.author.id, "megahug").then((results) => {
-				if (results.length == 0) {
-					Database.setTimeout(msg.author.id, "megahug");
-					return this.megaHug(msg, this.config.megaHugAnswer, user);
-				} else {
-					const cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaHug, [msg.author]);
-					msg.channel.send(cooldownMessage);
-				}
-			}).catch((err) => {
-				this.log.error("Promise rejection error: " + err);
-			});
+			const cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaHug, [msg.author]);
+
+			if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaHugType, true, "message", cooldownMessage, false, megaHugTimeout)) {
+				return this.megaHug(msg, this.config.megaHugAnswer, user);
+			}
 
 			Application.modules.Discord.setMessageSent();
 		}

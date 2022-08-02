@@ -98,23 +98,27 @@ module.exports = class Boop extends Module {
 
 	processMegaboops(msg) {
 		if (Tools.strStartsWord(msg.content, "megaboop")) {
+
+			// Calculates the difference between now and midnight in milliseconds.
+			// Only one megaboop is allowed per day.
+			const now = moment();
+			const val = moment().endOf("day");
+			const megaBoopTimeout = val.diff(now, "milliseconds");
+
 			if (!msg.mentions.everyone && msg.mentions.users.array().length === 1) {
 				const user = msg.mentions.users.array()[0];
 				if (Application.checkSelf(user.id)) {
 					return this.megaSelfBoop(msg);
 				}
 
-				Database.getTimeout(msg.author.id, "megaboop").then((results) => {
-					if (results.length == 0) {
-						Database.setTimeout(msg.author.id, "megaboop");
-						return this.megaBoopLoader(msg, user);
-					} else {
-						const cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaBoop, [msg.author]);
-						msg.channel.send(cooldownMessage);
-					}
-				}).catch((err) => {
-					this.log.error("Promise rejection error: " + err);
-				});
+				const cooldownMessage = Tools.parseReply(
+					this.config.cooldownMessageMegaBoop,
+					[msg.author]
+				);
+
+				if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaBoopType, true, "individual", cooldownMessage, false, megaBoopTimeout)) {
+					return this.megaBoopLoader(msg, user);
+				}
 
 				Application.modules.Discord.setMessageSent();
 			}
