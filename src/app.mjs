@@ -2,7 +2,7 @@ import { get_logger } from "./logger.mjs";
 import { discord } from "./modules/discord.mjs";
 import { logging } from "./modules/logging.mjs";
 import { time_to_galacon } from "./modules/time-to-galacon.mjs";
-import { run_old } from "./modules/run-old.mjs";
+// import { run_old } from "./modules/run-old.mjs";
 import { user_joined } from "./modules/user-joined.mjs";
 
 /** @typedef {import("./module.mjs").Module} Module */
@@ -10,7 +10,7 @@ import { user_joined } from "./modules/user-joined.mjs";
 const modules = {
 	discord,
 	logging,
-	run_old,
+	// run_old,
 	time_to_galacon,
 	user_joined
 };
