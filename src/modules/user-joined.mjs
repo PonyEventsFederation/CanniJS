@@ -1,6 +1,5 @@
 import * as app from "../app.mjs";
 import * as cfg from "./user-joined.cfg.mjs";
-import * as texts from "./user-joined.texts.mjs";
 import { define_module, define_start } from "../module.mjs";
 import { logger_var_init } from "../logger.mjs";
 
@@ -25,7 +24,7 @@ const start = define_start(async _logger => {
 		}
 
 		setTimeout(
-			() => general_channel.send(texts.welcome_message(member.id)),
+			() => general_channel.send(cfg.welcome_message(member.id)),
 			cfg.welcome_message_delay_in_secs * 1000
 		);
 	});

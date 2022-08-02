@@ -4,7 +4,6 @@ import { define_module, define_start } from "../module.mjs";
 import { logger_var_init } from "../logger.mjs";
 import * as app from "../app.mjs";
 import * as cfg from "./time-to-galacon.cfg.mjs";
-import * as texts from "./time-to-galacon.texts.mjs";
 
 /** @typedef {import("discord.js").Message} Message */
 
@@ -36,7 +35,7 @@ function handle_when(msg) {
 function handle_message(msg) {
 	if (!app.get_module("discord").get_message_send_access(msg)) return;
 
-	if (msg.content.toLowerCase().includes(texts.when_is_galacon_trigger)) {
+	if (msg.content.toLowerCase().includes(cfg.when_is_galacon_trigger)) {
 		msg.channel.send(get_cmd_response());
 	}
 }
@@ -45,20 +44,20 @@ function get_cmd_response() {
 	const time_details = get_galacon_time_details();
 
 	return "before_galacon" in time_details
-		? texts.when_command_res_before(time_details.before_galacon)
+		? cfg.when_command_res_before(time_details.before_galacon)
 		: "during_galacon" in time_details
-			? texts.when_command_res_during(time_details.during_galacon)
-			: texts.when_command_res_after(time_details.after_galacon);
+			? cfg.when_command_res_during(time_details.during_galacon)
+			: cfg.when_command_res_after(time_details.after_galacon);
 }
 
 async function update_status() {
 	const time_details = get_galacon_time_details();
 
 	const status_msg = "before_galacon" in time_details
-		? texts.status_msg_before(time_details.before_galacon)
+		? cfg.status_msg_before(time_details.before_galacon)
 		: "during_galacon" in time_details
-			? texts.status_msg_during(time_details.during_galacon)
-			: texts.status_msg_after(time_details.after_galacon);
+			? cfg.status_msg_during(time_details.during_galacon)
+			: cfg.status_msg_after(time_details.after_galacon);
 	logger.debug(`new message: ${status_msg}`);
 
 	await get_module("discord").set_presence({

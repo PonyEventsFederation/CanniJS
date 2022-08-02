@@ -11,3 +11,8 @@ export const rules_channel_id = define_value({
 });
 
 export const welcome_message_delay_in_secs = 1;
+
+/**
+ * @param {string} user_id
+ */
+export const welcome_message = user_id => `( ͡° ͜ʖ (\\  *BOOPS* <@${user_id}>\nWelcome to the official GalaCon Discord server!\nBe sure to check out our <#${rules_channel_id}>.`;

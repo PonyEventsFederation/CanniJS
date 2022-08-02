@@ -3,7 +3,6 @@ import * as app from "../app.mjs";
 import { get_logs, logger_var_init } from "../logger.mjs";
 import { define_module, define_start } from "../module.mjs";
 import * as cfg from "./logging.cfg.mjs";
-import * as texts from "./logging.texts.mjs";
 
 let logger = logger_var_init;
 
@@ -21,13 +20,13 @@ const start = define_start(async _logger => {
 			!(roles && roles.find(r => Boolean(msg.member?.roles.cache.has(r))))
 			&& !(users && users.includes(msg.author.id))
 		) {
-			await msg.channel.send(texts.no_access);
+			await msg.channel.send(cfg.no_access);
 			return;
 		}
 
 		const buf = await get_logs(/** @type {any} */ (arg));
 		if (!buf) {
-			await msg.channel.send(texts.invalid_format);
+			await msg.channel.send(cfg.invalid_format);
 			return;
 		}
 
@@ -39,12 +38,12 @@ const start = define_start(async _logger => {
 			: "bin";
 		/* eslint-enable indent */
 
-		await msg.author.send(texts.here_you_go, {
+		await msg.author.send(cfg.here_you_go, {
 			files: [new MessageAttachment(buf[1], `logs.${ext}`)]
 		});
 
 		if (msg.channel.type !== "dm") {
-			await msg.channel.send(texts.sending_to_dm);
+			await msg.channel.send(cfg.sending_to_dm);
 		}
 	});
 });
