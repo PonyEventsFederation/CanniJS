@@ -97,6 +97,11 @@ const stop = define_stop(async () => {
 	ready = false;
 });
 
+function get_client() {
+	logger.warn("get_client was called (use alternatives if possible)");
+	return client;
+}
+
 /** @param {string} _token */
 function set_bot_token(_token) {
 	token = _token;
@@ -238,6 +243,7 @@ function get_message_send_access(msg) {
 export const discord = define_module({
 	start,
 	stop,
+	get_client,
 
 	// discord api related
 	set_bot_token,
