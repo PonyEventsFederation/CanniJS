@@ -46,9 +46,9 @@ async function start_modules() {
 
 	for (const mod_name in modules) {
 		// _mod_name is not typed `keyof typeof modules` because typescript cannot guarantee
-		// during runtime that the passed object has extra properties
+		// during runtime that the passed object does not have extra properties
 		// but we set up that object, and the type is derived from the actual object assignment,
-		// so we can guarantee it so we do a cast here
+		// so we can guarantee it doesn't have extra properties so we do a cast here
 		const mod = modules[/** @type {keyof typeof modules} */ (mod_name)];
 
 		if ("start" in mod) {
