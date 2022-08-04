@@ -1,5 +1,5 @@
 import { Logger } from "tslog";
-import { is_production } from "./util.mjs";
+import { production } from "./util.mjs";
 import { brotliCompress, gzip } from "zlib";
 
 /** @typedef {import("tslog").ISettingsParam} LoggerSettings */
@@ -10,7 +10,7 @@ const dev_level = process.env["NO_SILLY"]
 const prod_level = process.env["SILLY"]
 	? "silly"
 	: "info";
-const minLevel = is_production()
+const minLevel = production
 	? prod_level
 	: dev_level;
 

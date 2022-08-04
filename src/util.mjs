@@ -4,13 +4,8 @@ const env = process.env["NODE_ENV"] === "production"
 	? "production"
 	: "development";
 
-export function is_development() {
-	return env === "development";
-}
-
-export function is_production() {
-	return env === "production";
-}
+export const development = env === "development";
+export const production = env === "production";
 
 /**
  * Configuration values. `gc` returns the value used in production (in galacon server), and

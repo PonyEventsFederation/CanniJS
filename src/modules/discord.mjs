@@ -1,6 +1,6 @@
 import { Client } from "discord.js";
 import { define_module, define_start, define_stop } from "../module.mjs";
-import { is_development } from "../util.mjs";
+import { development } from "../util.mjs";
 import { logger_var_init } from "../logger.mjs";
 import * as texts from "./discord.cfg.mjs";
 
@@ -134,7 +134,7 @@ function add_command(cmd, handler) {
 
 		// only throw error in dev
 		// don't crash the app if it somehow made it to deploy
-		if (is_development()) throw new Error(err_msg);
+		if (development) throw new Error(err_msg);
 		else logger.fatal(err_msg);
 	}
 	commands[cmd] = handler;
