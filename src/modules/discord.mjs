@@ -31,7 +31,7 @@ let logger = logger_var_init;
 const commands = {};
 // const reactions = [];
 // const channel_messaged = new Set;
-// const talked_recently = new Set;
+// const talked_recently = {};
 /** @type {Record<string, NodeJS.Timeout | undefined>} */
 const blocked_users = {};
 /** @type {Record<string, WeakRef<Message> | undefined>} */
@@ -202,7 +202,7 @@ function is_user_blocked(user_id) {
 /**
  * @param {Message} msg
  */
-function check_access(msg) {
+function check_user_access(msg) {
 	return !msg.author.bot
 		&& !is_user_blocked(msg.author.id)
 		&& message_send_access_available(msg);
@@ -233,14 +233,50 @@ function message_send_access_available(msg) {
 function get_message_send_access(msg) {
 	message_access_timeout.refresh();
 
-	if (msg.author.bot) return false;
-
-	const access = message_access[msg.id];
-	if (access) return false;
+	if (!check_user_access(msg)) return false;
 
 	message_access[msg.id] = new WeakRef(msg);
 	return true;
+
 }
+
+// tODO this once dev commands are up
+// /**
+//  * @param {object} _
+//  * @param {Message} _.msg
+//  * @param {string} [_.type]
+//  * @param {string} [_.cooldown_message]
+//  * @param {boolean} [_.send_cooldown_message]
+//  * @param {"channel" | "individual" | "message"} _.target
+//  * @param {boolean} [_.block_user]
+//  * @param {number} [_.cooldown_timeout_in_secs]
+//  */
+// function control_talked_recently({
+// 	msg,
+// 	type = "",
+// 	cooldown_message,
+// 	send_cooldown_message = true,
+// 	target,
+// 	block_user = false,
+// 	cooldown_timeout_in_secs
+// }) {
+// 	/** @type {string} */
+// 	let cooldown_target;
+
+// 	if (target === "channel") cooldown_target = msg.channel.id + type;
+// 	else if (target === "individual") cooldown_target = msg.author.id;
+// 	else if (target === "message") cooldown_target = msg.author.id + type;
+// 	else return false;
+
+// 	if (!talked_recently[cooldown_target]) {
+// 		// todo
+// 	} else {
+// 		if (!cooldown_message) {
+
+// 		}
+// 	}
+
+// }
 
 export const discord = define_module({
 	start,
@@ -264,8 +300,11 @@ export const discord = define_module({
 	block_user,
 	unblock_user,
 	is_user_blocked,
-	check_access,
+	check_user_access,
 
 	// message reply control
 	get_message_send_access
+
+	// command use throttling
+	// control_talked_recently
 });
