@@ -233,11 +233,13 @@ function message_send_access_available(msg) {
 function get_message_send_access(msg) {
 	message_access_timeout.refresh();
 
+	if (msg.author.bot) return false;
+
 	const access = message_access[msg.id];
 	if (access) return false;
 
 	message_access[msg.id] = new WeakRef(msg);
-	return !msg.author.bot;
+	return true;
 }
 
 export const discord = define_module({
@@ -265,6 +267,5 @@ export const discord = define_module({
 	check_access,
 
 	// message reply control
-	message_send_access_available,
 	get_message_send_access
 });
