@@ -41,9 +41,9 @@ const start = define_start(async _logger => {
 });
 
 /**
- * @param {GuildMember | undefined} member
+ * @param {GuildMember} [member]
  */
-function get_general_channel(member = undefined) {
+function get_general_channel(member) {
 	const channel = member
 		? member.guild
 			.channels
