@@ -1,5 +1,3 @@
-import { define_module, define_start, define_stop } from "../module.mjs";
-import { logger_var_init } from "../logger.mjs";
 import { spawn } from "child_process";
 
 /** @type {import("child_process").ChildProcess} */

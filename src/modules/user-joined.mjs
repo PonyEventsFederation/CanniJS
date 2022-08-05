@@ -1,7 +1,5 @@
 import * as app from "../app.mjs";
 import * as cfg from "./user-joined.cfg.mjs";
-import { define_module, define_start } from "../module.mjs";
-import { logger_var_init } from "../logger.mjs";
 
 /** @typedef {import("discord.js").GuildMember} GuildMember */
 /** @typedef {import("discord.js").TextChannel} TextChannel */

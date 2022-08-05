@@ -4,8 +4,10 @@ const env = process.env["NODE_ENV"] === "production"
 	? "production"
 	: "development";
 
-export const development = env === "development";
-export const production = env === "production";
+// @ts-expect-error
+global.development = env === "development";
+// @ts-expect-error
+global.production = env === "production";
 
 /**
  * Configuration values. `gc` returns the value used in production (in galacon server), and

@@ -1,5 +1,4 @@
 import { Logger } from "tslog";
-import { production } from "./util.mjs";
 import { brotliCompress, gzip } from "zlib";
 
 /** @typedef {import("tslog").ISettingsParam} LoggerSettings */
@@ -41,11 +40,8 @@ export function get_logger(name, param_overrides = {}) {
 	});
 }
 
-/**
- * this is undefined, but a helper constant to type the variable as `Logger`
- * without having to manually type out the definitions all the time
- */
-export const logger_var_init = /** @type {Logger} */ (/** @type {unknown} */ (undefined));
+// @ts-expect-error
+global.logger_var_init = undefined;
 
 export const console_log_logger = get_logger("console", {
 	overwriteConsole: true,

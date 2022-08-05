@@ -1,39 +1,31 @@
-import { logger_var_init } from "./logger.mjs";
+import { get_logger } from "./logger.mjs";
 
-/** @typedef {import("tslog").Logger} Logger */
-/** @typedef {(logger: import("tslog").Logger) => Promise<void>} Start */
-/** @typedef {() => Promise<void>} Stop */
-/**
- * @typedef {{
- *    start?: Start;
- *    stop?: Stop;
- * }} Module
- */
+const logger = get_logger("module");
 
-/** @type {<T extends Module>(mod: T | (() => T)) => T & { get_logger: () => Logger }} */
-export function define_module(mod) {
+global.define_module = function(mod) {
+	logger.silly("global define_module function called");
 	const initialised = typeof mod === "function"
 		? mod()
 		: mod;
 
-	let logger = logger_var_init;
+	let module_logger = logger_var_init;
 
 	return {
 		...initialised,
 		start: async _logger => {
-			logger = _logger;
-			if ("start" in initialised) await initialised.start(logger);
+			module_logger = _logger;
+			if ("start" in initialised) await initialised.start(module_logger);
 		},
-		get_logger: () => logger
+		get_logger: () => module_logger
 	};
-}
+};
 
-/** @param {Start} start */
-export function define_start(start) {
+global.define_start = function(start) {
+	logger.silly("global define_start function called");
 	return start;
-}
+};
 
-/** @param {Stop} stop */
-export function define_stop(stop) {
+global.define_stop = function(stop) {
+	logger.silly("global define_start function called");
 	return stop;
-}
+};

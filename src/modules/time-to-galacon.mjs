@@ -1,7 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { get_module } from "../app.mjs";
-import { define_module, define_start } from "../module.mjs";
-import { logger_var_init } from "../logger.mjs";
 import * as app from "../app.mjs";
 import * as cfg from "./time-to-galacon.cfg.mjs";
 

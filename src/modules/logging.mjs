@@ -1,7 +1,6 @@
 import { MessageAttachment } from "discord.js";
 import * as app from "../app.mjs";
-import { get_logs, logger_var_init } from "../logger.mjs";
-import { define_module, define_start } from "../module.mjs";
+import { get_logs } from "../logger.mjs";
 import * as cfg from "./logging.cfg.mjs";
 
 let logger = logger_var_init;
