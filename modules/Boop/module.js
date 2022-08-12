@@ -334,8 +334,8 @@ module.exports = class Boop extends Module {
 				Application.modules.Discord.setMessageSent();
 				return;
 			}
-			ans = lastMegaBoop.answer;
-			type = lastMegaBoop.damage;
+			ans = this.lastMegaBoop.answer;
+			type = this.lastMegaBoop.damage;
 		} else {
 			ans = this.config.megaBoopDevBlock;
 			type = type_pre;
