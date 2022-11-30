@@ -22,6 +22,8 @@ WORKDIR /home/sani/app
 
 COPY . .
 
+RUN pnpm i --frozen-lockfile
+
 RUN pnpm lint
 
 RUN pnpm prune --prod && pnpm store prune
