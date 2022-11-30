@@ -1,0 +1,25 @@
+---
+on:
+  push:
+    branches:
+    # - "**"
+    - "master"
+  # pull_request:
+
+jobs:
+  deploy:
+    name: deploy to fly.io
+    runs-on: ubuntu-22.04
+    # if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+
+    steps:
+    - name: checkout code
+      uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # 3.0.2
+
+    - name: setup flyctl
+      uses: superfly/flyctl-actions/setup-flyctl@master
+
+    - name: deploy
+      run: flyctl deploy --remote-only --no-cache
+      env:
+        FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
