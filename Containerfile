@@ -22,11 +22,11 @@ WORKDIR /home/sani/app
 
 COPY . .
 
-RUN pnpm i --frozen-lockfile
+RUN pnpm i --frozen-lockfile -P
 
-RUN pnpm lint
+# RUN pnpm lint
 
-RUN pnpm prune --prod && pnpm store prune
+# RUN pnpm prune --prod && pnpm store prune
 
 COPY LICENSE LICENSE
 
