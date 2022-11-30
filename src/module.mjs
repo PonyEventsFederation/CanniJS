@@ -26,6 +26,6 @@ global.define_start = function(start) {
 };
 
 global.define_stop = function(stop) {
-	logger.silly("global define_start function called");
+	logger.silly("global define_stop function called");
 	return stop;
 };
