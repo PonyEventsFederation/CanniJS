@@ -1,15 +1,15 @@
 "use strict";
 
-const { Worker, parentPort, isMainThread, workerData } = require("worker_threads");
+const { Worker, parentPort: _parentPort, isMainThread, workerData } = require("worker_threads");
 const os = require("os");
 const Algebrite = require("algebrite");
-const Promise = require("bluebird");
+// const Promise = require("bluebird");
 const Application = require("../../lib/Application");
 
 // it is safe to cast this into this type because this module will only ever
 // be required from the main thread so main will always run so we good
 /** @type {(method: "single" | "multi", alg: string) => Promise<string>} */
-module.exports = isMainThread ? main() : registerworker();
+module.exports = isMainThread ? main() : /** @type {any} */ (registerworker());
 
 function main() {
 	const numworkers = os.cpus().length;
@@ -50,7 +50,7 @@ function main() {
      */
 	function process(method, alg) {
 		return new Promise(resolve => {
-			const worker = workers.shift();
+			const worker = /** @type {typeof workers[number]} */(workers.shift());
 			inprogress[worker.id] = {
 				worker: worker.worker,
 				resolve
@@ -74,18 +74,23 @@ function registerworker() {
 	const workerid = workerData;
 	let res = "";
 
+	const parentPort = /** @type {NonNullable<typeof _parentPort>} */ (_parentPort);
+
 	parentPort.on("message", ({ alg, method }) => {
 		switch (method) {
 		case "single":
+			// @ts-expect-error
 			res = Algebrite.run(alg).toString();
 			break;
 		case "multi":
+			// @ts-expect-error
 			alg.forEach(i => res = Algebrite.run(i).toString());
 			break;
 		default:
 			res = "<@379800645571575810> made a mistake in her code";
 		}
 
+		// @ts-expect-error
 		Algebrite.clearall();
 		parentPort.postMessage({
 			res,
