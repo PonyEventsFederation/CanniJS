@@ -69,10 +69,7 @@ module.exports = class Solver extends Module {
 					msg.channel.send(Tools.parseReply(config.solver_no_output, [msg.author]));
 				} else {
 					msg.channel.send(Tools.parseReply(config.simple_multi_solve, [msg.author, res])).catch(function(error) {
-						if (
-							Tools.msg_contains(error, "must be 2000 or fewer in length")
-							|| Tools.msg_contains(error, "must be 4000 or fewer in length")
-						) {
+						if (Tools.msg_contains(error, "must be 2000 or fewer in length")) {
 							msg.channel.send("I'm sorry. The result of your calculation is too long to be printed in Discord.");
 						}
 
