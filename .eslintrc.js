@@ -5,15 +5,21 @@ const off = "off";
 const warn = "warn";
 
 module.exports = {
+	root: true,
 	extends: "eslint:recommended",
 	env: {
 		node: true,
 		es6: true
 	},
 	parserOptions: {
-		ecmaVersion: 2020
+		ecmaVersion: 2022,
+		sourceType: "module"
 	},
 	rules: {
+		"arrow-spacing": [
+			error,
+			{ before: true, after: true }
+		],
 		"brace-style": [
 			error,
 			"1tbs",
@@ -43,6 +49,10 @@ module.exports = {
 			error,
 			"tab"
 		],
+		"keyword-spacing": [
+			error,
+			{ before: true, after: true }
+		],
 		"max-len": [
 			error,
 			{
@@ -65,19 +75,33 @@ module.exports = {
 		"no-console": warn,
 		"no-empty-function": error,
 		"no-floating-decimal": error,
-		"no-inline-comments": error,
+		"no-inline-comments": [
+			error,
+			// jsdoc comments
+			{ ignorePattern: "@type" }
+		],
 		"no-lonely-if": error,
 		"no-multi-spaces": error,
 		"no-multiple-empty-lines": [
 			error,
 			{
-				max: 2,
+				max: 1,
 				maxEOF: 0,
 				maxBOF: 0
 			}
 		],
 		"no-shadow": off,
 		"no-trailing-spaces": error,
+		"no-undef": off,
+		"no-unused-vars": [
+			error,
+			{
+				varsIgnorePattern: "^_",
+				argsIgnorePattern: "^_",
+				destructuredArrayIgnorePattern: "^_",
+				caughtErrorsIgnorePattern: "^_"
+			}
+		],
 		"no-var": error,
 		"object-curly-spacing": [
 			error,
@@ -122,6 +146,10 @@ module.exports = {
 		"spaced-comment": [
 			error,
 			always
+		],
+		"switch-colon-spacing": [
+			error,
+			{ before: false, after: true }
 		],
 		"yoda": [
 			error,
