@@ -5,6 +5,7 @@ const off = "off";
 const warn = "warn";
 
 module.exports = {
+	root: true,
 	extends: "eslint:recommended",
 	env: {
 		node: true,
