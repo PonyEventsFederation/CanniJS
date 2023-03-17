@@ -1,17 +1,20 @@
-"use strict";
-// @IMPORTS
-const Application = require("./lib/Application");
-const stage = (process.env.STAGE || process.env.NODE_ENV || "dev").toLowerCase();
+import Application from "./lib/Application.js";
+import events from "events";
+import path from "path";
+import url from "url";
 
-require("events").defaultMaxListeners = 50;
+const stage = (process.env["STAGE"] || process.env["NODE_ENV"] || "dev").toLowerCase();
 
-if (stage == "dev") require("dotenv").config();
+events.defaultMaxListeners = 50;
 
+if (stage == "dev") await import("dotenv").then(d => d.config());
+
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 Application.configure({
 	rootDir: __dirname,
 	modules_path: __dirname + "/modules",
 	config_path: __dirname + "/config",
-	stage: stage,
+	stage,
 	logLevelConsole: stage == "dev" ? "debug" : "info",
 	logLevelFile: stage == "dev" ? "info" : "info",
 	logLevelRemote: stage == "dev" ? "debug" : "info",
@@ -56,14 +59,14 @@ const modules = [
 ];
 
 // remove all disabled modules
-const disabledModules = process.env.DISABLED_MODULES ? process.env.DISABLED_MODULES.split(",").map(m => m.trim()) : [];
+const disabledModules = process.env["DISABLED_MODULES"] ? process.env["DISABLED_MODULES"].split(",").map(m => m.trim()) : [];
 disabledModules.forEach(module => {
 	const i = modules.indexOf(module);
 	i !== -1 && modules.splice(i, 1);
 });
 
 // add all enabled modules
-const enabledModules = process.env.ENABLED_MODULES ? process.env.ENABLED_MODULES.split(",").map(m => m.trim()) : [];
+const enabledModules = process.env["ENABLED_MODULES"] ? process.env["ENABLED_MODULES"].split(",").map(m => m.trim()) : [];
 enabledModules.forEach(module => !modules.includes(module) && modules.push(module));
 
 modules.forEach(module => Application.registerModule(module));
