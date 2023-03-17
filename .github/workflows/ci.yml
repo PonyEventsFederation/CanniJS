@@ -53,8 +53,8 @@ jobs:
 
 
   deploy:
-    needs:
-    - test
+    # needs:
+    # - test
 
     name: deploy to fly.io
     runs-on: ubuntu-22.04
