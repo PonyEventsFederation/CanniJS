@@ -14,7 +14,7 @@
 	"engines": {
 		"node": "18.4.0"
 	},
-	"packageManager": "pnpm@7.6.0",
+	"packageManager": "pnpm@7.28.0",
 	"dependencies": {
 		"@js-temporal/polyfill": "^0.4.3",
 		"algebrite": "^1.4.0",
