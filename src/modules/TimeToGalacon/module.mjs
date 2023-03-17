@@ -1,8 +1,8 @@
 import Application from "../../lib/Application.mjs";
 import Module from "../../lib/Module.mjs";
 import Promise from "bluebird";
-import moment from "moment";
 import Tools from "../../lib/Tools.mjs";
+import { Temporal } from "@js-temporal/polyfill";
 
 // Set to false in case GalaCon is cancelled.
 const active = true;
@@ -20,13 +20,7 @@ export default class CanniTimeToHype extends Module {
 				this.handleMessage(msg);
 			});
 
-			Application.modules.Discord.client.on("ready", () => {
-				setInterval(() => {
-					this.updateGalaconDate();
-				}, (this.config.updateInterval || 10) * 1000);
-			});
-
-			this.setGalaconDate();
+			this.initGalaconDate();
 
 			return resolve(this);
 		});
@@ -44,7 +38,10 @@ export default class CanniTimeToHype extends Module {
 	}
 
 	handleMessage(msg) {
-		if (Application.modules.Discord.checkUserAccess(msg.author) && msg.mentions.has(Application.modules.Discord.client.user)) {
+		if (
+			Application.modules.Discord.checkUserAccess(msg.author)
+				&& msg.mentions.has(Application.modules.Discord.client.user)
+		) {
 			if (Tools.msg_contains(msg, "when is galacon")) {
 				if (active) {
 					return this.tellMeWhen(msg);
@@ -56,11 +53,18 @@ export default class CanniTimeToHype extends Module {
 		}
 	}
 
-	setGalaconDate() {
-		this.galaconDate = !this.config.galaconDate ? moment() : moment(this.config.galaconDate);
-		// reactivated for Galacon 2021, deactivate afterwards
-		this.log.info("Set galacon date to " + this.galaconDate.format());
-		this.galaconInterval = setInterval(() => this.updateGalaconDate(), (this.config.updateInterval || 10) * 1000);
+	initGalaconDate() {
+		const [y, m, d] = this.config.galaconDate.split("-");
+		this.galaconDate = new Temporal.PlainDateTime(y, m, d);
+
+		this.berlin_tz = new Temporal.TimeZone("europe/berlin");
+		this.local_tz = Temporal.Now.timeZone();
+
+		this.log.info("Set galacon date to " + this.galaconDate.toString({ smallestUnit: "minute" }));
+		this.galaconInterval = setInterval(
+			() => this.updateGalaconDate(),
+			(this.config.updateInterval || 10) * 1000
+		);
 		this.updateGalaconDate();
 	}
 
@@ -84,18 +88,20 @@ export default class CanniTimeToHype extends Module {
 	}
 
 	getTimeRemaining() {
-		const duration = this.galaconDate.diff(moment());
-		let seconds = parseInt(duration) / 1000;
-		const days = Math.floor(seconds / (3600 * 24));
-		seconds -= days * 3600 * 24;
-		const hrs = Tools.padTime(Math.floor(seconds / 3600));
-		seconds -= hrs * 3600;
-		const minutes = Tools.padTime(Math.floor(seconds / 60));
-		seconds -= minutes * 60;
+		// @ts-expect-error
+		const local_zoned_gc_time = this.galaconDate
+			// @ts-expect-error
+			.toZonedDateTime(this.berlin_tz)
+			// @ts-expect-error
+			.withTimeZone(this.local_tz);
 
-		return {
-			days, hrs, minutes, seconds
-		};
+		const diff = local_zoned_gc_time.since(
+			Temporal.Now.zonedDateTimeISO(),
+			{ smallestUnit: "minute", largestUnit: "day" }
+		);
+		const { days, hours, minutes } = diff;
+
+		return { days, hrs: hours, minutes };
 	}
 
 	stop() {
