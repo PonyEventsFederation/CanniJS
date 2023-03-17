@@ -31,3 +31,29 @@ export default class Module {
 		});
 	}
 }
+
+/**
+ * @typedef {{
+ *    start: () => Promise<void>;
+ *    stop: () => Promise<void>;
+ * }} ModuleLifecycle
+ *
+ * @typedef {{}} ModuleInjects
+ *
+ */
+
+/**
+ * @template C
+ * @template M
+ * @typedef { (cfg: C, injects: ModuleInjects) => M & ModuleLifecycle } ModuleInnerConstructor
+ */
+
+/**
+ * @template C
+ * @template M
+ * @param { ModuleInnerConstructor<C, M> } module
+ * @return { ModuleInnerConstructor<C, M> }
+ */
+export function define_module(module) {
+	return module;
+}
