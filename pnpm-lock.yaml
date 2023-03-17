@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@js-temporal/polyfill': ^0.4.3
-  '@types/node': ^18.0.0
+  '@types/node': ^18.11.18
   '@types/ws': ^8.5.3
   algebrite: ^1.4.0
   bluebird: ^3.7.2
@@ -17,7 +17,7 @@ specifiers:
   node-fetch: ^2.6.7
   striptags: ^3.2.0
   tslib: ^2.4.1
-  tslog: ^3.3.4
+  tslog: ^4.8.2
   typescript: ^4.7.4
   winston: ^1.1.2
 
@@ -35,7 +35,7 @@ dependencies:
   node-fetch: 2.6.7
   striptags: 3.2.0
   tslib: 2.4.1
-  tslog: 3.3.4
+  tslog: 4.8.2
   winston: 1.1.2
 
 devDependencies:
@@ -220,10 +220,6 @@ packages:
       balanced-match: 1.0.2
       concat-map: 0.0.1
     dev: true
-
-  /buffer-from/1.1.2:
-    resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
-    dev: false
 
   /callsites/3.1.0:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
@@ -866,18 +862,6 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /source-map-support/0.5.21:
-    resolution: {integrity: sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w==}
-    dependencies:
-      buffer-from: 1.1.2
-      source-map: 0.6.1
-    dev: false
-
-  /source-map/0.6.1:
-    resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
-    engines: {node: '>=0.10.0'}
-    dev: false
-
   /sqlstring/2.3.1:
     resolution: {integrity: sha512-ooAzh/7dxIG5+uDik1z/Rd1vli0+38izZhGzSa34FwR7IbelPWCCKSNIl8jlL/F7ERvy8CB2jNeM1E9i9mXMAQ==}
     engines: {node: '>= 0.6'}
@@ -928,11 +912,9 @@ packages:
     resolution: {integrity: sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==}
     dev: false
 
-  /tslog/3.3.4:
-    resolution: {integrity: sha512-N0HHuHE0e/o75ALfkioFObknHR5dVchUad4F0XyFf3gXJYB++DewEzwGI/uIOM216E5a43ovnRNEeQIq9qgm4Q==}
-    engines: {node: '>=10'}
-    dependencies:
-      source-map-support: 0.5.21
+  /tslog/4.8.2:
+    resolution: {integrity: sha512-eAKIRjxfSKYLs06r1wT7oou6Uv9VN6NW9g0JPidBlqQwPBBl5+84dm7r8zSOPVq1kyfEw1P6B3/FLSpZCorAgA==}
+    engines: {node: '>=16'}
     dev: false
 
   /tweetnacl/1.0.3:
