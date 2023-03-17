@@ -2,7 +2,7 @@
 name: Other
 about: Anything else goes here
 title: "[Other] Title here"
-assignees: autumnblazey
+assignees: Meadowsys
 ---
 
 ### Describe your issue

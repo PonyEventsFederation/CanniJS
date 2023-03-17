@@ -3,7 +3,7 @@ name: Feature request
 about: Suggest an idea for Canni
 title: "[Feature] Title here"
 labels: enhancement
-assignees: autumnblazey
+assignees: Meadowsys
 ---
 
 ### Describe the feature

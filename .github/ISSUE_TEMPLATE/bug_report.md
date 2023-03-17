@@ -3,7 +3,7 @@ name: Bug report
 about: Create a report to help improve Canni
 title: "[Bug] Title here"
 labels: bug
-assignees: autumnblazey
+assignees: Meadowsys
 ---
 
 ### Issue description
