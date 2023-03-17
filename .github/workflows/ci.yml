@@ -54,7 +54,7 @@ jobs:
 
     name: deploy to fly.io
     runs-on: ubuntu-22.04
-    if: ${{ github.ref == 'refs/heads/master' && !contains(github.event.head_commit.message, "[no deploy]") }}
+    if: ${{ github.ref == 'refs/heads/master' && !contains(github.event.head_commit.message, '[no deploy]') }}
 
     steps:
     - name: checkout code
