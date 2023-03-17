@@ -1,4 +1,4 @@
-import Application from "./lib/Application.js";
+import Application from "./lib/Application.mjs";
 import events from "events";
 import path from "path";
 import url from "url";
@@ -7,7 +7,7 @@ const stage = (process.env["STAGE"] || process.env["NODE_ENV"] || "dev").toLower
 
 events.defaultMaxListeners = 50;
 
-if (stage == "dev") await import("dotenv").then(d => d.config());
+if (stage == "dev") await import("dotenv/config");
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 Application.configure({
@@ -69,7 +69,9 @@ disabledModules.forEach(module => {
 const enabledModules = process.env["ENABLED_MODULES"] ? process.env["ENABLED_MODULES"].split(",").map(m => m.trim()) : [];
 enabledModules.forEach(module => !modules.includes(module) && modules.push(module));
 
-modules.forEach(module => Application.registerModule(module));
+for (const module of modules) {
+	await Application.registerModule(module);
+}
 
 Application.run();
 
