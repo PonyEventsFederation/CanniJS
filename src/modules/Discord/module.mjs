@@ -4,6 +4,16 @@ import Promise from "bluebird";
 import DiscordJS from "discord.js";
 import Tools from "../../lib/Tools.mjs";
 
+/**
+ * @type { Record<string, string> }
+ */
+const static_emoji_map = {
+	gc_cannisanta: "<:gc_cannisanta:659017337269256192>",
+	gc_cannisilvester: "<:gc_cannisilvester:661576210056478764>",
+	gc_cannihug: "<:gc_cannihug:767446105553502218>",
+	gc_cannibizaam: "<:gc_cannibizaam:606565381288493077>"
+};
+
 export default class Discord extends Module {
 	init() {
 		return new Promise(resolve => {
@@ -93,14 +103,23 @@ export default class Discord extends Module {
 		this.reactions.push({ text, type, cb });
 	}
 
-	getEmoji(type) {
-		const targetEmoji = this.client.emojis.cache.find(emoji => emoji.name.toLowerCase() === type.toLowerCase());
+	/**
+	 * @param { string } emoji_name
+	 */
+	getEmoji(emoji_name) {
+		// @ts-expect-error
+		const targetEmoji = this.client.emojis.cache.find(
+			emoji => emoji.name.toLowerCase() === emoji_name.toLowerCase()
+		);
 
-		if (targetEmoji) {
-			return targetEmoji;
+		if (targetEmoji) return targetEmoji;
+
+		if (static_emoji_map[emoji_name]) {
+			this.log.debug(`emoji ${emoji_name} found in static emoji map`);
+			return static_emoji_map[emoji_name];
 		}
 
-		Application.log.error(`Emoji ${type} not found`);
+		this.log.error(`Emoji ${emoji_name} not found`);
 		return "";
 	}
 
