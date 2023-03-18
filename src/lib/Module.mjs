@@ -1,5 +1,4 @@
 import merge from "merge";
-import Promise from "bluebird";
 import * as tools from "./Tools.mjs";
 
 export default class Module {
@@ -11,25 +10,16 @@ export default class Module {
 		this.moduleConfig = moduleConfig;
 	}
 
-	init() {
-		return new Promise(resolve => {
-			this.log.debug("Initializing...");
-			resolve(this);
-		});
+	async init() {
+		this.log.debug("Initializing...");
 	}
 
-	start() {
-		return new Promise(resolve => {
-			this.log.debug("Starting...");
-			resolve(this);
-		});
+	async start() {
+		this.log.debug("Starting...");
 	}
 
-	stop() {
-		return new Promise(resolve => {
-			this.log.debug("Stopping...");
-			resolve(this);
-		});
+	async stop() {
+		this.log.debug("Stopping...");
 	}
 }
 
