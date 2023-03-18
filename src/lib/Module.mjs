@@ -22,30 +22,3 @@ export default class Module {
 		this.log.debug("Stopping...");
 	}
 }
-
-/**
- * @typedef {{
- *    start: () => Promise<void>;
- *    stop: () => Promise<void>;
- * }} ModuleLifecycle
- *
- * @typedef {{
- *    logger: import("tslog").Logger<void>
- * }} ModuleInjects
- */
-
-/**
- * @template C
- * @template M
- * @typedef { (cfg: C, injects: ModuleInjects) => M & ModuleLifecycle } ModuleInnerConstructor
- */
-
-/**
- * @template C
- * @template M
- * @param { ModuleInnerConstructor<C, M> } module
- * @return { ModuleInnerConstructor<C, M> }
- */
-export function define_module(module) {
-	return module;
-}
