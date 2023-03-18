@@ -306,37 +306,86 @@ export default Application;
 
 /**
  * @satisfies { Record<
- *    string, (
- *    mi: import("./module").ModuleInjects) => import("./module").Module
+ *    string,
+ *    (mi: import("./module").ModuleInjects) => Promise<import("./module").Module>
  * > }
  */
-const uninitialised_modules = {};
+const uninitialised_modules = {
+	thing: async () => ({
+		stop,
+		thing: () => 3,
+		other_thing: () => Symbol()
+	})
+};
 
-export const modules = init_modules(uninitialised_modules);
+/** @type { () => Promise<void> } */
+let module_start;
+/** @type { () => Promise<void> } */
+let module_stop;
+let started = false;
+
+export let modules = create_modules_promise();
+
+/**
+ * @return { ReturnType<typeof init_modules<keyof uninitialised_modules, uninitialised_modules>> }
+ */
+function create_modules_promise() {
+	return new Promise(res => {
+		module_start = async () => {
+			started = true;
+			const modules = await init_modules(uninitialised_modules);
+			res(modules);
+		};
+		module_stop = async () => {
+			for (const [_name, module] of tools.entries(await modules)) {
+				await module.stop();
+			}
+
+			modules = create_modules_promise();
+			started = false;
+		};
+	});
+}
 
 /**
  * @template { string } ModuleNames
  * @template {{
- *    [K in ModuleNames]: (mi: import("./module").ModuleInjects) => import("./module").Module
+ *    [K in ModuleNames]: (mi: import("./module").ModuleInjects)
+ *       => Promise<import("./module").Module>
  * }} T
  * @param { T } modules
- * @return {{ [K in keyof T]: ReturnType<T[K]> }}
+ * @return { Promise<{ [K in keyof T]: Awaited<ReturnType<T[K]>> }> }
  */
-function init_modules(modules) {
-	/** @type {{ [K in keyof T]: ReturnType<T[K]> }} */
+async function init_modules(modules) {
+	/** @type {{ [K in keyof T]: Awaited<ReturnType<T[K]>> }} */
 	// @ts-expect-error
 	const initialised_modules = {};
 
-	tools.entries(modules)
-		.forEach(([name, module]) => {
-			/** @type { import("./module").ModuleInjects } */
-			const mi = {
-				logger: tools.get_logger(/** @type { string } */ (name))
-			};
+	const entries = tools.entries(modules);
+	for (const [name, module] of entries) {
+		/** @type { import("./module").ModuleInjects } */
+		const mi = {
+			logger: tools.get_logger(/** @type { string } */ (name))
+		};
 
-			// @ts-expect-error
-			initialised_modules[name] = module(mi);
-		});
+		// @ts-expect-error
+		initialised_modules[name] = await module(mi);
+	}
 
 	return initialised_modules;
+}
+
+export async function start_app() {
+	if (started) return;
+	await module_start();
+}
+
+export async function stop_app() {
+	if (!started) return;
+	await module_stop();
+}
+
+export async function restart_app() {
+	if (started) await module_stop();
+	await module_start();
 }

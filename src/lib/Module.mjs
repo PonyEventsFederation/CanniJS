@@ -24,10 +24,10 @@ export default class Module {
 }
 
 global.define_module = function(mod) {
-	return (mi) => {
+	return async mi => {
 		mi.logger.debug("starting...");
 
-		const module = mod(mi);
+		const module = await mod(mi);
 
 		const old_stop = module.stop;
 		module.stop = async () => {
