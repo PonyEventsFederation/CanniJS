@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 
-import "./lib/Module.mjs";
+import "./globals.mjs";
 
 import Application from "./lib/Application.mjs";
-import * as app from "./lib/Application.mjs";
+import { start_app, stop_app } from "./lib/Application.mjs";
 import events from "events";
 import path from "path";
 import url from "url";
@@ -12,7 +12,10 @@ import url from "url";
 old_app();
 
 async function new_app() {
-	await app.start_app();
+	await start_app();
+	process.on("SIGINT", stop_app);
+	process.on("SIGTERM", stop_app);
+	process.on("exit", stop_app);
 }
 
 async function old_app() {
