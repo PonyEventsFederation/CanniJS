@@ -503,6 +503,20 @@ const Tools = {
 
 export default Tools;
 
+// typing for return: https://stackoverflow.com/a/60142095
+/**
+ * @template T
+ * @param {T} o
+ * @return { Array<{ [K in keyof T]: [K, T[K]] }[keyof T]> }
+ *
+ * { [k in K]: typeof o[k] }
+ * entries<T>(o: { [s: string]: T } | ArrayLike<T>): [string, T][];
+ */
+export function entries(o) {
+	// @ts-expect-error
+	return Object.entries(o);
+}
+
 export function get_env() {
 	if (process.env["NODE_ENV"] === "production") return "production";
 	if (process.env["NODE_ENV"] === "development") return "development";

@@ -22,3 +22,25 @@ export default class Module {
 		this.log.debug("Stopping...");
 	}
 }
+
+global.define_module = function(mod) {
+	return (mi) => {
+		mi.logger.debug("starting...");
+
+		const module = mod(mi);
+
+		const old_stop = module.stop;
+		module.stop = async () => {
+			mi.logger.debug("stopping...");
+			await old_stop();
+		};
+
+		return module;
+	};
+};
+
+global.define_stop = function(stop) {
+	return stop;
+};
+
+global.stop = Promise.resolve;

@@ -303,3 +303,40 @@ const Application = {
 };
 
 export default Application;
+
+/**
+ * @satisfies { Record<
+ *    string, (
+ *    mi: import("./module").ModuleInjects) => import("./module").Module
+ * > }
+ */
+const uninitialised_modules = {};
+
+export const modules = init_modules(uninitialised_modules);
+
+/**
+ * @template { string } ModuleNames
+ * @template {{
+ *    [K in ModuleNames]: (mi: import("./module").ModuleInjects) => import("./module").Module
+ * }} T
+ * @param { T } modules
+ * @return {{ [K in keyof T]: ReturnType<T[K]> }}
+ */
+function init_modules(modules) {
+	/** @type {{ [K in keyof T]: ReturnType<T[K]> }} */
+	// @ts-expect-error
+	const initialised_modules = {};
+
+	tools.entries(modules)
+		.forEach(([name, module]) => {
+			/** @type { import("./module").ModuleInjects } */
+			const mi = {
+				logger: tools.get_logger(/** @type { string } */ (name))
+			};
+
+			// @ts-expect-error
+			initialised_modules[name] = module(mi);
+		});
+
+	return initialised_modules;
+}
