@@ -4,6 +4,7 @@ import Promise from "bluebird";
 import moment from "moment";
 import htmlEntities from "html-entities";
 import striptags from "striptags";
+import * as tslog from "tslog";
 
 const Tools = {
 	getConfigValueByPath(config, path, defaultValue = null) {
@@ -501,3 +502,31 @@ const Tools = {
 };
 
 export default Tools;
+
+export function get_env() {
+	if (process.env["NODE_ENV"] === "production") return "production";
+	if (process.env["NODE_ENV"] === "development") return "development";
+	if (process.env["NODE_ENV"] === "development-silly") return "development-silly";
+	return "development";
+}
+
+function get_log_level() {
+	const env = get_env();
+	switch (env) {
+		case "production": return 3;
+		case "development": return 2;
+		case "development-silly": return 0;
+	}
+}
+
+/**
+ * @param { string } name
+ */
+export function get_logger(name) {
+	return new tslog.Logger({
+		name,
+		minLevel: get_log_level(),
+		prettyLogTimeZone: "local",
+		prettyLogTemplate: "{{yyyy}}-{{mm}}-{{dd}} {{hh}}:{{MM}}:{{ss}}.{{mm}}\t{{logLevelName}}\t{{name}} ({{filePathWithLine}}) "
+	});
+}

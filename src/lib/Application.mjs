@@ -1,9 +1,10 @@
 import fs from "fs";
-import winston from "winston";
-import moment from "moment";
 import merge from "merge";
+import * as module from "./Module.mjs";
+import moment from "moment";
 import { EventEmitter } from "events";
 import Tools from "./Tools.mjs";
+import * as tools from "./Tools.mjs";
 const emitterInstance = new EventEmitter();
 
 const Application = {
@@ -35,20 +36,6 @@ const Application = {
 		this.moduleObjs = [];
 		this.modules = {};
 
-		winston.setLevels({
-			debug: 0,
-			info: 1,
-			warn: 2,
-			error: 3
-		});
-
-		winston.addColors({
-			debug: "blue",
-			info: "grey",
-			warn: "yellow",
-			error: "red"
-		});
-
 		this.log = this.getLogger("application");
 		this.scriptName = null;
 
@@ -70,26 +57,30 @@ const Application = {
 		return this.running || false;
 	},
 
+	/**
+	 * @param { string } name
+	 */
 	getLogger(name) {
-		let transports = [];
-		if (!Application.config.logDisabled) {
-			transports = [
-				new winston.transports.Console({
-					level: Application.config.logLevelConsole,
-					colorize: true,
-					json: false,
-					label: name.toUpperCase(),
-					timestamp: () => {
-						return moment().format(this.config.logformat);
-					}
-				})
-			];
+		// let transports = [];
+		// if (!Application.config.logDisabled) {
+		// 	transports = [
+		// 		new winston.transports.Console({
+		// 			level: Application.config.logLevelConsole,
+		// 			colorize: true,
+		// 			json: false,
+		// 			label: name.toUpperCase(),
+		// 			timestamp: () => {
+		// 				return moment().format(this.config.logformat);
+		// 			}
+		// 		})
+		// 	];
 
-		}
+		// }
 
-		return new (winston.Logger)({
-			transports: transports
-		});
+		// return new (winston.Logger)({
+		// 	transports: transports
+		// });
+		return tools.get_logger(name);
 	},
 
 	loadModuleConfig(moduleName) {
@@ -258,6 +249,7 @@ export default Application;
  * @template M
  * @typedef {import("./Module.mjs").ModuleInnerConstructor<C, M>} ModuleInnerConstructor
  */
+
 /**
  * @template { string } ModuleNames
  * @template {{ [k in ModuleNames]: object }} ModuleCfgs
@@ -287,7 +279,10 @@ export function create_application(cfg) {
 	const modules_list = entries(cfg.modules)
 		.map(([name, construct]) => {
 			/** @type { [ModuleNames, ConstructedModules[ModuleNames]] } */
-			const constructed = [name, construct(cfg.cfg[name], {})];
+			const constructed = [name, construct(cfg.cfg[name], {
+				logger: tools.get_logger(name)
+			})];
+
 			return constructed;
 		});
 
@@ -299,3 +294,8 @@ export function create_application(cfg) {
 
 	return { modules };
 }
+
+export const new_application = create_application({
+	cfg: {},
+	modules: {}
+});

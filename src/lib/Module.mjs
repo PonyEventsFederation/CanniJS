@@ -1,12 +1,13 @@
-import Application from "./Application.mjs";
 import merge from "merge";
 import Promise from "bluebird";
+import * as tools from "./Tools.mjs";
 
 export default class Module {
+	// @ts-expect-error
 	constructor(name, config, moduleConfig) {
 		this.name = name;
 		this.config = merge.recursive({}, config);
-		this.log = Application.getLogger(this.name);
+		this.log = tools.get_logger(this.name);
 		this.moduleConfig = moduleConfig;
 	}
 
@@ -38,8 +39,9 @@ export default class Module {
  *    stop: () => Promise<void>;
  * }} ModuleLifecycle
  *
- * @typedef {{}} ModuleInjects
- *
+ * @typedef {{
+ *    logger: import("tslog").Logger<void>
+ * }} ModuleInjects
  */
 
 /**
