@@ -21,7 +21,7 @@ export default class Boop extends Module {
 			this.megaon = false;
 
 			if (Tools.test_ENV("WACHMANN_ID")) {
-				wachmann_id = process.env.WACHMANN_ID;
+				wachmann_id = process.env["WACHMANN_ID"];
 			}
 
 			Application.modules.Discord.client.on("message", (msg) => {

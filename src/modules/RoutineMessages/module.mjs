@@ -13,7 +13,7 @@ export default class RoutineMessages extends Module {
 			this.log.debug("Starting...");
 
 			if (Tools.test_ENV("GENERAL_CHAT")) {
-				target = Application.getClient().channels.fetch(process.env.GENERAL_CHAT);
+				target = Application.getClient().channels.fetch(process.env["GENERAL_CHAT"]);
 			}
 
 			interval = this.config.m_time_imterval;

@@ -44,7 +44,7 @@ export default class Discord extends Module {
 
 			this.authToken = this.config.token;
 			if (this.authToken.toLowerCase() === "env") {
-				this.authToken = process.env.BOT_TOKEN;
+				this.authToken = process.env["BOT_TOKEN"];
 			}
 
 			return resolve(this);

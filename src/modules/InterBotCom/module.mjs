@@ -11,7 +11,7 @@ export default class InterBotCom extends Module {
 			this.log.debug("Starting...");
 
 			if (Tools.test_ENV("WACHMANN_ID")) {
-				wachmann_id = process.env.WACHMANN_ID;
+				wachmann_id = process.env["WACHMANN_ID"];
 			}
 
 			Application.modules.Discord.client.on("message", (msg) => {

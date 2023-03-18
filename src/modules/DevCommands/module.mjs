@@ -25,7 +25,7 @@ export default class DevC extends Module {
 			};
 
 			if (Tools.test_ENV("MAIN_SERVER")) {
-				guild = Tools.guild_by_id(Application.getClient(), process.env.MAIN_SERVER);
+				guild = Tools.guild_by_id(Application.getClient(), process.env["MAIN_SERVER"]);
 			}
 
 			this.load_ids();

@@ -497,7 +497,7 @@ const Tools = {
 	},
 
 	allows_command_use(member) {
-		return !member.roles?.cache.get(process.env.NO_COMMAND_ROLE || "962689871305121813");
+		return !member.roles?.cache.get(process.env["NO_COMMAND_ROLE"] || "962689871305121813");
 	}
 };
 
