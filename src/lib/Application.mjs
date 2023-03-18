@@ -14,7 +14,6 @@ const Application = {
 				// i needed an event, its used in the solver module
 				// to know when to remove worker pool
 			}, (err) => {
-				// @ts-expect-error
 				this.log.error(err);
 				process.exit(1);
 			});
@@ -29,25 +28,19 @@ const Application = {
 			config.stage = config.stage.toLowerCase();
 		}
 
-		// @ts-expect-error
 		this.config = merge.recursive({
 			logformat: "dddd, MMMM Do YYYY, h:mm:ss a",
 			logLevelConsole: "debug",
 			logDisabled: false,
 			quiet: false
 		}, config);
-		// @ts-expect-error
 		this.moduleObjs = [];
-		// @ts-expect-error
 		this.modules = {};
 
-		// @ts-expect-error
 		this.log = this.getLogger("application");
-		// @ts-expect-error
 		this.scriptName = null;
 
 		process.on("uncaughtException", (err) => {
-			// @ts-expect-error
 			this.log.error(err);
 			process.exit(1);
 		});
@@ -57,7 +50,6 @@ const Application = {
 	 * @return { boolean }
 	 */
 	isDev() {
-		// @ts-expect-error
 		return this.config.stage === "dev" || this.config.stage === "development";
 	},
 
@@ -65,7 +57,6 @@ const Application = {
 	 * @return { boolean }
 	 */
 	isProd() {
-		// @ts-expect-error
 		return this.config.stage === "prod" || this.config.stage === "production";
 	},
 
@@ -73,7 +64,6 @@ const Application = {
 	 * @return { boolean }
 	 */
 	isRunning() {
-		// @ts-expect-error
 		return this.running || false;
 	},
 
@@ -107,9 +97,7 @@ const Application = {
 	 * @param { string } moduleName
 	 */
 	loadModuleConfig(moduleName) {
-		// @ts-expect-error
 		const configJsonLocation = this.config.config_path + "/" + moduleName + ".json";
-		// @ts-expect-error
 		const localConfigJsonLocation = this.config.config_path + "/" + moduleName + ".local.json";
 		let localConfig = {};
 
@@ -122,14 +110,12 @@ const Application = {
 			let stagedConfig = {};
 			let configHasStages = false;
 
-			// @ts-expect-error
 			for (const stage of this.config.stages) {
 				if (config[stage]) {
 					configHasStages = true;
 					stagedConfig = merge.recursive(stagedConfig, config[stage]);
 				}
 
-				// @ts-expect-error
 				if (stage == this.config.stage) {
 					break;
 				}
@@ -157,7 +143,6 @@ const Application = {
 	 * @param { string } moduleName
 	 */
 	async registerModule(moduleName) {
-		// @ts-expect-error
 		const mainModuleFile = this.config.modules_path + "/" + moduleName + "/module.mjs";
 
 		if (!fs.existsSync(mainModuleFile)) {
@@ -169,7 +154,6 @@ const Application = {
 		const moduleObj = {
 			name: moduleName,
 			mainPath: mainModuleFile,
-			// @ts-expect-error
 			rootPath: this.config.modules_path + "/" + moduleName,
 			config: moduleConfig
 		};
@@ -177,32 +161,25 @@ const Application = {
 		const moduleClass = await import(mainModuleFile);
 		const moduleInstance = new moduleClass.default(moduleName, moduleConfig, moduleObj);
 
-		// @ts-expect-error
 		moduleObj.instance = moduleInstance;
 
-		// @ts-expect-error
 		this.moduleObjs.push(moduleObj);
-		// @ts-expect-error
 		this.modules[moduleName] = moduleInstance;
 
 		return moduleInstance;
 	},
 
 	async initModules() {
-		// @ts-expect-error
 		this.log.info("Initializing Modules");
 
-		// @ts-expect-error
 		for (const moduleObj of this.moduleObjs) {
 			await moduleObj.instance.init();
 		}
 	},
 
 	async startModules() {
-		// @ts-expect-error
 		this.log.info("Starting Modules");
 
-		// @ts-expect-error
 		for (const moduleObj of this.moduleObjs) {
 			await moduleObj.instance.start();
 		}
@@ -210,14 +187,10 @@ const Application = {
 
 	stopModules() {
 		return new Promise((resolve, reject) => {
-			// @ts-expect-error
 			this.log.info("Stopping Modules");
 
-			// @ts-expect-error
 			Promise.all(this.moduleObjs.map(moduleObj => moduleObj.instance.stop())).then(() => {
-				// @ts-expect-error
 				this.moduleObjs = null;
-				// @ts-expect-error
 				this.modules = null;
 				// @ts-expect-error
 				resolve();
@@ -226,7 +199,6 @@ const Application = {
 	},
 
 	loadApplicationConfigs() {
-		// @ts-expect-error
 		const rootDir = Application.config.config_path + "/application";
 		const files = fs.readdirSync(rootDir);
 		const applicationConfig = {};
@@ -237,11 +209,9 @@ const Application = {
 			}
 			const config = Tools.loadCommentedConfigFile(rootDir + "/" + file);
 
-			// @ts-expect-error
 			applicationConfig[file.replace(/^(.*?)\.json$/, "$1")] = config;
 		}
 
-		// @ts-expect-error
 		this.appConfigs = applicationConfig;
 	},
 
@@ -250,10 +220,8 @@ const Application = {
 		await this.initModules();
 		await this.startModules();
 
-		// @ts-expect-error
 		this.log.info("Application started");
 
-		// @ts-expect-error
 		this.running = true;
 	},
 
@@ -280,7 +248,6 @@ const Application = {
 	 * @return { import("discord.js").Client }
 	 */
 	getClient() {
-		// @ts-expect-error
 		return Application.modules.Discord.client;
 	},
 
@@ -288,7 +255,6 @@ const Application = {
 	 * @return { string }
 	 */
 	getClientId() {
-		// @ts-expect-error
 		return Application.modules.Discord.client.user.id;
 	},
 
@@ -297,7 +263,6 @@ const Application = {
 	 * @return {import("discord.js").User}
 	 */
 	getUser(userId) {
-		// @ts-expect-error
 		return Application.modules.Discord.client.users.fetch(userId);
 	}
 };
