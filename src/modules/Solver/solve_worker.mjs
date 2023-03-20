@@ -58,7 +58,6 @@ function main() {
 	}
 
 	Application.emitter.on("stop", () => {
-		console.log("AAAAA".repeat(500));
 		workers.forEach(({ worker }) => worker.terminate());
 		Object.values(inprogress).forEach(({ worker }) => worker.terminate());
 	});
