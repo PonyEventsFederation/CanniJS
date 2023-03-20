@@ -1,42 +1,8 @@
-import merge from "merge";
-import * as tools from "./Tools.mjs";
+// Q: Where is this `./module.js` file?????????
+// A: Its actually `./module.d.ts`. Microsoft, why the fuck.
+//    No, your excuse of "not wanting to rewrite import paths" is not valid.
 
-export default class OldModule {
-	constructor(name, config, moduleConfig) {
-		this.name = name;
-		this.config = merge.recursive({}, config);
-		this.log = tools.get_logger(this.name);
-		this.moduleConfig = moduleConfig;
-	}
-
-	async init() {
-		this.log.debug("Initializing...");
-	}
-
-	async start() {
-		this.log.debug("Starting...");
-	}
-
-	async stop() {
-		this.log.debug("Stopping...");
-	}
-}
-
-/**
- * @typedef {{
- *    stop: Stop;
- * }} Module
- * @typedef { () => Promise<void> } Stop
- * @typedef {{
- *    logger: import("tslog").Logger<void>
- * }} ModuleInjects
- */
-
-/**
- * @template { import("./module").Module } T
- * @param { (mi: ModuleInjects) => Promise<T> } mod
- * @return { (mi: ModuleInjects) => Promise<T> }
- */
+/** @type { import("./module.js").define_module } */
 export function define_module(mod) {
 	return async mi => {
 		mi.logger.info("starting...");
@@ -53,10 +19,10 @@ export function define_module(mod) {
 	};
 };
 
-/** @type { (stop: Stop) => Stop } */
+/** @type { import("./module.js").define_stop } */
 export function define_stop(stop) {
 	return stop;
 };
 
-/** @type { Stop } */
+/** @type { import("./module.js").Stop } */
 export const stop = Promise.resolve;

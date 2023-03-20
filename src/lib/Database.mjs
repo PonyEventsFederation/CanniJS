@@ -1,8 +1,8 @@
-import Application from "./Application.mjs";
+import * as tools from "./Tools.mjs";
 import Promise from "bluebird";
 import { Temporal } from "@js-temporal/polyfill";
 
-const logger = Application.getLogger("database");
+const logger = tools.get_logger("database");
 
 /**
  * @type {{ [k: string]: Array<string> }}
