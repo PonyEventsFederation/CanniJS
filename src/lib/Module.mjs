@@ -39,13 +39,13 @@ export default class OldModule {
  */
 export function define_module(mod) {
 	return async mi => {
-		mi.logger.debug("starting...");
+		mi.logger.info("starting...");
 
 		const module = await mod(mi);
 
 		const old_stop = module.stop;
 		module.stop = async () => {
-			mi.logger.debug("stopping...");
+			mi.logger.info("stopping...");
 			await old_stop();
 		};
 
