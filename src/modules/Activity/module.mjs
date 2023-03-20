@@ -1,6 +1,5 @@
 import { define_module, stop } from "../../lib/Module.mjs";
 import * as app from "../../lib/Application.mjs";
-import Promise from "bluebird";
 import Tools from "../../lib/Tools.mjs";
 const probability = 0.25;
 

@@ -4,7 +4,6 @@ import * as app from "../../lib/Application.mjs";
 import app_config from "../../config/application/config.json" assert { type: "json" };
 import config from "../../config/Bap.json" assert{ type: "json" };
 
-import Promise from "bluebird";
 import Tools from "../../lib/Tools.mjs";
 const bapDeleteTimeout = 40000;
 /** @type { string } */

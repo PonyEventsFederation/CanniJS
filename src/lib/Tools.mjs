@@ -1,6 +1,5 @@
 import Application from "./Application.mjs";
 import fs from "fs";
-import Promise from "bluebird";
 import moment from "moment";
 import htmlEntities from "html-entities";
 import striptags from "striptags";
@@ -543,4 +542,12 @@ export function get_logger(name) {
 		prettyLogTimeZone: "local",
 		prettyLogTemplate: "{{yyyy}}-{{mm}}-{{dd}} {{hh}}:{{MM}}:{{ss}}.{{mm}}\t{{logLevelName}}\t{{name}} ({{filePathWithLine}}) "
 	});
+}
+
+/**
+ * @param { number } ms number of ms to sleep for
+ * @return { Promise<void> }
+ */
+export function sleep(ms) {
+	return new global.Promise(res => setTimeout(res, ms));
 }

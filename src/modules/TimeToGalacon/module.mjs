@@ -1,7 +1,6 @@
 import { define_module, stop } from "../../lib/Module.mjs";
 import Application from "../../lib/Application.mjs";
 import Module from "../../lib/Module.mjs";
-import Promise from "bluebird";
 import Tools from "../../lib/Tools.mjs";
 import { Temporal } from "@js-temporal/polyfill";
 

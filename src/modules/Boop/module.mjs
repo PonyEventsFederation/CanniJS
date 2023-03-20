@@ -4,7 +4,6 @@ import * as app from "../../lib/Application.mjs";
 import app_config from "../../config/application/config.json" assert { type: "json" };
 import Database from "../../lib/Database.mjs";
 import Module from "../../lib/Module.mjs";
-import Promise from "bluebird";
 import Tools from "../../lib/Tools.mjs";
 import moment from "moment";
 import config from "../../config/Boop.json" assert { type: "json" };
