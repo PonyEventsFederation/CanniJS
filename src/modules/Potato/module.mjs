@@ -5,7 +5,7 @@ import Module from "../../lib/Module.mjs";
 import Promise from "bluebird";
 import Tools from "../../lib/Tools.mjs";
 
-import config from "../../config/Potato.json";
+import config from "../../config/Potato.json" assert { type: "json" };
 
 export const potato = define_module(async mi => {
 	const smartato_emo = (await app.modules).discord.get_emoji("gc_smartato");

@@ -5,7 +5,7 @@ import Module from "../../lib/Module.mjs";
 import Promise from "bluebird";
 import Tools from "../../lib/Tools.mjs";
 
-import config from "../../config/WorstPony.json";
+import config from "../../config/WorstPony.json" assert { type: "json" };
 
 export const worst_pony = define_module(async mi => {
 	(await app.modules).discord.client.on("message", async msg => {

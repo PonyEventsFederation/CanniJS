@@ -78,7 +78,7 @@ export const overload = define_module(async mi => {
 		(await app.modules).discord.client.user.setStatus("idle");
 		await Tools.listSender(msg.channel, answer, [2000, 4000, 4000], [config.downtime]);
 		(await app.modules).discord.client.user.setStatus("dnd");
-		setTimeout(function() {
+		setTimeout(async function() {
 			(await app.modules).discord.client.user.setPresence({ status: "online" });
 			overload_on = false;
 			msg.channel.send(Tools.parseReply(online));
