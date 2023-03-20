@@ -1,4 +1,4 @@
-import { define_module } from "../../lib/Module.mjs";
+import { define_module, stop } from "../../lib/Module.mjs";
 import Application from "../../lib/Application.mjs";
 import * as app from "../../lib/Application.mjs";
 import app_config from "../../config/application/config.json" assert { type: "json" };
