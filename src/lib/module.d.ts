@@ -9,7 +9,7 @@ export type ModuleInjects = {
 };
 
 declare global {
-	function define_module<T extends Module>(mod: (mi: ModuleInjects) => Promise<T>): (mi: ModuleInjects) => Promise<T>
+	function define_module<T extends Module>(mod: (mi: ModuleInjects) => Promise<T>): (mi: ModuleInjects) => Promise<T>;
 	function define_stop(stop: Stop): Stop;
 	function stop(): Promise<void>;
 }
