@@ -51,7 +51,17 @@ export const discord = define_module(async mi => {
 	first_activity();
 
 	return {
-		stop
+		stop,
+		add_command,
+		check_self,
+		check_user_access,
+		client,
+		control_talked_recently,
+		get_emoji,
+		has_cooldown,
+		send_cooldown_message,
+		set_cooldown,
+		set_message_sent
 	};
 
 	async function stop() {
@@ -237,6 +247,10 @@ export const discord = define_module(async mi => {
 				name: msg
 			}
 		});
+	}
+
+	function check_self(id) {
+		return id === client.user?.id;
 	}
 });
 

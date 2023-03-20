@@ -269,6 +269,35 @@ const Application = {
 
 export default Application;
 
+import { activity } from "../modules/Activity/module.mjs";
+import { assfart } from "../modules/Assfart/module.mjs";
+import { bap } from "../modules/Bap/module.mjs";
+import { best_pony } from "../modules/BestPony/module.mjs";
+import { bizaam } from "../modules/Bizaam/module.mjs";
+import { boop } from "../modules/Boop/module.mjs";
+import { compliment } from "../modules/Compliment/module.mjs";
+import { dev_commands } from "../modules/DevCommands/module.mjs";
+import { discord } from "../modules/Discord/module.mjs";
+import { fanta } from "../modules/Fanta/module.mjs";
+import { gamer_canni } from "../modules/GamerCanni/module.mjs";
+import { greetings } from "../modules/Greetings/module.mjs";
+import { help } from "../modules/Help/module.mjs";
+import { holiday } from "../modules/Holiday/module.mjs";
+import { hug } from "../modules/Hug/module.mjs";
+import { hype } from "../modules/Hype/module.mjs";
+import { ignore } from "../modules/Ignore/module.mjs";
+import { inter_bot_com } from "../modules/InterBotCom/module.mjs";
+import { mention_canni } from "../modules/MentionCanni/module.mjs";
+import { no_message_processor } from "../modules/NoMessageProcessor/module.mjs";
+import { overload } from "../modules/Overload/module.mjs";
+import { potato } from "../modules/Potato/module.mjs";
+import { routine_messages } from "../modules/RoutineMessages/module.mjs";
+import { solver } from "../modules/Solver/module.mjs";
+import { time_to_galacon } from "../modules/TimeToGalacon/module.mjs";
+import { user_joined } from "../modules/UserJoined/module.mjs";
+import { worst_pony } from "../modules/WorstPony/module.mjs";
+
+
 /**
  * @satisfies { Record<
  *    string,
@@ -276,11 +305,33 @@ export default Application;
  * > }
  */
 const uninitialised_modules = {
-	thing: async () => ({
-		stop,
-		thing: () => 3,
-		other_thing: () => Symbol()
-	})
+	activity,
+	assfart,
+	bap,
+	best_pony,
+	bizaam,
+	boop,
+	compliment,
+	dev_commands,
+	discord,
+	fanta,
+	gamer_canni,
+	greetings,
+	help,
+	holiday,
+	hug,
+	hype,
+	ignore,
+	inter_bot_com,
+	mention_canni,
+	no_message_processor,
+	overload,
+	potato,
+	routine_messages,
+	solver,
+	time_to_galacon,
+	user_joined,
+	worst_pony
 };
 
 /** @type { () => Promise<void> } */
