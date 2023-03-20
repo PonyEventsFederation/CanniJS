@@ -1,8 +1,7 @@
 import merge from "merge";
 import * as tools from "./Tools.mjs";
 
-export default class Module {
-	// @ts-expect-error
+export default class OldModule {
 	constructor(name, config, moduleConfig) {
 		this.name = name;
 		this.config = merge.recursive({}, config);
@@ -23,7 +22,22 @@ export default class Module {
 	}
 }
 
-global.define_module = function(mod) {
+/**
+ * @typedef {{
+ *    stop: Stop;
+ * }} Module
+ * @typedef { () => Promise<void> } Stop
+ * @typedef {{
+ *    logger: import("tslog").Logger<void>
+ * }} ModuleInjects
+ */
+
+/**
+ * @template { import("./module").Module } T
+ * @param { (mi: ModuleInjects) => Promise<T> } mod
+ * @return { (mi: ModuleInjects) => Promise<T> }
+ */
+export function define_module(mod) {
 	return async mi => {
 		mi.logger.debug("starting...");
 
@@ -39,8 +53,10 @@ global.define_module = function(mod) {
 	};
 };
 
-global.define_stop = function(stop) {
+/** @type { (stop: Stop) => Stop } */
+export function define_stop(stop) {
 	return stop;
 };
 
-global.stop = Promise.resolve;
+/** @type { Stop } */
+export const stop = Promise.resolve;

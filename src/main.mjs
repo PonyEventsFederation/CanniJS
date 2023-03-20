@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-vars */
 
-import "./globals.mjs";
-
 import Application from "./lib/Application.mjs";
 import { start_app, stop_app } from "./lib/Application.mjs";
 import events from "events";
@@ -12,6 +10,9 @@ import url from "url";
 old_app();
 
 async function new_app() {
+	// TODO make this dev only
+	await import("dotenv/config");
+
 	await start_app();
 	process.on("SIGINT", stop_app);
 	process.on("SIGTERM", stop_app);

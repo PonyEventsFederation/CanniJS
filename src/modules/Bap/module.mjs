@@ -1,3 +1,4 @@
+import { define_module } from "../../lib/Module.mjs";
 import Application from "../../lib/Application.mjs";
 import * as app from "../../lib/Application.mjs";
 
