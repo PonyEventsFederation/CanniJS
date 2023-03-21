@@ -7,12 +7,17 @@ export function define_module(mod) {
 	return async mi => {
 		mi.logger.info("starting...");
 
+		const done = create_deadlock_detector("initialisation", mi.logger);
 		const module = await mod(mi);
+		done();
 
 		const old_stop = module.stop;
 		module.stop = async () => {
 			mi.logger.info("stopping...");
+
+			const done = create_deadlock_detector("stop", mi.logger);
 			await old_stop();
+			done();
 		};
 
 		return module;
@@ -26,3 +31,21 @@ export function define_stop(stop) {
 
 /** @type { import("./module.js").Stop } */
 export const stop = Promise.resolve;
+
+/**
+ * @param { string } thing
+ * @param { import("tslog").Logger<void> } logger
+ */
+function create_deadlock_detector(thing, logger) {
+	let counter = 0;
+	const deadlock_detector = setInterval(() => {
+		logger.fatal(`${thing}: promise has not resolved, potential deadlock? (~${++counter * 10}s)`);
+	}, 10_000);
+
+	return () => {
+		clearInterval(deadlock_detector)
+		if (counter > 0) {
+			logger.info(`${thing}: promise resolved, done, all is good`);
+		}
+	};
+}
