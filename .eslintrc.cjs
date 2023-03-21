@@ -1,3 +1,5 @@
+const path = require("path");
+
 const always = "always";
 const error = "error";
 const never = "never";
@@ -6,14 +8,19 @@ const warn = "warn";
 
 module.exports = {
 	root: true,
-	extends: "eslint:recommended",
+	extends: [
+		"eslint:recommended",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:@typescript-eslint/recommended-requiring-type-checking",
+		"plugin:@typescript-eslint/strict"
+	],
 	env: {
 		node: true,
 		es6: true
 	},
+	parser: "@typescript-eslint/parser",
 	parserOptions: {
-		ecmaVersion: 2022,
-		sourceType: "module"
+		project: path.resolve("./tsconfig.json")
 	},
 	rules: {
 		"arrow-spacing": [
