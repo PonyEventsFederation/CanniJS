@@ -2,7 +2,6 @@ import { Worker, parentPort as _parentPort, isMainThread, workerData } from "wor
 import os from "os";
 import Algebrite from "algebrite";
 // const Promise = require("bluebird");
-import Application from "../../lib/Application.mjs";
 
 // it is safe to cast this into this type because this module will only ever
 // be required from the main thread so main will always run so we good
@@ -57,10 +56,11 @@ function main() {
 		});
 	}
 
-	Application.emitter.on("stop", () => {
-		workers.forEach(({ worker }) => worker.terminate());
-		Object.values(inprogress).forEach(({ worker }) => worker.terminate());
-	});
+	// Application.emitter.on("stop", () => {
+	// 	console.log("AAAAA".repeat(500));
+	// 	workers.forEach(({ worker }) => worker.terminate());
+	// 	Object.values(inprogress).forEach(({ worker }) => worker.terminate());
+	// });
 
 	return process;
 }

@@ -1,6 +1,11 @@
 /* eslint-disable no-unused-vars */
 
 import { start_app, stop_app } from "./lib/Application.mjs";
+import events from "events";
+
+// TODO this is probably bad? need investigate
+// (as part of general cleanup too)
+events.setMaxListeners(50);
 
 // TODO make this dev only
 await import("dotenv/config");

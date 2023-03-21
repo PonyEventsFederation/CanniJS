@@ -1,9 +1,10 @@
-import Application from "./Application.mjs";
 import fs from "fs";
 import moment from "moment";
 import htmlEntities from "html-entities";
 import striptags from "striptags";
 import * as tslog from "tslog";
+
+const logger = get_logger("tools");
 
 const Tools = {
 	getConfigValueByPath(config, path, defaultValue = null) {
@@ -69,7 +70,7 @@ const Tools = {
 		try {
 			return this.parseCommentedJson(fs.readFileSync(path));
 		} catch (e) {
-			Application.log.error("Error loading JSON " + path);
+			logger.error("Error loading JSON " + path);
 		}
 	},
 
@@ -88,7 +89,7 @@ const Tools = {
 				return json;
 			}
 		} catch (e) {
-			Application.log.error(e);
+			logger.error(e);
 		}
 
 		const tokenizer = /'|(\/\*)|(\*\/)|(\/\/)|\n|\r/g,
@@ -168,24 +169,24 @@ const Tools = {
 		return /^[.0-9]+$/.test(String(val));
 	},
 
-	formatDuration(duration) {
-		// don't forget the second param
-		const sec_num = parseInt(duration / 1000, 10);
-		let hours = Math.floor(sec_num / 3600);
-		let minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-		let seconds = sec_num - (hours * 3600) - (minutes * 60);
+	// formatDuration(duration) {
+	// 	// don't forget the second param
+	// 	const sec_num = parseInt(duration / 1000, 10);
+	// 	let hours = Math.floor(sec_num / 3600);
+	// 	let minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+	// 	let seconds = sec_num - (hours * 3600) - (minutes * 60);
 
-		if (hours < 10) {
-			hours = "0" + hours;
-		}
-		if (minutes < 10) {
-			minutes = "0" + minutes;
-		}
-		if (seconds < 10) {
-			seconds = "0" + seconds;
-		}
-		return hours + ":" + minutes + ":" + seconds;
-	},
+	// 	if (hours < 10) {
+	// 		hours = "0" + hours;
+	// 	}
+	// 	if (minutes < 10) {
+	// 		minutes = "0" + minutes;
+	// 	}
+	// 	if (seconds < 10) {
+	// 		seconds = "0" + seconds;
+	// 	}
+	// 	return hours + ":" + minutes + ":" + seconds;
+	// },
 
 	toPrecision(value, precision = 0) {
 		const power = Math.pow(10, precision);
@@ -219,23 +220,23 @@ const Tools = {
 		return true;
 	},
 
-	escapeForCDATA(val, keeptags = []) {
-		if (!val) {
-			return val;
-		}
+	// escapeForCDATA(val, keeptags = []) {
+	// 	if (!val) {
+	// 		return val;
+	// 	}
 
-		if (typeof val !== "string") {
-			val = val.toString();
-		}
+	// 	if (typeof val !== "string") {
+	// 		val = val.toString();
+	// 	}
 
-		val = htmlEntities.decode(val);
+	// 	val = htmlEntities.decode(val);
 
-		if (keeptags === true) {
-			return val;
-		}
+	// 	if (keeptags === true) {
+	// 		return val;
+	// 	}
 
-		return striptags(val, keeptags);
-	},
+	// 	return striptags(val, keeptags);
+	// },
 
 	parseReply(str, ...args) {
 		let i = 0;
@@ -434,7 +435,7 @@ const Tools = {
 		try {
 			return fs.readFileSync(path);
 		} catch (e) {
-			Application.log.error("Error loading File " + path);
+			logger.error("Error loading File " + path);
 		}
 	},
 

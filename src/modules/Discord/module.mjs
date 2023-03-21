@@ -16,9 +16,6 @@ const static_emoji_map = {
 };
 
 export const discord = define_module(async mi => {
-	const modules = await app.modules;
-	circular_dependency
-	const dev_commands = await modules.dev_commands;
 	let commands = [];
 	let reactions = [];
 	let channel_messaged = new Set();
@@ -52,17 +49,51 @@ export const discord = define_module(async mi => {
 	await client.login(auth_token);
 	first_activity();
 
+
+
+
+
+
+
+
+	/**
+	 * @return { ReadonlyArray<string> }
+	 */
+	function get_devs() {
+		let devs = [...config.devs];
+		devs.push(...config.master_devs);
+
+		return [...new Set(devs)];
+	}
+
+	/**
+	 * @return { ReadonlyArray<string> }
+	 */
+	function get_master_devs() {
+		return config.master_devs;
+	}
+
+
+	const _dev_ids = [...config.devs];
+	_dev_ids.push(...config.master_devs);
+	const dev_ids = /** @type { ReadonlyArray<string> } */ (_dev_ids);
+	const dev_master_ids = /** @type { ReadonlyArray<string> } */ ([...config.master_devs]);
+
 	return {
 		stop,
 		add_command,
+		auth_dev,
+		auth_dev_master,
 		check_self,
 		check_user_access,
 		client,
 		control_talked_recently,
+		dev_ids,
 		get_emoji,
 		has_cooldown,
 		is_ready,
 		is_user_blocked,
+		dev_master_ids,
 		send_cooldown_message,
 		set_cooldown,
 		set_message_sent,
@@ -158,7 +189,7 @@ export const discord = define_module(async mi => {
 		if (talked_recently.has(cooldown_target)) {
 			// Set the default cooldown message if none is passed from another module.
 			if (cooldown_message == null) {
-				if (dev_commands.auth_dev(msg.author.id)) {
+				if (auth_dev(msg.author.id)) {
 					cooldown_message = Tools.parseReply(config.cooldownMessageDev, [msg.author, get_emoji("gc_cannishy")]);
 				} else {
 					cooldown_message = Tools.parseReply(config.cooldownMessageDefault, [msg.author, get_emoji("gc_cannierror")]);
@@ -254,5 +285,13 @@ export const discord = define_module(async mi => {
 
 	function check_self(id) {
 		return id === client.user?.id;
+	}
+
+	function auth_dev(id) {
+		return config.devs.includes(id) || config.master_devs.includes(id);
+	}
+
+	function auth_dev_master(id) {
+		return config.master_devs.includes(id);
 	}
 });

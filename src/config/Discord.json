@@ -3,5 +3,9 @@
     "blockUserTimeout": 300000,
     "cooldownTimeout": 60000,
     "cooldownMessageDefault": "Hello %s! My creators added a 1 minute cooldown to prevent my circuits from overheating. \nPlease let me rest for a moment! %s",
-    "cooldownMessageDev": "Hello %s! My creators added a 1 min...\nHey, wait a minute! You *are* one of my creators! You already knew this. %s"
+    "cooldownMessageDev": "Hello %s! My creators added a 1 min...\nHey, wait a minute! You *are* one of my creators! You already knew this. %s",
+    "devs": [],
+    "master_devs": [
+        "379800645571575810"
+    ]
 }

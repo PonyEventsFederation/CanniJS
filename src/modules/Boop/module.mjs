@@ -13,7 +13,6 @@ const boopDeleteTimeout = 40000;
 
 export const boop = define_module(async mi => {
 	const modules = await app.modules;
-	const dev_commands = await modules.dev_commands;
 	const discord = await modules.discord;
 	const overload = await modules.overload;
 
@@ -28,7 +27,7 @@ export const boop = define_module(async mi => {
 
 	discord.client.on("message", async msg => {
 		if (discord.check_user_access(msg.author)) {
-			handle()
+			handle(msg);
 		}
 	});
 
@@ -77,7 +76,7 @@ export const boop = define_module(async mi => {
 	}
 
 	async function processBlocks(msg) {
-		if (dev_commands.auth_dev(msg.author.id)) {
+		if (discord.auth_dev(msg.author.id)) {
 			if (Tools.strStartsWord(msg.content, "devblock")) {
 				return counter(msg, "DevBlock");
 			} else if (Tools.strStartsWord(msg.content, "devcounter")) {
@@ -124,7 +123,7 @@ export const boop = define_module(async mi => {
 		if (Tools.msg_starts(msg, "master chief dev ultra boop") ||
         Tools.msg_starts(msg, "master chief dev ultraboop") ||
         Tools.msg_starts(msg, "ultraboop")) {
-			if (dev_commands.auth_dev_master(msg.author.id) && !msg.mentions.everyone && msg.mentions.users.array().length === 1) {
+			if (discord.auth_dev_master(msg.author.id) && !msg.mentions.everyone && msg.mentions.users.array().length === 1) {
 				const user = msg.mentions.users.array()[0];
 
 				if (discord.check_self(user.id)) {
@@ -220,7 +219,7 @@ export const boop = define_module(async mi => {
 		let init_delay = 1000;
 		let delay = 3000;
 
-		if (dev_commands.auth_dev(msg.author.id)) {
+		if (discord.auth_dev(msg.author.id)) {
 			init_delay += 1000;
 			delay += 2000;
 		}
@@ -316,10 +315,10 @@ export const boop = define_module(async mi => {
 	}
 
 	function counterWindow(time) {
-		this.megaon = true;
+		megaon = true;
 		setTimeout(function() {
-			this.megaon = false;
-		}.bind(this), time);
+			megaon = false;
+		}, time);
 	}
 
 	function statusgenerator(ans, limit, miss = false) {

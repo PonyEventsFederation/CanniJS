@@ -3,7 +3,7 @@ import { define_module, stop } from "../../lib/Module.mjs";
 import Tools from "../../lib/Tools.mjs";
 import { Temporal } from "@js-temporal/polyfill";
 
-import * as config from "../../config/TimeToGalacon.json" assert { type: "json" };
+import config from "../../config/TimeToGalacon.json" assert { type: "json" };
 
 // Set to false in case GalaCon is cancelled.
 const active = true;
@@ -23,9 +23,14 @@ export const time_to_galacon = define_module(async mi => {
 	const {
 		berlin_tz,
 		galaconDate,
-		galaconInterval,
 		local_tz
 	} = initGalaconDate();
+
+	await updateGalaconDate();
+	const galaconInterval = setInterval(
+		updateGalaconDate,
+		(config.updateInterval || 60) * 1000
+	);
 
 	return {
 		stop
@@ -66,14 +71,8 @@ export const time_to_galacon = define_module(async mi => {
 		const local_tz = Temporal.Now.timeZone();
 
 		mi.logger.info("Set galacon date to " + galaconDate.toString({ smallestUnit: "minute" }));
-		const galaconInterval = setInterval(
-			() => updateGalaconDate(),
-			(config.updateInterval || 10) * 1000
-		);
 
-		updateGalaconDate();
-
-		return { galaconDate, berlin_tz, local_tz, galaconInterval };
+		return { galaconDate, berlin_tz, local_tz };
 	}
 
 	function tellMeWhen(msg) {
@@ -85,14 +84,14 @@ export const time_to_galacon = define_module(async mi => {
 		discord.set_message_sent();
 	}
 
-	function updateGalaconDate() {
+	async function updateGalaconDate() {
 		const duration = getTimeRemaining();
 		const msg = `Time to Galacon: ${duration.days} days, ${duration.hrs.toString().padStart(2, "0")}:${duration.minutes} left! Hype!`;
 
-		discord.client.user.setActivity({
+		await discord.client.user.setActivity(msg, {
 			status: "online",
 			afk: false
-		}).catch(console.error);
+		});
 	}
 
 	function getTimeRemaining() {

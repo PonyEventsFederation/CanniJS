@@ -11,7 +11,7 @@ export const help = define_module(async mi => {
 
 	const path = resolve_path("./src/config/Text/help.txt");
 
-	const help_list = prepare_help(await fsp.readFile(path));
+	const help_list = prepare_help(await fsp.readFile(path, "utf-8"));
 	discord.add_command("help", help);
 
 	return {

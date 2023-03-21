@@ -15,7 +15,7 @@ export const compliment = define_module(async mi => {
 	discord.client.on("message", async msg => {
 		hug_emoji = discord.get_emoji("gc_cannihug");
 
-		// @ts-expect-error
+		// // @ts-expect-error
 		if (discord.check_user_access(msg.author) && msg.mentions.has(discord.client.user)) {
 			handle(msg);
 		}
@@ -45,7 +45,7 @@ export const compliment = define_module(async mi => {
 					}
 
 					if (users[i].id === msg.author.id) {
-						if (dev_commands.auth_dev(msg.author.id)) {
+						if (discord.auth_dev(msg.author.id)) {
 							compliment_dev(msg);
 						} else {
 							compliment(msg, config.selfcomplimentType, config.ans_self_compliment_template, msg.author);
@@ -58,7 +58,7 @@ export const compliment = define_module(async mi => {
 			}
 		}
 		if (Tools.msg_starts_mentioned(msg, "compliment me")) {
-			if (dev_commands.auth_dev(msg.author.id)) {
+			if (discord.auth_dev(msg.author.id)) {
 				return compliment_dev(msg);
 			} else {
 				return compliment(msg, config.selfcomplimentType, config.ans_self_compliment_template, msg.author);
