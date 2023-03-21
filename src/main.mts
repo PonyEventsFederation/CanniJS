@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 import { start_app, stop_app } from "./lib/Application.mjs";
 import events from "events";
 

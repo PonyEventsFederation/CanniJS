@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"lint": "eslint src --ext js,mjs,ts",
-		"build": "tsc"
+		"build": "rm -rf build && tsc"
 	},
 	"repository": {
 		"type": "git",
