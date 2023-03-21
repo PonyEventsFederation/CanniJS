@@ -30,7 +30,7 @@ export function define_stop(stop) {
 };
 
 /** @type { import("./module.js").Stop } */
-export const stop = Promise.resolve;
+export const stop = () => Promise.resolve();
 
 /**
  * @param { string } thing
