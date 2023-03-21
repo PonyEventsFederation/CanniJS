@@ -2,8 +2,9 @@
 	"name": "cannijs",
 	"private": true,
 	"description": "Galacon's very own Canni Discord bot",
+	"type": "module",
 	"scripts": {
-		"lint": "eslint src --ext js,mjs",
+		"lint": "eslint src --ext js,mjs,ts",
 		"build": "tsc"
 	},
 	"repository": {
@@ -34,6 +35,8 @@
 	"devDependencies": {
 		"@types/node": "^18.11.18",
 		"@types/ws": "^8.5.3",
+		"@typescript-eslint/eslint-plugin": "^5.55.0",
+		"@typescript-eslint/parser": "^5.55.0",
 		"eslint": "^8.18.0",
 		"typescript": "^5.0.2"
 	}
