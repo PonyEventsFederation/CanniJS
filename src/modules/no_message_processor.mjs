@@ -14,8 +14,24 @@ const remote_target = null;
 
 export const no_message_processor = define_module(async mi => {
 	const modules = await app.modules;
+	await modules.assfart;
+	await modules.bap;
+	await modules.best_pony;
+	await modules.bizaam;
+	await modules.boop;
+	await modules.compliment;
+	await modules.dev_commands;
 	const discord = await modules.discord;
-	let gamer_canni = await modules.gamer_canni;
+	await modules.fanta;
+	const gamer_canni = await modules.gamer_canni;
+	await modules.holiday;
+	await modules.hug;
+	await modules.hype;
+	await modules.ignore;
+	await modules.mention_canni;
+	await modules.potato;
+	await modules.time_to_galacon;
+	await modules.worst_pony;
 
 	discord.client.on("message", async msg => {
 		if (discord.check_user_access(msg.author)) {
