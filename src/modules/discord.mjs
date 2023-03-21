@@ -251,7 +251,7 @@ export const discord = define_module(async mi => {
 	}
 
 	function check_user_access(user) {
-		return !user.bot || is_user_blocked(user.id) || is_message_sent();
+		return !(user.bot || is_user_blocked(user.id) || is_message_sent());
 	}
 
 	function unblock_user(userId) {
