@@ -2,7 +2,42 @@ import { define_module, stop } from "../../lib/Module.mjs";
 import * as app from "../../lib/Application.mjs";
 import Tools from "../../lib/Tools.mjs";
 
-import config from "../../config/Potato.json" assert { type: "json" };
+const config = {
+	"potatoType": "potato",
+	"bestpotatoType": "bestpotato",
+	"phrase_potato": [
+		"canni is a potato",
+		"canni is potato",
+		"canni = potato",
+		"canni == potato",
+		"canni === potato"
+	],
+	"phrase_best_potato": [
+		"canni is the best potato",
+		"canni is best potato",
+		"canni > potato",
+		"canni >= potato",
+		"canni is smartato",
+		"canni is best smartato",
+		"canni is the best smartato",
+		"canni is a smartato"
+	],
+	"ans_potato": [
+		"%s hey, I'm not a potato!\nI'm a smart potato!",
+		"%s I'm a smart potato\nA Smartato!",
+		"%s I'm the smartest potato around!",
+		"%s Smartato! GLaDOS would be proud!",
+		"Smartato!"
+	],
+	"ans_best_potato": [
+		"%s I'm the best potato around!",
+		"%s I'm the incredible smartato!",
+		"%s I'm the smartest potato ever!",
+		"%s Indeed. I'm the best potato! GLaDOS would be proud!",
+		"%s I'm as smart as GLaDOS, but a lot nicer and friendlier!",
+		"The best Smartato!"
+	]
+};
 
 export const potato = define_module(async mi => {
 	const modules = await app.modules;

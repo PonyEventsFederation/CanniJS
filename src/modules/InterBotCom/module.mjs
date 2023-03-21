@@ -2,7 +2,10 @@ import { define_module, stop } from "../../lib/Module.mjs";
 import * as app from "../../lib/Application.mjs";
 import Tools from "../../lib/Tools.mjs";
 
-import config from "../../config/InterBotCom.json" assert { type: "json" };
+const config = {
+	"ans_boop_guard_response": "%s Sorry...",
+	"bapGuardResponse": "Eep! Sorry Wachmann! %s"
+};
 
 let wachmann_id;
 

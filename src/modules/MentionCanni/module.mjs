@@ -2,7 +2,42 @@ import { define_module, stop } from "../../lib/Module.mjs";
 import * as app from "../../lib/Application.mjs";
 import Tools from "../../lib/Tools.mjs";
 
-import config from "../../config/MentionCanni.json" assert { type: "json" };
+const config = {
+	"loveAnswer": [
+		"%s I love you too! %s"
+	],
+	"howAreYouAnswer": [
+		"%s I'm okay, thank you for asking!",
+		"%s I am absolutely great!",
+		"%s I'm a bit sad that it's not GalaCon yet.",
+		"%s I'm still a little sleepy.",
+		"%s I'm running a bit low on Fanta."
+	],
+	"broHoofAnswer": [
+		"%s /)*(\\"
+	],
+	"chrisBrokeMeAnswer": "%s I'm not sure. I think Berry might've broken something again...",
+	"xrayBrokeMeAnswer": "%s I'm not sure. I think Xray messed up something with the Python environment again...",
+	"remoteAnswer": "%s Sometimes I feel like I'm being remote controlled...",
+	"loveCanniType": "loveCanni",
+	"howAreYouType": "howAreYou",
+	"memberCountType": "memberCount",
+	"cooldownMessageLove": "I cannot handle this much love! %s",
+	"phrase_how_are_you": [
+		"how are you",
+		"how're you",
+		"how’re you",
+		"I am fine and u",
+		"I am fine and you",
+		"and you?",
+		"and u?"
+	],
+	"phrase_how_many_members": [
+		"how many members are there",
+		"how many members are on the server"
+	],
+	"ans_memberCount": "There are currently %s server members."
+};
 
 export const mention_canni = define_module(async mi => {
 	const modules = await app.modules;

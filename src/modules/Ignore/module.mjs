@@ -4,7 +4,15 @@ import Tools from "../../lib/Tools.mjs";
 import fs from "fs";
 import path from "path";
 
-import config from "../../config/Ignore.json" assert { type: "json" };
+const config = {
+	"potato_ignoredType": "potato_ignored",
+	"potato_ignored_mentionedType": "potato_ignored_mentioned",
+	"ans_potato_begin_ignore": "%s All right. I'll ignore whatever they say!",
+	"ans_potato_stop_ignore": "%s Got it! I'll stop ignoring them.",
+	"ans_potato_ignore": "Don't listen to %s. They're a :potato:.",
+	"ans_potato_ignored_mentioned": "%s I'm ignoring you. You :potato:."
+};
+
 
 const write_to_file = true;
 let idLocation;

@@ -2,7 +2,12 @@ import { define_module, stop } from "../../lib/Module.mjs";
 import * as app from "../../lib/Application.mjs";
 import Tools from "../../lib/Tools.mjs";
 
-import config from "../../config/Bizaam.json" assert { type: "json" };
+const config = {
+	"bizaamAnswer": [
+		"%s BIIZAAAAAMM!!!"
+	],
+	"bizaamType": "bizaamType"
+};
 
 export const bizaam = define_module(async mi => {
 	let modules = await app.modules;

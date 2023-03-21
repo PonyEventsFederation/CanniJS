@@ -3,7 +3,10 @@ import * as app from "../../lib/Application.mjs";
 import Tools from "../../lib/Tools.mjs";
 import { resolve as resolve_path } from "path";
 
-import config from "../../config/Hype.json" assert { type: "json" };
+const config = {
+	"hypeType": "hypeType",
+	"ans_hype": "HYPE!!!!! %s"
+};
 
 const path = resolve_path("./src/data/hype.gif")
 

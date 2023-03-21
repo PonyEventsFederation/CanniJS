@@ -2,7 +2,34 @@ import { define_module, stop } from "../../lib/Module.mjs";
 import * as app from "../../lib/Application.mjs";
 import Tools from "../../lib/Tools.mjs";
 
-import config from "../../config/Holiday.json" assert { type: "json" };
+const config = {
+	"christmasAnswer": [
+		"Hey %s! Sani and I wish you a very Merry Christmas! %s",
+		"%s They say Christmas is a time for smiles, but how can I smile when I've run out of Fanta?\n Gladly I've bunkered enough Fanta for decades!",
+		"%s I hope you're enjoying a beautiful white Christmas! %s",
+		"%s Ho ho ho! Merry Christmas! %s",
+		"%s I hope you're making this a Christmas to remember! %s",
+		"%s Christmas wouldn't be Christmas without you. %s",
+		"%s Have a wonderful Christmas! %s"
+	],
+	"specialchristmasAnswer": [
+		[
+			"Hey %s! Sani and I wish all of you a very Merry Christmas! %s",
+			"But hey, %s! Wish everyone a Merry Christmas as well!"
+		]
+	],
+	"christmasType": "christmas",
+	"silvesterType": "silvester",
+	"silvesterAnswer": [
+		"%s Happy New Year! %s"
+	],
+	"specialsilvesterAnswer": [
+		[
+			"Hey %s! Sani and I wish all of you a Happy New Year! %s",
+			"Hey, %s! Wish everyone a Happy New Year as well!"
+		]
+	]
+};
 
 const christmas_date = [12, 25];
 const new_year_date = [1, 1];

@@ -5,7 +5,16 @@ import Tools from "../../lib/Tools.mjs";
 import fs from "fs";
 import path from "path";
 
-import config from "../../config/DevCommands.json" assert { type: "json" };
+const config = {
+	"ans_add_dev": "%s You are now a Canni developer.\nPlease don't break me...",
+	"ans_remove_dev": "%s You are no longer a developer. Still, thank you for your hard work.",
+	"ans_debug_author_id": "Your id is: %s",
+	"ans_status_report": "Everything seems to be fine.\nThere are currently: %s server members.",
+	"ans_list_dev": "Authorised Canni developers are:\n%s",
+	"ans_list_master_devs": "Authorised Canni masters devs are:\n%s",
+	"ans_member_id": "The id of %s is: %s",
+	"ans_channel_id": "The channel id is : %s"
+};
 
 const write_to_file = true;
 let guild;

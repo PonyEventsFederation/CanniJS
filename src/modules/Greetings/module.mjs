@@ -2,7 +2,52 @@ import { define_module, stop } from "../../lib/Module.mjs";
 import * as app from "../../lib/Application.mjs";
 import Tools from "../../lib/Tools.mjs";
 
-import config from "../../config/Greetings.json" assert { type: "json" };
+const config = {
+	"byenightType": "byenightType",
+	"phrase_bye_night":[
+		"good night",
+		"nighty night",
+		"nini"
+	],
+	"ans_bye_night": [
+		"Good night",
+		"Sleep well",
+		"Sweet dreams"
+	],
+
+	"byeType": "byeType",
+	"phrase_bye":[
+		"bye"
+	],
+	"ans_bye": [
+		"Bye, see you soon.",
+		"Bye, come back soon.",
+		"Don't stay away for too long"
+	],
+
+	"helloType": "helloType",
+	"phrase_hello":[
+		"hello",
+		"hi"
+	],
+	"ans_hello": [
+		"Hello",
+		"Hello, welcome back.",
+		"Hi, nice to see you again.",
+		"Hi, how are you?",
+		"Hey, how are you today?"
+	],
+
+	"hello_morning_Type": "hello_morning_Type",
+	"phrase_hello_morning":[
+		"good morning"
+	],
+	"ans_hello_morning": [
+		"Good morning",
+		"Rise and shine.",
+		"Good morning. How are you today?"
+	]
+};
 
 export const greetings = define_module(async mi => {
 	const modules = await app.modules;

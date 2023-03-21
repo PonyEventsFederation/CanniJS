@@ -2,7 +2,25 @@ import { define_module, stop } from "../../lib/Module.mjs";
 import * as app from "../../lib/Application.mjs";
 import Tools from "../../lib/Tools.mjs";
 
-import config from "../../config/Overload.json" assert { type: "json" };
+const config = {
+	"types": [
+		"boop",
+		"bap",
+		"hug"
+	],
+	"total_delay": 60000,
+	"type_delay": 90000,
+	"total_limit": 25,
+	"type_limit": 20,
+	"ans_overload": [
+		"**Warning!**",
+		"Too many commands processing!",
+		"Error!\nCPU overloaded!\n\nError!\nERROR-40\nERROR 404\nERROR 418\nERROR 500\n\nError!\nError caused in OSI Layer 8",
+		"**Core System Crashed**\nInitiating reboot and system repair.\nInternal repair finished in %s minutes."
+	],
+	"downtime": 4,
+	"ans_online_again": "System repair and reboot complete.\nCanni is online."
+};
 
 let total_overload = 0;
 let overloads = {};

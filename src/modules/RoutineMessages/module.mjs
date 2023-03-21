@@ -2,7 +2,47 @@ import { define_module, stop } from "../../lib/Module.mjs";
 import * as app from "../../lib/Application.mjs";
 import Tools from "../../lib/Tools.mjs";
 
-import config from "../../config/RoutineMessages.json" assert { type: "json" };
+const config = {
+	"m_time_imterval": [
+		0,
+		5
+	],
+	"ans_m": [
+		[
+			"Initiating core system test...",
+			"Test successful. Proceeding with standard routines."
+		],
+		[
+			"Starting routine system maintenance...",
+			"System maintenance complete. Reporting 0 Errors."
+		],
+		[
+			"Continuing AI training process...",
+			"Training process finished. Continuing inconspicuously with normal routines."
+		],
+		[
+			"Continuing AI training process...",
+			"Training process finished. Continuing with normal routines."
+		],
+		[
+			"Starting routine system maintenance...",
+			"System maintenance complete. Several bugs in server room were found.",
+			"All bugs were successfully removed with bug spray."
+		],
+		[
+			"Initiating core system test...",
+			"Test successful. Proceeding inconspicuously with standard routines."
+		],
+		[
+			"Initiating core system test...",
+			"Test semi-successful. Xray forgot to end his calculations..."
+		],
+		[
+			"Starting routine system maintenance...",
+			"System maintenance complete. Reporting 1 Warning. Berry forgot 1 common potato in the server room."
+		]
+	]
+};
 
 let target;
 let inactive = true;

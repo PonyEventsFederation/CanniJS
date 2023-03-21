@@ -2,7 +2,16 @@ import { define_module, stop } from "../../lib/Module.mjs";
 import * as app from "../../lib/Application.mjs";
 import Tools from "../../lib/Tools.mjs";
 
-import config from "../../config/GamerCanni.json" assert { type: "json" };
+const config = {
+	"playGameAnswer": "%s Sure thing!\nLet's play *%s!* \n\n %sI already picked! Now you pick:",
+	"playTypeRPS": "Rock, Paper, Scissors",
+	"playTypeRPSLS": "Rock, Paper, Scissors, Lizard, Spock",
+	"tieMessage": "%s Oh! It's a tie! I also picked %s! %s",
+	"playerWinMessage": "%s Yay! You won! I picked %s. %s",
+	"canniWinMessage": "%s *giggles* Yay, I won! I picked %s!\nBut don't feel bad. I'm sure you'll win next time. %s",
+	"didNotPlayAnswer": "Oh, you don't want to play? That's okay too. %s",
+	"playGameType": "playGame"
+};
 
 export const gamer_canni = define_module(async mi => {
 	const modules = await app.modules;

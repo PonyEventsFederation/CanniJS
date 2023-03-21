@@ -2,7 +2,12 @@ import { define_module, stop } from "../../lib/Module.mjs";
 import * as app from "../../lib/Application.mjs";
 import Tools from "../../lib/Tools.mjs";
 
-import config from "../../config/Assfart.json" assert { type: "json" };
+const config = {
+	"assfartAnswer": [
+		"Shut up %s, it's Ausfahrt!"
+	],
+	"assfartType": "assfart"
+};
 
 export const assfart = define_module(async mi => {
 	const modules = await app.modules;

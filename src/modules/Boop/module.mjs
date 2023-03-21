@@ -4,12 +4,143 @@ import app_config from "../../config/application/config.json" assert { type: "js
 import Database from "../../lib/Database.mjs";
 import Tools from "../../lib/Tools.mjs";
 import moment from "moment";
-import config from "../../config/Boop.json" assert { type: "json" };
 import { resolve as resolve_path } from "path";
 const path = resolve_path("./src/data/impact.gif");
 let boop_dev_on = true;
 let wachmann_id;
 const boopDeleteTimeout = 40000;
+
+const config = {
+	"boopAnswer": [
+		"( ͡° ͜ʖ (\\  *BOOPS* %s"
+	],
+	"canniBoopAnswer": [
+		"%s Nu-uh! Don't boop me... *boops back*. %s",
+		"%s Canni is not for booping. %s"
+	],
+	"selfBoopAnswer": [
+		"Teehee. Berry isn't looking~. %s\n*( ͡° ͜ʖ (\\ Canni quickly boops her own snoot.*"
+	],
+	"megaBoopAnswer": [
+		[
+			"All right! Get ready! Here comes my super powerful, and totally unblockable megaboop!",
+			"Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n*Canni Bot's megaboop hits you for %s damage.*"
+		]
+	],
+	"megaBoopMissAnswer": [
+		[
+			"All right! Get ready! Here comes my super powerful, and totally unblockable megaboop!",
+			"Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n*Canni Bot's megaboop misses you.*",
+			"Oh no, I missed!"
+		]
+	],
+	"megaBoopCritAnswer": [
+		[
+			"All right! Get ready! Here comes my super powerful, and totally unblockable megaboop!",
+			"Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n**Canni Bot's megaboop critically hits you for %s damage.**"
+		]
+	],
+	"megaSelfBoopAnswer": [
+		"%s I'm sorry, but I can't do that. \nMy creators added a failsafe so that I don't accidentally damage myself. %s"
+	],
+	"megaBoopDevBlock": ["**The ultimate Dev Megaboop Annihilation nullifies Canni Bot's megaboop!**","Hey... %s you can't just use your %s to counter my megaboop... Not fair..."],
+	"megaBoopBlock": [
+		"Incoming!\n\n( ͡° ͜ʖ (\\  *MEGABOOPS* %s\n\n**You block a part of the megaboop!**\n*Canni Bot's megaboop hits you now only for %s damage.*"
+	],
+	"hyperBoopAnswer": [
+		[
+			"All right! Get ready! Here comes my super powerful, and totally unblockable megaaaaaaaaaaaaaaa.............................",
+			"**Warning!**",
+			"Megaboop is overloading.",
+			"Hypercharge has been activated!",
+			"Converting power to execute **hyperboop**....","...","..",".",
+			"Unleashing the ultimate **hyperboop**!",
+			"Incoming!\n\n**( ͡° ͜ʖ (\\  *HYPERBOOPS*** %s \n\n**Canni Bot's hyperboop critically hits you for *infinite* damage.**"
+		]
+	],
+	"cooldownMessage": "%s Oh my. I can't keep up with that many boops. You'll have to let me cool down for a bit! %s",
+	"cooldownMessageMegaBoop": "%s Oh no! I can't let you megaboop another pony today. That would be far too dangerous!",
+	"boopLimit": 3,
+	"boopTimeout": 180000,
+	"boopType": "boopType",
+	"megaBoopType": "megaBoopType",
+	"status_effects": [
+		"Fanta!\nYou feel completely refreshed and re-energised! (Although you still received damage...)",
+		"Super Fanta-stic!\nYou feel completely refreshed and re-energised! You are fully healed!",
+		"Poison.\nYou feel a bit dizzy~~~",
+		"Fire!\nHot, hot, hot! You are hot.",
+		"Ice.\nYou are as cool as ice!",
+		"Shock!\nYou are electrified! Stay away from electric appliances for a little while.",
+		"Soaked.\nFor some reason you are soaked... How it happened remains a mystery.",
+		"Glowing!\nYou are glowing in radiant white. But nothing happened...",
+		"Radiation!\nYou are afflicted with a green glow. Is that... a third eye!?",
+		"Petrification.\nYou rock!",
+		"Gravity Change! You are 0.001g lighter!",
+		"Confused...\nYou suddenly become very, *very* confused..........",
+		"Amnesia!\nYou forgot about this status effect! .... Wait .... Which status effect? .... What is a status effect? ....",
+		"Giga-Cheese-Cake-Rocket-Boat!!!\nThis status effect is self-explanatory.",
+		"Des-Pear.\nYou want to eat a pear desperately!",
+		"Brainwashed.\nYou brain has been taken to the laundry and is now squeaky clean!",
+		"R-Age!\nFor the next 10 seconds you are so enraged that your age is high enough to watch R-rated films!",
+		"Hungary.\nYou are hungry in Hungary!",
+		"Sleepy.\nYou feel... very... sleepy... zzZZZ...",
+		"Flying!\nYou can fly as long as you are falling! (Obviously...)",
+		"Bouncy.\nYou are bouncy and you want to jump around.",
+		"Invisible!\nThe other ponies can't see you!",
+		"X-Ray Vision!\nYou can see through air!!! Isn't that incredible!",
+		"Xray Version!\nThis is not X-Ray Vision! You are temporarily a version of Xray!",
+		"Crystal.\nOoohhh... Shiny...",
+		"Chris-tall\nThis is not Crystal! You are now as tall as Chris!",
+		"Potato.\nYou are as smart as a sack of potatoes.",
+		"Smartato!\nYou are as smart as Canni! (Take that as you will.)",
+		"Error 404.\nStatus effect not found.",
+		"Insomnia.\nI guess you don't need this effect. You are on this Server so you must have it already...",
+		"Cannification!\nYou are turned into a nice and sweet bot!",
+		"Bottification.\nYou are turned into a bot!",
+		"Nugget!\nYou temporarily become a meme lord! A true connoisseur of the funny!",
+		"Ponyfication.\nYou are turned into a pony!",
+		"Mean Ponyfication.\nYou are turned into a pony! But not your OC. Muhahaha!!!",
+		"MLP Ponyfication.\nCongratulations, you are a small horse!",
+		"FiM Ponyfication.\nCongratulations, you are 2 dimensional!",
+		"G5 Ponyfication.\nCongratulations, you have heart shaped hooves!",
+		"Mango!\nBe aware: you are a Mango! Watch out for bat ponies.",
+		"Galacon!\nYou want to come to Galacon! This status effect cannot be removed.",
+		"Barrel Roll!\nDo a Barrel Roll!",
+		"Stung.\nHow could the boop possibly have contained a mosquito?"
+	],
+	"status_effect_template": "*The megaboop gave you the following temporary status effect:\n\n%s*",
+	"status_effect_miss_template": "*The megaboop missed but gave you a status effect anyway:\n\n%s*",
+	"dev_ultra_boop_rejection": [
+		"%s Silly you... You don't have the permission to do that...",
+		"%s Oh no. Only my developers are authorised to do that."
+	],
+	"dev_ultra_boop": [
+		[
+			"Processing request...",
+			"Authorisation as master dev successful!\n~~~~",
+			"Full access granted!\n~~~~",
+			"**Warning!**\nAll safety parameters disabled!\n~~~~",
+			"Target locked!\nEvasion not possible!\n~~~~",
+			"Initiating charging process.\nCompletion in 60 seconds.\n~~~~",
+			"Charge at 25%",
+			"Charge at 50%",
+			"Charge at 75%",
+			"Charge at 99%",
+			"Charge at 100%\nApproaching critical mass!\n~~~~",
+			"Ultraboop singularity has successfully been generated!\n~~~~",
+			"Loading Master Chief Dev Ultraboop Cannon!\n~~~~",
+			"Finalizing remaining prelaunch routines...\n~~~~",
+			"Unleashing the ultimate, absolute, unstoppable **Master Chief Dev Ultraboop**!"
+		]
+	],
+	"dev_ultra_boop_impact":"Incoming!\n\n( ͡° ͜ʖ (\\  *ULTRABOOPS* %s",
+	"dev_ultra_boop_postimpact":"**Canni Bot's Master Chief Dev Ultraboop hits you for *infinite* damage.**",
+	"dev_self_boop": ["%s\nWarning!\nThis operation can't be performed!"],
+	"dev_ultra_boop_rejection_type":"dev_ultra_boop_rejection_type",
+	"boop_guard_type": "boop_guard_type",
+	"ans_boop_guard_cooldown": "I think he doesn't want to be disturbed right now...",
+	"command_use_not_allowed_cooldown_response": "Also, I'm not allowed to boop %s..."
+};
 
 export const boop = define_module(async mi => {
 	const modules = await app.modules;

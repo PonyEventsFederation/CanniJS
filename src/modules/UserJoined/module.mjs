@@ -2,7 +2,12 @@ import { define_module, stop } from "../../lib/Module.mjs";
 import * as app from "../../lib/Application.mjs";
 import Tools from "../../lib/Tools.mjs";
 
-import config from "../../config/UserJoined.json" assert { type: "json" };
+const config = {
+	"generalChannelId": "602434888880095244",
+	"rulesChannelId": "602436162447212554",
+	"welcomeMessage": "( ͡° ͜ʖ (\\  *BOOPS* %s\nWelcome to the official GalaCon Discord server!\nBe sure to check out our <#%s>.",
+	"welcomeMessageDelay": 1000
+};
 
 export const user_joined = define_module(async mi => {
 	const modules = await app.modules;

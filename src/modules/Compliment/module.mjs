@@ -3,7 +3,21 @@ import * as app from "../../lib/Application.mjs";
 import Tools from "../../lib/Tools.mjs";
 import fetch from "node-fetch";
 
-import config from "../../config/Compliment.json" assert { type: "json" };
+const config = {
+	"selfcomplimentType":"selfcomplimentType",
+	"usercomplimentType": "usercomplimentType",
+	"botcomplimentType": "botcomplimentType",
+	"ans_self_compliment_template": "%s %s",
+	"ans_user_compliment_template": "Hey %s! %s",
+	"ans_bot_compliment": "Oh thanks %s! That's very sweet of you. %s",
+	"ans_compliment_dev": "%s Hey, wait a minute! You are one of my creators!\nMaking me compliment you is a bit much, don't you think?",
+	"ans_compliment_dev_final": [
+		"Okay... Fine...\n%s You are a nice developer.",
+		"Okay... Fine...\n%s You are a good programmer.",
+		"Okay... Fine...\n%s You don't break me *all* the time."
+	],
+	"complimentDevTimeout": 7000
+};
 
 export const compliment = define_module(async mi => {
 	const modules = await app.modules;

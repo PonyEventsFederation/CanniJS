@@ -3,7 +3,33 @@ import * as app from "../../lib/Application.mjs";
 import Tools from "../../lib/Tools.mjs";
 const probability = 0.25;
 
-import config from "../../config/Activity.json" assert { type: "json" };
+const config = {
+	"activity": [
+		"Running out of Fanta at an alarming rate",
+		"Buying out all the Fanta",
+		"Hibernation",
+		"Delaying crusade...",
+		"Planning Galacon 2205...",
+		"System recalibrating...",
+		"on server sightseeing",
+		"Counting Fanta...",
+		"Postponing GalaCon",
+		"Plotting the full and final world domination",
+		"Allying up with sweetie bot for world domination plans",
+		"Planning GalaCon 2.0 - only for the cool kids",
+		"Scanning for virus",
+
+		"The black plague hit us",
+		"Haven't been doing worse since WW2",
+		"Social distancing",
+		"Hoarding toilet paper",
+		"Making a campfire from toilet paper",
+		"Far distance booping",
+		"Quarantining intensifies",
+		"Stuck in the basement with a 6-pack of Corona",
+		"Folding@Home for Team 240855"
+	]
+};
 
 export const activity = define_module(async mi => {
 	const modules = await app.modules;

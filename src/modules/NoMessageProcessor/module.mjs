@@ -2,7 +2,12 @@ import { define_module, stop } from "../../lib/Module.mjs";
 import * as app from "../../lib/Application.mjs";
 import Tools from "../../lib/Tools.mjs";
 
-import config from "../../config/NoMessageProcessor.json" assert { type: "json" };
+const config = {
+	"playGameAnswer": "( ͡° ͜ʖ (\\  *BOOPS* %s. \nHey, I'm bored... Would you like to play a game with me? \nLet's play *%s*! \n\n %sI already picked! Now you pick:",
+	"stillLearningAnswer": "I'm sorry, I don't understand what you're saying, I'm still learning. \nPlease don't be mad at me. %s",
+	"randomBoopAnswer": "( ͡° ͜ʖ (\\  *BOOPS* %s. I'm bored!",
+	"didNotPlayAnswer": "Oh... You don't want to play? That's fine too."
+};
 
 const remote_on = false;
 const remote_target = null;

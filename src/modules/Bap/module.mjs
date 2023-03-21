@@ -2,7 +2,38 @@ import { define_module, stop } from "../../lib/Module.mjs";
 import * as app from "../../lib/Application.mjs";
 
 import app_config from "../../config/application/config.json" assert { type: "json" };
-import config from "../../config/Bap.json" assert{ type: "json" };
+
+const config = {
+	"bapAnswer": [
+		":newspaper2: *BAPS* %s",
+		"*Canni sneaks up behind her target and...*\n:newspaper2: *BAPS* %s",
+		"*Canni swings her newspaper at %s.*\n:newspaper2: *BAP*"
+	],
+	"bapethAnswer": [
+		":newspaper2: *BAPETH* %s",
+		"Have at thee, cur!\n:newspaper2: *BAPETH* %s",
+		"I shall vanquish thee, with mine own newspaper!\n:newspaper2: *BAPETH* %s"
+	],
+	"canniBapAnswer": [
+		":newspaper2:*Canni gives herself a good bap on the head.* \n%s Ouch! That hurt! %s"
+	],
+	"selfBapAnswer": [
+		"%s Noooooo! \nDon't bap me. I'm a good pony. %s",
+		":newspaper2: *Canni baps %s instead*.\nTeehee! I got you!"
+	],
+	"selfBapethAnswer": [
+		"%s Nay! Doth not bapeth me.\n I am a valorous pony. %s",
+		":newspaper2: *Canni baps %s instead.*\nTake that, Ruffian!"
+	],
+	"cooldownMessage": "%s It's not very nice to bap people that often, you know...",
+	"bapLimit": 3,
+	"bapTimeout": 180000,
+	"bapType": "bapType",
+	"bapethType": "bapethType",
+	"bapGuardType": "bapGuardType",
+	"bapGuardCooldownAnswer": "I better not, or Wachmann will be mad at me again..."
+};
+
 
 import Tools from "../../lib/Tools.mjs";
 const bapDeleteTimeout = 40000;

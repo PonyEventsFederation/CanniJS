@@ -3,7 +3,17 @@ import { define_module } from "../../lib/Module.mjs";
 import { Client } from "discord.js";
 import Tools from "../../lib/Tools.mjs";
 
-import config from "../../config/Discord.json" assert { type: "json" };
+const config = {
+	"token": "ENV",
+	"blockUserTimeout": 300000,
+	"cooldownTimeout": 60000,
+	"cooldownMessageDefault": "Hello %s! My creators added a 1 minute cooldown to prevent my circuits from overheating. \nPlease let me rest for a moment! %s",
+	"cooldownMessageDev": "Hello %s! My creators added a 1 min...\nHey, wait a minute! You *are* one of my creators! You already knew this. %s",
+	"devs": [],
+	"master_devs": [
+		"379800645571575810"
+	]
+};
 
 /**
  * @type { Record<string, string> }

@@ -2,7 +2,20 @@ import { define_module, stop } from "../../lib/Module.mjs";
 import * as app from "../../lib/Application.mjs";
 import Tools from "../../lib/Tools.mjs";
 
-import config from "../../config/WorstPony.json" assert { type: "json" };
+const config = {
+	"canniWorstPonyAnswer": [
+		"%s Why are you so mean to me?"
+	],
+	"canniWorstPonyType": "canniWorstPony",
+	"cooldownMessageWorstPony": "%s Fine, I'm not talking to you anymore for a while.",
+	"forgiveUserAnswer": [
+		"%s %s Oh all right. I forgive you."
+	],
+	"notSorryAnswer": [
+		"%s What're you sorry for? You didn't do anything wrong, did you?"
+	],
+	"blockTimeout": 300000
+};
 
 export const worst_pony = define_module(async mi => {
 	const modules = await app.modules;

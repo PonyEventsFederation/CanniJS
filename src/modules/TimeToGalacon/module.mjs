@@ -3,7 +3,15 @@ import { define_module, stop } from "../../lib/Module.mjs";
 import Tools from "../../lib/Tools.mjs";
 import { Temporal } from "@js-temporal/polyfill";
 
-import config from "../../config/TimeToGalacon.json" assert { type: "json" };
+const config = {
+	"timeAnswer": "There are %s days, %s hours, and %s minutes left until the next GalaCon!",
+	"galaconAnswer": [
+		"This is taking forever!",
+		"Donate all your hard earned money bills!"
+	],
+	"galaconDate": "2023-09-16",
+	"updateInterval": 10
+};
 
 // Set to false in case GalaCon is cancelled.
 const active = true;

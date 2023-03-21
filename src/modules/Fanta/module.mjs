@@ -2,7 +2,20 @@ import { define_module, stop } from "../../lib/Module.mjs";
 import * as app from "../../lib/Application.mjs";
 import Tools from "../../lib/Tools.mjs";
 
-import config from "../../config/Fanta.json" assert { type: "json" };
+const config = {
+	"fantaType": "fanta",
+	"fantaAnswers":[
+		"There's no wrong way to Fanta size.",
+		"♪♫ Is this real life, is this just Fanta sea? ♫♪",
+		"I dreamt I was drowning in an ocean of orange soda. \nThank Celestia it was only a Fanta sea.",
+		"Soaking a twig in Coke is nice, but soaking a twig in Fanta? \n... Fanta stick.",
+		"What's so funny about Fanta?",
+		"Fanta is Canni Bot fuel.",
+		"Perry doesn't like Fanta jokes...",
+		"I think you are Fanta stick.",
+		"I've always dreamed of swimming in an ocean of orange soda\nIt's a Fanta sea of mine"
+	]
+};
 
 export const fanta = define_module(async mi => {
 	const modules = await app.modules;
