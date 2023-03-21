@@ -1,14 +1,15 @@
 import { define_module, stop } from "../../lib/Module.mjs";
-import Application from "../../lib/Application.mjs";
 import * as app from "../../lib/Application.mjs";
-import Module from "../../lib/Module.mjs";
 import Tools from "../../lib/Tools.mjs";
 
 import config from "../../config/BestPony.json" assert { type: "json" };
 
 export const best_pony = define_module(async mi => {
-	(await app.modules).discord.client.on("message", async msg => {
-		if ((await app.modules).discord.check_user_access(msg.author) && Tools.msg_contains(msg, " is best pony")) {
+	let modules = await app.modules;
+	let discord = await modules.discord;
+
+	discord.client.on("message", async msg => {
+		if (discord.check_user_access(msg.author) && Tools.msg_contains(msg, " is best pony")) {
 			handle(msg)
 		}
 	});
@@ -34,11 +35,11 @@ export const best_pony = define_module(async mi => {
 	}
 
 	function whoIsBestPony(msg, type, answers, emoji = "") {
-		if (Application.modules.Discord.controlTalkedRecently(msg, type)) {
+		if (discord.control_talked_recently(msg, type)) {
 			const random = Tools.getRandomIntFromInterval(0, answers.length - 1);
-			msg.channel.send(Tools.parseReply(answers[random], [msg.author, Application.modules.Discord.getEmoji(emoji)]));
+			msg.channel.send(Tools.parseReply(answers[random], [msg.author, discord.get_emoji(emoji)]));
 
-			Application.modules.Discord.setMessageSent();
+			discord.set_message_sent();
 		}
 	}
 });

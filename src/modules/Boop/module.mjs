@@ -1,9 +1,7 @@
 import { define_module, stop } from "../../lib/Module.mjs";
-import Application from "../../lib/Application.mjs";
 import * as app from "../../lib/Application.mjs";
 import app_config from "../../config/application/config.json" assert { type: "json" };
 import Database from "../../lib/Database.mjs";
-import Module from "../../lib/Module.mjs";
 import Tools from "../../lib/Tools.mjs";
 import moment from "moment";
 import config from "../../config/Boop.json" assert { type: "json" };
@@ -14,6 +12,11 @@ let wachmann_id;
 const boopDeleteTimeout = 40000;
 
 export const boop = define_module(async mi => {
+	const modules = await app.modules;
+	const dev_commands = await modules.dev_commands;
+	const discord = await modules.discord;
+	const overload = await modules.overload;
+
 	let boopCooldown = new Set();
 	let messageSent = new Set();
 	let interrupt = { inter: false };
@@ -23,8 +26,8 @@ export const boop = define_module(async mi => {
 		wachmann_id = process.env["WACHMANN_ID"];
 	}
 
-	(await app.modules).discord.client.on("message", async msg => {
-		if ((await app.modules).discord.check_user_access(msg.author)) {
+	discord.client.on("message", async msg => {
+		if (discord.check_user_access(msg.author)) {
 			handle()
 		}
 	});
@@ -41,7 +44,7 @@ export const boop = define_module(async mi => {
 				setCooldown(msg, users);
 			}
 
-			if (!(await app.modules).discord.has_cooldown(msg.author.id, config.boopType)) {
+			if (!discord.has_cooldown(msg.author.id, config.boopType)) {
 				processBoops(msg, users);
 				// todo
 			}
@@ -59,7 +62,7 @@ export const boop = define_module(async mi => {
 
 	async function processBoops(msg, users) {
 		for (let i = 0; i < users.length; i++) {
-			if ((await app.modules).discord.check_self(users[i].id)) {
+			if (discord.check_self(users[i].id)) {
 				selfBoop(msg);
 				continue;
 			}
@@ -74,7 +77,7 @@ export const boop = define_module(async mi => {
 	}
 
 	async function processBlocks(msg) {
-		if ((await app.modules).dev_commands.auth_dev(msg.author.id)) {
+		if (dev_commands.auth_dev(msg.author.id)) {
 			if (Tools.strStartsWord(msg.content, "devblock")) {
 				return counter(msg, "DevBlock");
 			} else if (Tools.strStartsWord(msg.content, "devcounter")) {
@@ -86,7 +89,7 @@ export const boop = define_module(async mi => {
 			const now = moment();
 			const val = moment().endOf("day");
 			const blockTimeout = val.diff(now, "milliseconds");
-			if ((await app.modules).discord.control_talked_recently(msg, config.megaBoopType, false, "message", undefined, undefined, blockTimeout)) {
+			if (discord.control_talked_recently(msg, config.megaBoopType, false, "message", undefined, undefined, blockTimeout)) {
 				return counter(msg, "Block");
 			}
 		}
@@ -96,7 +99,7 @@ export const boop = define_module(async mi => {
 		if (Tools.strStartsWord(msg.content, "megaboop")) {
 			if (!msg.mentions.everyone && msg.mentions.users.array().length === 1) {
 				const user = msg.mentions.users.array()[0];
-				if ((await app.modules).discord.check_self(user.id)) {
+				if (discord.check_self(user.id)) {
 					return megaSelfBoop(msg);
 				}
 
@@ -112,7 +115,7 @@ export const boop = define_module(async mi => {
 					mi.logger.error("Promise rejection error: " + err);
 				});
 
-				(await app.modules).discord.set_message_sent();
+				discord.set_message_sent();
 			}
 		}
 	}
@@ -121,10 +124,10 @@ export const boop = define_module(async mi => {
 		if (Tools.msg_starts(msg, "master chief dev ultra boop") ||
         Tools.msg_starts(msg, "master chief dev ultraboop") ||
         Tools.msg_starts(msg, "ultraboop")) {
-			if ((await app.modules).dev_commands.auth_dev_master(msg.author.id) && !msg.mentions.everyone && msg.mentions.users.array().length === 1) {
+			if (dev_commands.auth_dev_master(msg.author.id) && !msg.mentions.everyone && msg.mentions.users.array().length === 1) {
 				const user = msg.mentions.users.array()[0];
 
-				if ((await app.modules).discord.check_self(user.id)) {
+				if (discord.check_self(user.id)) {
 					return selfDevBoop(msg);
 				}
 
@@ -143,20 +146,20 @@ export const boop = define_module(async mi => {
 			message.delete({ timeout: boopDeleteTimeout });
 		});
 
-		(await app.modules).overload.overload("boop");
-		(await app.modules).discord.set_message_sent();
+		overload.overload("boop");
+		discord.set_message_sent();
 	}
 
 	async function selfBoop(msg) {
 		if (Tools.chancePercent(5)) {
 			const random = Tools.getRandomIntFromInterval(0, config.selfBoopAnswer.length - 1);
-			const answer = Tools.parseReply(config.selfBoopAnswer[random], [(await app.modules).discord.get_emoji("gc_canniexcited")]);
+			const answer = Tools.parseReply(config.selfBoopAnswer[random], [discord.get_emoji("gc_canniexcited")]);
 			msg.channel.send(answer).then(message => {
 				message.delete({ timeout: boopDeleteTimeout });
 			});
 		} else {
 			const random = Tools.getRandomIntFromInterval(0, config.canniBoopAnswer.length - 1);
-			const answer = Tools.parseReply(config.canniBoopAnswer[random], [msg.author, (await app.modules).discord.get_emoji("gc_cannishy")]);
+			const answer = Tools.parseReply(config.canniBoopAnswer[random], [msg.author, discord.get_emoji("gc_cannishy")]);
 			msg.channel.send(answer).then(message => {
 				message.delete({ timeout: boopDeleteTimeout });
 			});
@@ -164,13 +167,13 @@ export const boop = define_module(async mi => {
 
 		setTimeout(() => msg.delete(), app_config.deleteDelay);
 
-		(await app.modules).overload.overload("boop");
-		(await app.modules).discord.set_message_sent();
+		overload.overload("boop");
+		discord.set_message_sent();
 	}
 
 	async function wachmannBoop(msg, user) {
 		const guard_cooldown_message = Tools.parseReply(config.ans_boop_guard_cooldown);
-		if ((await app.modules).discord.control_talked_recently(msg, config.boop_guard_type, true, "channel", guard_cooldown_message, undefined, 120000)) {
+		if (discord.control_talked_recently(msg, config.boop_guard_type, true, "channel", guard_cooldown_message, undefined, 120000)) {
 			boop(msg, user);
 		}
 	}
@@ -217,7 +220,7 @@ export const boop = define_module(async mi => {
 		let init_delay = 1000;
 		let delay = 3000;
 
-		if ((await app.modules).dev_commands.auth_dev(msg.author.id)) {
+		if (dev_commands.auth_dev(msg.author.id)) {
 			init_delay += 1000;
 			delay += 2000;
 		}
@@ -231,15 +234,15 @@ export const boop = define_module(async mi => {
 			}
 		}, init_delay);
 
-		(await app.modules).discord.set_message_sent();
+		discord.set_message_sent();
 	}
 
 	async function megaSelfBoop(msg) {
 		const random = Tools.getRandomIntFromInterval(0, config.megaSelfBoopAnswer.length - 1);
-		msg.channel.send(Tools.parseReply(config.megaSelfBoopAnswer[random], [msg.author, Application.modules.Discord.getEmoji("gc_cannihello")]));
+		msg.channel.send(Tools.parseReply(config.megaSelfBoopAnswer[random], [msg.author, discord.get_emoji("gc_cannihello")]));
 
-		(await app.modules).overload.overload("boop");
-		(await app.modules).discord.set_message_sent();
+		overload.overload("boop");
+		discord.set_message_sent();
 	}
 
 	async function hyperBoop(msg, user) {
@@ -251,23 +254,23 @@ export const boop = define_module(async mi => {
 			msg.channel.send(Tools.parseReply(ans, [user]));
 		}
 
-		(await app.modules).discord.set_message_sent();
+		discord.set_message_sent();
 	}
 
 	async function devbooprejection(msg) {
-		if ((await app.modules).discord.control_talked_recently(msg, config.dev_ultra_boop_rejection_type, false, "message")) {
+		if (discord.control_talked_recently(msg, config.dev_ultra_boop_rejection_type, false, "message")) {
 			const random = Tools.getRandomIntFromInterval(0, config.dev_ultra_boop_rejection.length - 1);
 			msg.channel.send(Tools.parseReply(config.dev_ultra_boop_rejection[random], [msg.author]));
 		}
 
-		(await app.modules).discord.set_message_sent();
+		discord.set_message_sent();
 	}
 
 	async function selfDevBoop(msg) {
 		const random = Tools.getRandomIntFromInterval(0, config.dev_self_boop.length - 1);
 		msg.channel.send(Tools.parseReply(config.dev_self_boop[random], [msg.author]));
 
-		(await app.modules).discord.set_message_sent();
+		discord.set_message_sent();
 	}
 
 	async function devboop(msg, user) {
@@ -290,7 +293,7 @@ export const boop = define_module(async mi => {
 			msg.channel.send(Tools.parseReply(ans, [user]));
 		}
 
-		(await app.modules).discord.set_message_sent();
+		discord.set_message_sent();
 	}
 
 
@@ -309,7 +312,7 @@ export const boop = define_module(async mi => {
 		setTimeout(function() {
 			Tools.listSender(msg.channel, ans, [2000], [msg.author, type]);
 		}, 2000);
-		(await app.modules).discord.set_message_sent();
+		discord.set_message_sent();
 	}
 
 	function counterWindow(time) {
@@ -342,11 +345,11 @@ export const boop = define_module(async mi => {
 	}
 
 	async function setCooldown(msg, users) {
-		const cooldownMessage = Tools.parseReply(config.cooldownMessage, [msg.author, (await app.modules).discord.get_emoji("gc_cannierror")]);
+		const cooldownMessage = Tools.parseReply(config.cooldownMessage, [msg.author, discord.get_emoji("gc_cannierror")]);
 
-		if (!(await app.modules).discord.has_cooldown(msg.author.id, config.boopType)) {
-			(await app.modules).discord.set_cooldown(msg.author.id, config.boopType, config.boopTimeout);
-			(await app.modules).discord.send_cooldown_message(msg, msg.author.id + config.boopType, cooldownMessage, false);
+		if (!discord.has_cooldown(msg.author.id, config.boopType)) {
+			discord.set_cooldown(msg.author.id, config.boopType, config.boopTimeout);
+			discord.send_cooldown_message(msg, msg.author.id + config.boopType, cooldownMessage, false);
 			mi.logger.info(`${msg.author} added to boop cooldown list.`);
 
 			const no_command_users = users.filter(u => !Tools.allows_command_use(u));
@@ -362,6 +365,6 @@ export const boop = define_module(async mi => {
 			);
 		}
 
-		(await app.modules).discord.set_message_sent();
+		discord.set_message_sent();
 	}
 });

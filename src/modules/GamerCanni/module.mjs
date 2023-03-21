@@ -1,26 +1,28 @@
 import { define_module, stop } from "../../lib/Module.mjs";
-import Application from "../../lib/Application.mjs";
 import * as app from "../../lib/Application.mjs";
-import Module from "../../lib/Module.mjs";
 import Tools from "../../lib/Tools.mjs";
 
 import config from "../../config/GamerCanni.json" assert { type: "json" };
 
 export const gamer_canni = define_module(async mi => {
-	(await app.modules).discord.client.on("message", async msg => {
-		if ((await app.modules).discord.check_user_access(msg.author)) {
+	const modules = await app.modules;
+	const discord = await modules.discord;
+
+	discord.client.on("message", async msg => {
+		if (discord.check_user_access(msg.author)) {
 			handle(msg);
 		}
 	});
 
 	return {
+		letsPlay,
 		stop
 	};
 
 	function handle(msg) {
-		if (msg.mentions.has(Application.modules.Discord.client.user)) {
+		if (msg.mentions.has(discord.client.user)) {
 			if (Tools.msg_contains(msg, "let's play a game") || Tools.msg_contains(msg, "let's play a game")) {
-				if (Application.modules.Discord.controlTalkedRecently(msg, config.playGameType)) {
+				if (discord.control_talked_recently(msg, config.playGameType)) {
 					return letsPlay(msg);
 				}
 			}
@@ -75,7 +77,7 @@ export const gamer_canni = define_module(async mi => {
 
 		const canniChoice = getEmojiName(emojis[Math.floor(Math.random() * emojis.length)]);
 
-		msg.channel.send(Tools.parseReply(flavourText, [msg.author, gameName, Application.modules.Discord.getEmoji("gc_canniexcited")])).then(sentEmbed => {
+		msg.channel.send(Tools.parseReply(flavourText, [msg.author, gameName, discord.get_emoji("gc_canniexcited")])).then(sentEmbed => {
 			for (let i = 0; i < emojis.length; i++) {
 				sentEmbed.react(emojis[i]);
 			}
@@ -94,11 +96,11 @@ export const gamer_canni = define_module(async mi => {
 				mi.logger.info("User chose " + userChoice);
 			}).catch(() => {
 				mi.logger.info("User decided not to play");
-				msg.reply(Tools.parseReply(config.didNotPlayAnswer, [Application.modules.Discord.getEmoji("gc_cannishy")]));
+				msg.reply(Tools.parseReply(config.didNotPlayAnswer, [discord.get_emoji("gc_cannishy")]));
 			});
 		});
 
-		Application.modules.Discord.setMessageSent();
+		discord.set_message_sent();
 	}
 
 	function play(msg, userChoice, canniChoice) {
@@ -143,16 +145,16 @@ export const gamer_canni = define_module(async mi => {
 	function resultMessage(msg, canniChoice, result) {
 		switch (result) {
 		case "tie":
-			msg.channel.send(Tools.parseReply(config.tieMessage, [msg.author, canniChoice, Application.modules.Discord.getEmoji("gc_cannihello")]));
+			msg.channel.send(Tools.parseReply(config.tieMessage, [msg.author, canniChoice, discord.get_emoji("gc_cannihello")]));
 			break;
 		case "playerWin":
-			msg.channel.send(Tools.parseReply(config.playerWinMessage, [msg.author, canniChoice, Application.modules.Discord.getEmoji("gc_cannibizaam")]));
+			msg.channel.send(Tools.parseReply(config.playerWinMessage, [msg.author, canniChoice, discord.get_emoji("gc_cannibizaam")]));
 			break;
 		case "canniWin":
-			msg.channel.send(Tools.parseReply(config.canniWinMessage, [msg.author, canniChoice, Application.modules.Discord.getEmoji("gc_cannismile")]));
+			msg.channel.send(Tools.parseReply(config.canniWinMessage, [msg.author, canniChoice, discord.get_emoji("gc_cannismile")]));
 			break;
 		}
 
-		Application.modules.Discord.setMessageSent();
+		discord.set_message_sent();
 	}
 });

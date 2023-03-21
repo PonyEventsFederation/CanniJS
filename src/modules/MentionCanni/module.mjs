@@ -1,14 +1,15 @@
 import { define_module, stop } from "../../lib/Module.mjs";
-import Application from "../../lib/Application.mjs";
 import * as app from "../../lib/Application.mjs";
-import Module from "../../lib/Module.mjs";
 import Tools from "../../lib/Tools.mjs";
 
 import config from "../../config/MentionCanni.json" assert { type: "json" };
 
 export const mention_canni = define_module(async mi => {
-	(await app.modules).discord.client.on("message", async msg => {
-		if ((await app.modules).discord.check_user_access(msg.author) && msg.mentions.has((await app.modules).discord.client.user)) {
+	const modules = await app.modules;
+	const discord = await modules.discord;
+
+	discord.client.on("message", async msg => {
+		if (discord.check_user_access(msg.author) && msg.mentions.has(discord.client.user)) {
 			CanniIsMentioned(msg);
 		}
 	});
@@ -35,23 +36,23 @@ export const mention_canni = define_module(async mi => {
 		}
 
 		if (Tools.msg_contains(msg, "merry christmas")) {
-			(await app.modules).discord.set_message_sent();
+			discord.set_message_sent();
 		}
 	}
 
 	function love(msg) {
-		const cooldownMessage = Tools.parseReply(config.cooldownMessageLove, [msg.author, Application.modules.Discord.getEmoji("gc_cannierror")]);
+		const cooldownMessage = Tools.parseReply(config.cooldownMessageLove, [msg.author, discord.get_emoji("gc_cannierror")]);
 
-		if (Application.modules.Discord.controlTalkedRecently(msg, config.loveCanniType, true, "channel", cooldownMessage)) {
+		if (discord.control_talked_recently(msg, config.loveCanniType, true, "channel", cooldownMessage)) {
 			const random = Tools.getRandomIntFromInterval(0, config.loveAnswer.length - 1);
-			msg.channel.send(Tools.parseReply(config.loveAnswer[random], [msg.author, Application.modules.Discord.getEmoji("gc_cannilove")]));
+			msg.channel.send(Tools.parseReply(config.loveAnswer[random], [msg.author, discord.get_emoji("gc_cannilove")]));
 
-			Application.modules.Discord.setMessageSent();
+			discord.set_message_sent();
 		}
 	}
 
 	function howAreYou(msg) {
-		if (Application.modules.Discord.controlTalkedRecently(msg, config.howAreYouType)) {
+		if (discord.control_talked_recently(msg, config.howAreYouType)) {
 			const broken = Tools.getRandomIntFromInterval(0, 200);
 
 			if (broken === 100) {
@@ -65,22 +66,22 @@ export const mention_canni = define_module(async mi => {
 				msg.channel.send(Tools.parseReply(config.howAreYouAnswer[random], [msg.author]));
 			}
 
-			Application.modules.Discord.setMessageSent();
+			discord.set_message_sent();
 		}
 	}
 
 	function memberCount(msg) {
-		if (Application.modules.Discord.controlTalkedRecently(msg, config.memberCountType)) {
+		if (discord.control_talked_recently(msg, config.memberCountType)) {
 			msg.channel.send(Tools.parseReply(config.ans_memberCount, [msg.guild.memberCount]));
 		}
 
-		Application.modules.Discord.setMessageSent();
+		discord.set_message_sent();
 	}
 
 	function broHoof(msg) {
 		const random = Tools.getRandomIntFromInterval(0, config.broHoofAnswer.length - 1);
 		msg.channel.send(Tools.parseReply(config.broHoofAnswer[random], [msg.author]));
 
-		Application.modules.Discord.setMessageSent();
+		discord.set_message_sent();
 	}
 });

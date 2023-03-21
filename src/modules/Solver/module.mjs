@@ -1,15 +1,16 @@
 import { define_module, stop } from "../../lib/Module.mjs";
-import Application from "../../lib/Application.mjs";
 import * as app from "../../lib/Application.mjs";
-import Module from "../../lib/Module.mjs";
 import Tools from "../../lib/Tools.mjs";
 import solveinworker from "./solve_worker.mjs";
 
 import config from "../../config/Solver.json" assert { type: "json" };
 
 export const solver = define_module(async mi => {
-	let smileEmoji = (await app.modules).discord.client.on("message", async msg => {
-		if ((await app.modules).discord.check_user_access(msg.author) && msg.mentions.has((await app.modules).discord.client.user)) {
+	const modules = await app.modules;
+	const discord = await modules.discord;
+
+	let smileEmoji = discord.client.on("message", async msg => {
+		if (discord.check_user_access(msg.author) && msg.mentions.has(discord.client.user)) {
 			handle(app);
 		}
 	});
@@ -32,7 +33,7 @@ export const solver = define_module(async mi => {
 
 	function info(msg) {
 		msg.channel.send(Tools.parseReply(config.solver_info, [msg.author, smileEmoji]));
-		Application.modules.Discord.setMessageSent();
+		discord.set_message_sent();
 	}
 
 	function simple_parse(msg) {
@@ -43,13 +44,13 @@ export const solver = define_module(async mi => {
 					if (error.toString().toLowerCase().includes("must be 2000 or fewer in length")) {
 						msg.channel.send("I'm sorry. The result of your calculation is too long to be printed in Discord.");
 					}
-					Application.log.error(error);
+					mi.logger.error(error);
 				});
 			});
 		} else {
 			msg.channel.send(Tools.parseReply(config.solver_nothing, [msg.author]));
 		}
-		Application.modules.Discord.setMessageSent();
+		discord.set_message_sent();
 	}
 
 	function simple_multi_parse(msg) {
@@ -64,14 +65,14 @@ export const solver = define_module(async mi => {
 							msg.channel.send("I'm sorry. The result of your calculation is too long to be printed in Discord.");
 						}
 
-						Application.log.error(error);
+						mi.logger.error(error);
 					});
 				}
 			});
 		} else {
 			msg.channel.send(Tools.parseReply(config.solver_nothing, [msg.author]));
 		}
-		Application.modules.Discord.setMessageSent();
+		discord.set_message_sent();
 	}
 
 	function prepareMulti(pre) {

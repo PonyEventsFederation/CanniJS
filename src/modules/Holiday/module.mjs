@@ -1,7 +1,5 @@
 import { define_module, stop } from "../../lib/Module.mjs";
-import Application from "../../lib/Application.mjs";
 import * as app from "../../lib/Application.mjs";
-import Module from "../../lib/Module.mjs";
 import Tools from "../../lib/Tools.mjs";
 
 import config from "../../config/Holiday.json" assert { type: "json" };
@@ -11,13 +9,16 @@ const new_year_date = [1, 1];
 let wachmann_id;
 
 export const holiday = define_module(async mi => {
+	const modules = await app.modules;
+	const discord = await modules.discord;
+
 	let wachmann_id = process.env["WACHMANN_ID"];
 
-	const cannisanta = (await app.modules).discord.get_emoji("gc_cannisanta");
-	const silvester = (await app.modules).discord.get_emoji("gc_cannisilvester");
+	const cannisanta = discord.get_emoji("gc_cannisanta");
+	const silvester = discord.get_emoji("gc_cannisilvester");
 
-	(await app.modules).discord.client.on("message", async msg => {
-		if ((await app.modules).discord.check_user_access(msg.author)) {
+	discord.client.on("message", async msg => {
+		if (discord.check_user_access(msg.author)) {
 			handle(msg);
 		}
 	});
@@ -38,7 +39,7 @@ export const holiday = define_module(async mi => {
 
 
 	function christmas_loader(msg) {
-		if (Application.modules.Discord.controlTalkedRecently(msg, config.christmasType, false, "message")) {
+		if (discord.control_talked_recently(msg, config.christmasType, false, "message")) {
 			if (Tools.chancePercent(10)) {
 				special_christmas(msg);
 			} else {
@@ -51,7 +52,7 @@ export const holiday = define_module(async mi => {
 		const random = Tools.getRandomIntFromInterval(0, config.christmasAnswer.length - 1);
 		msg.channel.send(Tools.parseReply(config.christmasAnswer[random], [msg.author, cannisanta]));
 
-		Application.modules.Discord.setMessageSent();
+		discord.set_message_sent();
 	}
 
 	function special_christmas(msg) {
@@ -67,12 +68,12 @@ export const holiday = define_module(async mi => {
 			} else {
 				msg.channel.send(Tools.parseReply(answer, [msg.author, cannisanta]));
 			}
-			Application.modules.Discord.setMessageSent();
+			discord.set_message_sent();
 		}
 	}
 
 	function new_year_loader(msg) {
-		if (Application.modules.Discord.controlTalkedRecently(msg, config.silvesterType, false, "message")) {
+		if (discord.control_talked_recently(msg, config.silvesterType, false, "message")) {
 			if (Tools.chancePercent(30)) {
 				special_new_year(msg);
 			} else {
@@ -85,7 +86,7 @@ export const holiday = define_module(async mi => {
 		const random = Tools.getRandomIntFromInterval(0, config.silvesterAnswer.length - 1);
 		msg.channel.send(Tools.parseReply(config.silvesterAnswer[random], [msg.author, silvester]));
 
-		Application.modules.Discord.setMessageSent();
+		discord.set_message_sent();
 	}
 
 	function special_new_year(msg) {
@@ -101,7 +102,7 @@ export const holiday = define_module(async mi => {
 			} else {
 				msg.channel.send(Tools.parseReply(answer, [msg.author, silvester]));
 			}
-			Application.modules.Discord.setMessageSent();
+			discord.set_message_sent();
 		}
 	}
 });

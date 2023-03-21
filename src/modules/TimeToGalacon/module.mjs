@@ -1,6 +1,5 @@
+import * as app from "../../lib/Application.mjs";
 import { define_module, stop } from "../../lib/Module.mjs";
-import Application from "../../lib/Application.mjs";
-import Module from "../../lib/Module.mjs";
 import Tools from "../../lib/Tools.mjs";
 import { Temporal } from "@js-temporal/polyfill";
 
@@ -10,11 +9,14 @@ import * as config from "../../config/TimeToGalacon.json" assert { type: "json" 
 const active = true;
 
 export const time_to_galacon = define_module(async mi => {
-	Application.modules.Discord.addCommand("when", (msg) => {
+	const modules = await app.modules;
+	const discord = await modules.discord;
+
+	discord.add_command("when", (msg) => {
 		handleWhen(msg);
 	});
 
-	Application.modules.Discord.client.on("message", (msg) => {
+	discord.client.on("message", (msg) => {
 		handleMessage(msg);
 	});
 
@@ -30,27 +32,27 @@ export const time_to_galacon = define_module(async mi => {
 	};
 
 	function handleWhen(msg) {
-		if (Application.modules.Discord.checkUserAccess(msg.author)) {
+		if (discord.check_user_access(msg.author)) {
 			if (active) {
 				return tellMeWhen(msg);
 			} else {
 				msg.channel.send("Currently not available...");
-				Application.modules.Discord.setMessageSent();
+				discord.set_message_sent();
 			}
 		}
 	}
 
 	function handleMessage(msg) {
 		if (
-			Application.modules.Discord.checkUserAccess(msg.author)
-				&& msg.mentions.has(Application.modules.Discord.client.user)
+			discord.check_user_access(msg.author)
+				&& msg.mentions.has(discord.client.user)
 		) {
 			if (Tools.msg_contains(msg, "when is galacon")) {
 				if (active) {
 					return tellMeWhen(msg);
 				} else {
 					msg.channel.send("Currently not available...");
-					Application.modules.Discord.setMessageSent();
+					discord.set_message_sent();
 				}
 			}
 		}
@@ -80,17 +82,17 @@ export const time_to_galacon = define_module(async mi => {
 
 		msg.channel.send(Tools.parseReply(config.timeAnswer, [duration.days, duration.hrs, duration.minutes]) + "\n" + config.galaconAnswer[random]);
 
-		Application.modules.Discord.setMessageSent();
+		discord.set_message_sent();
 	}
 
 	function updateGalaconDate() {
 		const duration = getTimeRemaining();
-		const msg = `Time to Galacon: ${duration.days} days, ${duration.hrs}:${duration.minutes} left! Hype!`;
+		const msg = `Time to Galacon: ${duration.days} days, ${duration.hrs.toString().padStart(2, "0")}:${duration.minutes} left! Hype!`;
 
-		Application.modules.Discord.client.user.setActivity(msg, {
+		discord.client.user.setActivity({
 			status: "online",
 			afk: false
-		}).then().catch(console.error);
+		}).catch(console.error);
 	}
 
 	function getTimeRemaining() {

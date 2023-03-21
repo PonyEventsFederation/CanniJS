@@ -6,22 +6,23 @@ import config from "../../config/Bap.json" assert{ type: "json" };
 
 import Tools from "../../lib/Tools.mjs";
 const bapDeleteTimeout = 40000;
-/** @type { string } */
-let wachmann_id;
 
 export const bap = define_module(async mi => {
+	const modules = await app.modules;
+	const discord = await modules.discord;
+	const overload = await modules.overload;
+
 	const boopCooldown = new Set();
 	const messageSent = new Set();
-	/** @type { string } */
-	// @ts-expect-error
+	/** @type { string | undefined } */
 	let wachmann_id = undefined;
 
 	if (process.env["WACHMANN_ID"]) {
 		wachmann_id = process.env["WACHMANN_ID"];
 	}
 
-	(await app.modules).discord.client.on("message", async msg => {
-		if ((await app.modules).discord.check_user_access(msg.author)) {
+	discord.client.on("message", async msg => {
+		if (discord.check_user_access(msg.author)) {
 			handle(msg);
 		}
 	});
@@ -42,6 +43,9 @@ export const bap = define_module(async mi => {
 		}
 	}
 
+	/**
+	 * @param { "bap" | "bapeth" } answerType
+	 */
 	function processBaps(msg, type, answerType) {
 		console.log(answerType);
 		const users = msg.mentions.users.array();
@@ -50,10 +54,10 @@ export const bap = define_module(async mi => {
 			setCooldown(msg);
 		}
 
-		if (!Application.modules.Discord.hasCooldown(msg.author.id, type)) {
+		if (!discord.has_cooldown(msg.author.id, type)) {
 			for (let i = 0; i < users.length; i++) {
-				if (Application.checkSelf(users[i].id)) {
-					const answers = getAnswerType("self" + answerType);
+				if (discord.check_self(users[i].id)) {
+					const answers = getAnswerType(`self${answerType}`);
 					selfBap(msg, answers);
 					continue;
 				}
@@ -71,6 +75,9 @@ export const bap = define_module(async mi => {
 		}
 	}
 
+	/**
+	 * @param { "bap" | "bapeth" | "selfbap" | "selfbapeth" } type
+	 */
 	function getAnswerType(type) {
 		switch(type) {
 		case "bap":
@@ -91,8 +98,8 @@ export const bap = define_module(async mi => {
 			message.delete({ timeout: bapDeleteTimeout });
 		});
 
-		Application.modules.Overload.overload("bap");
-		Application.modules.Discord.setMessageSent();
+		overload.overload("bap");
+		discord.set_message_sent();
 	}
 
 	function selfBap(msg, answerType) {
@@ -102,13 +109,13 @@ export const bap = define_module(async mi => {
 			const random = Tools.getRandomIntFromInterval(0, config.selfBapAnswer.length - 1);
 			response = msg.channel.send(Tools.parseReply(config.selfBapAnswer[random], [
 				msg.author,
-				Application.modules.Discord.getEmoji("gc_cannierror")
+				discord.get_emoji("gc_cannierror")
 			]));
 		} else {
 			const random = Tools.getRandomIntFromInterval(0, answerType.length - 1);
 			response = msg.channel.send(Tools.parseReply(answerType[random], [
 				msg.author,
-				Application.modules.Discord.getEmoji("gc_cannierror")
+				discord.get_emoji("gc_cannierror")
 			]));
 		}
 
@@ -116,14 +123,14 @@ export const bap = define_module(async mi => {
 			message.delete({ timeout: bapDeleteTimeout });
 		});
 
-		Application.modules.Overload.overload("bap");
-		Application.modules.Discord.setMessageSent();
+		overload.overload("bap");
+		discord.set_message_sent();
 	}
 
 	function wachmannBap(msg, user) {
 		const guardCooldownMessage = Tools.parseReply(config.bapGuardCooldownAnswer);
 
-		if (Application.modules.Discord.controlTalkedRecently(msg, config.bapGuardType, true, "channel", guardCooldownMessage, undefined, 120000)) {
+		if (discord.control_talked_recently(msg, config.bapGuardType, true, "channel", guardCooldownMessage, undefined, 120000)) {
 			bap(msg, user);
 		}
 	}
@@ -131,12 +138,12 @@ export const bap = define_module(async mi => {
 	function setCooldown(msg) {
 		const cooldownMessage = Tools.parseReply(config.cooldownMessage, [msg.author]);
 
-		if (!Application.modules.Discord.hasCooldown(msg.author.id, config.bapType)) {
-			Application.modules.Discord.setCooldown(msg.author.id, config.bapType, config.bapTimeout);
-			Application.modules.Discord.sendCooldownMessage(msg, msg.author.id + config.bapType, cooldownMessage, false);
+		if (!discord.has_cooldown(msg.author.id, config.bapType)) {
+			discord.set_cooldown(msg.author.id, config.bapType, config.bapTimeout);
+			discord.send_cooldown_message(msg, msg.author.id + config.bapType, cooldownMessage, false);
 			mi.logger.info(`${msg.author} added to bap cooldown list.`);
 		}
 
-		Application.modules.Discord.setMessageSent();
+		discord.set_message_sent();
 	}
 });

@@ -1,15 +1,16 @@
 import { define_module, stop } from "../../lib/Module.mjs";
-import Application from "../../lib/Application.mjs";
 import * as app from "../../lib/Application.mjs";
-import Module from "../../lib/Module.mjs";
 import Tools from "../../lib/Tools.mjs";
 
 import config from "../../config/Potato.json" assert { type: "json" };
 
 export const potato = define_module(async mi => {
-	const smartato_emo = (await app.modules).discord.get_emoji("gc_smartato");
-	(await app.modules).discord.client.on("message", async msg => {
-		if ((await app.modules).discord.check_user_access(msg.author)) {
+	const modules = await app.modules;
+	const discord = await modules.discord;
+
+	const smartato_emo = discord.get_emoji("gc_smartato");
+	discord.client.on("message", async msg => {
+		if (discord.check_user_access(msg.author)) {
 			handle(msg);
 		}
 	});
@@ -29,17 +30,17 @@ export const potato = define_module(async mi => {
 	}
 
 	function potato(msg, type, answerType) {
-		if (Application.modules.Discord.controlTalkedRecently(msg, type)) {
+		if (discord.control_talked_recently(msg, type)) {
 			const random = Tools.getRandomIntFromInterval(0, answerType.length - 1);
 			msg.channel.send(Tools.parseReply(answerType[random], [msg.author])).then(sentEmbed => {
 				potatofy(sentEmbed);
 			});
-			Application.modules.Discord.setMessageSent();
+			discord.set_message_sent();
 		}
 	}
 
 	function potatofy(msg) {
-		if (Application.modules.Discord.checkUserAccess(msg.author)) {
+		if (discord.check_user_access(msg.author)) {
 			msg.react(smartato_emo);
 		}
 	}

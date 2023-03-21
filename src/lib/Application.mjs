@@ -301,7 +301,7 @@ import { worst_pony } from "../modules/WorstPony/module.mjs";
 /**
  * @satisfies { Record<
  *    string,
- *    (mi: import("./Module.mjs").ModuleInjects) => Promise<import("./Module.mjs").Module>
+ *    (mi: import("./module.js").ModuleInjects) => Promise<import("./module.js").Module>
  * > }
  */
 const uninitialised_modules = {
@@ -354,7 +354,7 @@ function create_modules_promise() {
 		};
 		module_stop = async () => {
 			for (const [_name, module] of tools.entries(await modules)) {
-				await module.stop();
+				await (await module).stop();
 			}
 
 			modules = create_modules_promise();
@@ -366,26 +366,26 @@ function create_modules_promise() {
 /**
  * @template { string } ModuleNames
  * @template {{
- *    [K in ModuleNames]: (mi: import("./Module.mjs").ModuleInjects)
- *       => Promise<import("./Module.mjs").Module>
+ *    [K in ModuleNames]: (mi: import("./module.js").ModuleInjects)
+ *       => Promise<import("./module.js").Module>
  * }} T
  * @param { T } modules
- * @return { Promise<{ [K in keyof T]: Awaited<ReturnType<T[K]>> }> }
+ * @return { Promise<{ [K in keyof T]: ReturnType<T[K]> }> }
  */
 async function init_modules(modules) {
-	/** @type {{ [K in keyof T]: Awaited<ReturnType<T[K]>> }} */
+	/** @type {{ [K in keyof T]: ReturnType<T[K]> }} */
 	// @ts-expect-error
 	const initialised_modules = {};
 
 	const entries = tools.entries(modules);
 	for (const [name, module] of entries) {
-		/** @type { import("./Module.mjs").ModuleInjects } */
+		/** @type { import("./module.js").ModuleInjects } */
 		const mi = {
 			logger: tools.get_logger(/** @type { string } */ (name))
 		};
 
 		// @ts-expect-error
-		initialised_modules[name] = await module(mi);
+		initialised_modules[name] = module(mi);
 	}
 
 	return initialised_modules;

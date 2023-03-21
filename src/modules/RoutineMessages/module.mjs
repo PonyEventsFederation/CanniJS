@@ -1,7 +1,5 @@
 import { define_module, stop } from "../../lib/Module.mjs";
-import Application from "../../lib/Application.mjs";
 import * as app from "../../lib/Application.mjs";
-import Module from "../../lib/Module.mjs";
 import Tools from "../../lib/Tools.mjs";
 
 import config from "../../config/RoutineMessages.json" assert { type: "json" };
@@ -11,13 +9,16 @@ let inactive = true;
 let interval;
 
 export const routine_messages = define_module(async mi => {
+	const modules = await app.modules;
+	const discord = await modules.discord;
+
 	let target = process.env["GENERAL_CHAT"]
-		? await (await app.modules).discord.client.channels.fetch(process.env["GENERAL_CHAT"])
+		? await discord.client.channels.fetch(process.env["GENERAL_CHAT"])
 		: undefined;
 	let interval = config.m_time_imterval;
 
-	(await app.modules).discord.client.on("message", async msg => {
-		if ((await app.modules).discord.check_user_access(msg.author) && inactive && target) {
+	discord.client.on("message", async msg => {
+		if (discord.check_user_access(msg.author) && inactive && target) {
 			if (checkTime()) {
 				inactive = false;
 				startMaintenance();

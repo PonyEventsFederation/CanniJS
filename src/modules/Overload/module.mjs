@@ -1,7 +1,5 @@
 import { define_module, stop } from "../../lib/Module.mjs";
-import Application from "../../lib/Application.mjs";
 import * as app from "../../lib/Application.mjs";
-import Module from "../../lib/Module.mjs";
 import Tools from "../../lib/Tools.mjs";
 
 import config from "../../config/Overload.json" assert { type: "json" };
@@ -14,21 +12,25 @@ let type_delay = 0;
 let overload_on = false;
 
 export const overload = define_module(async mi => {
+	const modules = await app.modules;
+	const discord = await modules.discord;
+
 	let overloads = {};
 
 	// TODO remove this var lol
 	let types = config.types;
 	load_overloader();
 
-	Application.modules.Discord.client.on("message", (msg) => {
-		if(Application.modules.Discord.checkUserAccess(msg.author) && check_overload(msg)) {
-			Application.modules.Discord.setMessageSent();
+	discord.client.on("message", (msg) => {
+		if(discord.check_user_access(msg.author) && check_overload(msg)) {
+			discord.set_message_sent();
 			return;
 		}
 	});
 
 	return {
-		stop
+		stop,
+		overload
 	};
 
 	function overload(type, num = 1) {
@@ -74,11 +76,11 @@ export const overload = define_module(async mi => {
 		const online = config.ans_online_again;
 		const answer = config.ans_overload;
 		reset_all();
-		(await app.modules).discord.client.user.setStatus("idle");
+		discord.client.user.setStatus("idle");
 		await Tools.listSender(msg.channel, answer, [2000, 4000, 4000], [config.downtime]);
-		(await app.modules).discord.client.user.setStatus("dnd");
+		discord.client.user.setStatus("dnd");
 		setTimeout(async function() {
-			(await app.modules).discord.client.user.setPresence({ status: "online" });
+			discord.client.user.setPresence({ status: "online" });
 			overload_on = false;
 			msg.channel.send(Tools.parseReply(online));
 		}, downtime_ms);

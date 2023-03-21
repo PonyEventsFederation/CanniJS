@@ -1,17 +1,18 @@
 import { define_module, stop } from "../../lib/Module.mjs";
-import Application from "../../lib/Application.mjs";
 import * as app from "../../lib/Application.mjs";
-import Module from "../../lib/Module.mjs";
 import Tools from "../../lib/Tools.mjs";
 import fs from "fs";
 import fsp from "fs/promises";
 import { resolve as resolve_path } from "path";
 
 export const help = define_module(async mi => {
+	const modules = await app.modules;
+	const discord = await modules.discord;
+
 	const path = resolve_path("./src/config/Text/help.txt");
 
 	const help_list = prepare_help(await fsp.readFile(path));
-	(await app.modules).discord.add_command("help", help);
+	discord.add_command("help", help);
 
 	return {
 		stop
@@ -19,7 +20,7 @@ export const help = define_module(async mi => {
 
 	async function help(msg) {
 		recursiveSender(msg, 0);
-		(await app.modules).discord.set_message_sent();
+		discord.set_message_sent();
 	}
 
 	// TODO this doesn't need to be recursive, change it into a for loop or something

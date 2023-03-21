@@ -1,7 +1,5 @@
-import { define_module, stop } from "../../lib/Module.mjs";
-import Application from "../../lib/Application.mjs";
-import Module from "../../lib/Module.mjs";
-import DiscordJS from "discord.js";
+import * as app from "../../lib/Application.mjs";
+import { define_module } from "../../lib/Module.mjs";
 import { Client } from "discord.js";
 import Tools from "../../lib/Tools.mjs";
 
@@ -18,6 +16,9 @@ const static_emoji_map = {
 };
 
 export const discord = define_module(async mi => {
+	const modules = await app.modules;
+	circular_dependency
+	const dev_commands = await modules.dev_commands;
 	let commands = [];
 	let reactions = [];
 	let channel_messaged = new Set();
@@ -60,9 +61,12 @@ export const discord = define_module(async mi => {
 		control_talked_recently,
 		get_emoji,
 		has_cooldown,
+		is_ready,
+		is_user_blocked,
 		send_cooldown_message,
 		set_cooldown,
-		set_message_sent
+		set_message_sent,
+		unblock_user
 	};
 
 	async function stop() {
@@ -154,7 +158,7 @@ export const discord = define_module(async mi => {
 		if (talked_recently.has(cooldown_target)) {
 			// Set the default cooldown message if none is passed from another module.
 			if (cooldown_message == null) {
-				if (Application.modules.DevCommands.auth_dev(msg.author.id)) {
+				if (dev_commands.auth_dev(msg.author.id)) {
 					cooldown_message = Tools.parseReply(config.cooldownMessageDev, [msg.author, get_emoji("gc_cannishy")]);
 				} else {
 					cooldown_message = Tools.parseReply(config.cooldownMessageDefault, [msg.author, get_emoji("gc_cannierror")]);
@@ -195,7 +199,7 @@ export const discord = define_module(async mi => {
 			}, config.cooldownTimeout);
 		}
 
-		Application.modules.Discord.setMessageSent();
+		set_message_sent();
 	}
 
 	function block_user(userId, blockTimeout) {
@@ -206,9 +210,7 @@ export const discord = define_module(async mi => {
 	}
 
 	function check_user_access(user) {
-		return !(user.bot
-            || Application.modules.Discord.isUserBlocked(user.id)
-            || Application.modules.Discord.isMessageSent());
+		return !user.bot || is_user_blocked(user.id) || is_message_sent();
 	}
 
 	function unblock_user(userId) {

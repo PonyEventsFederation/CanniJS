@@ -1,9 +1,7 @@
 import { define_module, stop } from "../../lib/Module.mjs";
-import Application from "../../lib/Application.mjs";
 import * as app from "../../lib/Application.mjs";
 import app_config from "../../config/application/config.json" assert { type: "json" };
 import Database from "../../lib/Database.mjs";
-import Module from "../../lib/Module.mjs";
 import Tools from "../../lib/Tools.mjs";
 import moment from "moment";
 
@@ -12,10 +10,14 @@ import config from "../../config/Hug.json" assert { type: "json" };
 const hugDeleteTimeout = 40000;
 
 export const hug = define_module(async mi => {
-	let hug_emoji = (await app.modules).discord.get_emoji("gc_cannihug");
+	const modules = await app.modules;
+	const discord = await modules.discord;
+	const overload = await modules.overload;
 
-	(await app.modules).discord.client.on("message", async msg => {
-		if ((await app.modules).discord.check_user_access(msg.author)) {
+	let hug_emoji = discord.get_emoji("gc_cannihug");
+
+	discord.client.on("message", async msg => {
+		if (discord.check_user_access(msg.author)) {
 			handle(msg);
 		}
 	});
@@ -26,7 +28,7 @@ export const hug = define_module(async mi => {
 
 	function handle(msg) {
 		// Politely asking for a hug from Canni.
-		if (msg.mentions.has(Application.modules.Discord.client.user)) {
+		if (msg.mentions.has(discord.client.user)) {
 			if (Tools.msg_contains_list(msg, config.phrase_askHug)) {
 				return hug(msg, config.requestHugAnswer, msg.author);
 			}
@@ -47,10 +49,10 @@ export const hug = define_module(async mi => {
 
 			if (users.length > config.hugLimit) {
 				setCooldown(msg);
-			} else if (!Application.modules.Discord.hasCooldown(msg.author.id, config.hugType)) {
+			} else if (!discord.has_cooldown(msg.author.id, config.hugType)) {
 				for (let i = 0; i < users.length; i++) {
 					// Hug targeted at Canni.
-					if (Application.checkSelf(users[i].id)) {
+					if (discord.check_self(users[i].id)) {
 						hug(msg, config.botHugAnswer);
 						continue;
 					}
@@ -75,7 +77,7 @@ export const hug = define_module(async mi => {
 		if (!msg.mentions.everyone && msg.mentions.users.array().length === 1) {
 			const user = msg.mentions.users.array()[0];
 
-			if (Application.checkSelf(user.id)) {
+			if (discord.check_self(user.id)) {
 				return megaHug(msg, config.megaSelfHugAnswer, msg.author);
 			}
 
@@ -91,7 +93,7 @@ export const hug = define_module(async mi => {
 				mi.logger.error("Promise rejection error: " + err);
 			});
 
-			Application.modules.Discord.setMessageSent();
+			discord.set_message_sent();
 		}
 	}
 
@@ -101,8 +103,8 @@ export const hug = define_module(async mi => {
 
 		msg.channel.send(answer);
 
-		Application.modules.Overload.overload("hug");
-		Application.modules.Discord.setMessageSent();
+		overload.overload("hug");
+		discord.set_message_sent();
 	}
 
 	function hug(msg, answerType, target = "") {
@@ -114,19 +116,19 @@ export const hug = define_module(async mi => {
 		});
 
 		setTimeout(() => msg.delete(), hugDeleteTimeout);
-		Application.modules.Overload.overload("hug");
-		Application.modules.Discord.setMessageSent();
+		overload.overload("hug");
+		discord.set_message_sent();
 	}
 
 	function setCooldown(msg) {
-		const cooldownMessage = Tools.parseReply(config.cooldownMessage, [msg.author, Application.modules.Discord.getEmoji("gc_cannierror")]);
+		const cooldownMessage = Tools.parseReply(config.cooldownMessage, [msg.author, discord.get_emoji("gc_cannierror")]);
 
-		if (!Application.modules.Discord.hasCooldown(msg.author.id, config.hugType)) {
-			Application.modules.Discord.setCooldown(msg.author.id, config.hugType, config.hugTimeout);
-			Application.modules.Discord.sendCooldownMessage(msg, msg.author.id + config.hugType, cooldownMessage, false);
+		if (!discord.has_cooldown(msg.author.id, config.hugType)) {
+			discord.set_cooldown(msg.author.id, config.hugType, config.hugTimeout);
+			discord.send_cooldown_message(msg, msg.author.id + config.hugType, cooldownMessage, false);
 			mi.logger.info(`${msg.author} added to hug cooldown list.`);
 		}
 
-		Application.modules.Discord.setMessageSent();
+		discord.set_message_sent();
 	}
 });

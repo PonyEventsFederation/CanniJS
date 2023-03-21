@@ -1,8 +1,6 @@
 import { define_module, stop } from "../../lib/Module.mjs";
-import Application from "../../lib/Application.mjs";
 import * as app from "../../lib/Application.mjs";
 import app_config from "../../config/application/config.json" assert { type: "json" };
-import Module from "../../lib/Module.mjs";
 import Tools from "../../lib/Tools.mjs";
 import fs from "fs";
 import path from "path";
@@ -18,17 +16,22 @@ let dev_master_ids;
 let guild;
 
 export const dev_commands = define_module(async mi => {
+	const modules = await app.modules;
+	const discord = await modules.discord;
+
 	if (Tools.test_ENV("MAIN_SERVER")) {
-		guild = Tools.guild_by_id((await app.modules).discord.client, process.env["MAIN_SERVER"]);
+		guild = Tools.guild_by_id(discord.client, process.env["MAIN_SERVER"]);
 	}
 
 	load_ids();
 
-	(await app.modules).discord.client.on("message", msg => {
+	discord.client.on("message", msg => {
 		handle();
 	});
 
 	return {
+		auth_dev,
+		auth_dev_master,
 		stop
 	};
 
@@ -41,7 +44,7 @@ export const dev_commands = define_module(async mi => {
 	}
 
 	async function handle(msg) {
-		if ((await app.modules).discord.check_user_access(msg.author) && msg.mentions.has((await app.modules).discord.client.user) && guild) {
+		if (discord.check_user_access(msg.author) && msg.mentions.has(discord.client.user) && guild) {
 			if (auth_dev_master(msg.author.id)) {
 				processMasterCommands(msg);
 			}
@@ -85,41 +88,43 @@ export const dev_commands = define_module(async mi => {
 
 	async function addDev(msg) {
 		if (!msg.mentions.everyone && msg.mentions.users.array().length === 2) {
-			let discord_id = (await app.modules).discord.client.user.id;
+			// @ts-expect-error
+			let discord_id = discord.client.user.id;
 			const user = msg.mentions.users.array().find(x => x.id !== discord_id);
 			id_add(user.id);
 			msg.channel.send(Tools.parseReply(config.ans_add_dev, [user]));
-			(await app.modules).discord.set_message_sent();
+			discord.set_message_sent();
 		}
 	}
 
 	async function removeDev(msg) {
 		if (!msg.mentions.everyone && msg.mentions.users.array().length === 2) {
-			let discord_id = (await app.modules).discord.client.user.id;
+			// @ts-expect-error
+			let discord_id = discord.client.user.id;
 			const user = msg.mentions.users.array().find(x => x.id !== discord_id);
 			id_remove(user.id);
 			msg.channel.send(Tools.parseReply(config.ans_remove_dev, [user]));
-			(await app.modules).discord.set_message_sent();
+			discord.set_message_sent();
 		}
 	}
 
 	async function sReport(msg) {
 		msg.channel.send(Tools.parseReply(config.ans_status_report, [msg.guild.memberCount]));
-		(await app.modules).discord.set_message_sent();
+		discord.set_message_sent();
 	}
 
 	async function listMasterDevs(msg) {
 		let users = "";
 		dev_master_ids.forEach(item => users += guild.members.find(m => m.id === item) + "\n");
 		msg.channel.send(Tools.parseReply(config.ans_list_master_devs, [users]));
-		(await app.modules).discord.set_message_sent();
+		discord.set_message_sent();
 	}
 
 	async function listDevs(msg) {
 		let users = "";
 		dev_ids.forEach(item => users += guild.members.find(m => m.id === item) + "\n");
 		msg.channel.send(Tools.parseReply(config.ans_list_dev, [users]));
-		(await app.modules).discord.set_message_sent();
+		discord.set_message_sent();
 	}
 
 	async function memberId(msg) {
@@ -128,11 +133,12 @@ export const dev_commands = define_module(async mi => {
 		}
 		let user;
 		if (!msg.mentions.everyone && msg.mentions.users.array().length === 2) {
-			let discord_id = (await app.modules).discord.client.user.id;
+			// @ts-expect-error
+			let discord_id = discord.client.user.id;
 			user = msg.mentions.users.array().find(x => x.id !== discord_id);
 			msg.channel.send(Tools.parseReply(config.ans_member_id, [user.username, user.id])).then(message => {message.delete(8000);});
 		}
-		(await app.modules).discord.set_message_sent();
+		discord.set_message_sent();
 	}
 
 	async function channelId(msg) {
@@ -140,7 +146,7 @@ export const dev_commands = define_module(async mi => {
 			setTimeout(() => msg.delete(), app_config.deleteDelay);
 		}
 		msg.channel.send(Tools.parseReply(config.ans_channel_id, [msg.channel.id])).then(message => message.delete(8000));
-		(await app.modules).discord.set_message_sent();
+		discord.set_message_sent();
 	}
 
 	function load_ids() {
@@ -159,7 +165,7 @@ export const dev_commands = define_module(async mi => {
 			const dconfig = Tools.loadCommentedConfigFile(dLocation);
 
 			if (dconfig.token.toLowerCase() === "env") {
-				if (Tools.test_ENV("MASTER_DEV_ID")) {
+				if (process.env["MASTER_DEV_ID"]) {
 					const masters = process.env["MASTER_DEV_ID"].split(",");
 					masters.forEach(add_master_dev);
 					ids = [dev_ids, dev_master_ids];

@@ -7,16 +7,16 @@ export function define_module(mod) {
 	return async mi => {
 		mi.logger.info("starting...");
 
-		const done = create_deadlock_detector("initialisation", mi.logger);
+		const done = create_deadlock_indicator("initialisation", mi.logger);
 		const module = await mod(mi);
 		done();
 
-		const old_stop = module.stop;
+		const original_stop = module.stop;
 		module.stop = async () => {
 			mi.logger.info("stopping...");
 
-			const done = create_deadlock_detector("stop", mi.logger);
-			await old_stop();
+			const done = create_deadlock_indicator("stop", mi.logger);
+			await original_stop();
 			done();
 		};
 
@@ -36,7 +36,7 @@ export const stop = Promise.resolve;
  * @param { string } thing
  * @param { import("tslog").Logger<void> } logger
  */
-function create_deadlock_detector(thing, logger) {
+function create_deadlock_indicator(thing, logger) {
 	let counter = 0;
 	const deadlock_detector = setInterval(() => {
 		logger.fatal(`${thing}: promise has not resolved, potential deadlock? (~${++counter * 10}s)`);

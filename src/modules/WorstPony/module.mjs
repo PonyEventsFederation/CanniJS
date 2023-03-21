@@ -1,13 +1,14 @@
 import { define_module, stop } from "../../lib/Module.mjs";
-import Application from "../../lib/Application.mjs";
 import * as app from "../../lib/Application.mjs";
-import Module from "../../lib/Module.mjs";
 import Tools from "../../lib/Tools.mjs";
 
 import config from "../../config/WorstPony.json" assert { type: "json" };
 
 export const worst_pony = define_module(async mi => {
-	(await app.modules).discord.client.on("message", async msg => {
+	const modules = await app.modules;
+	const discord = await modules.discord;
+
+	discord.client.on("message", async msg => {
 		handle(msg);
 	});
 
@@ -20,29 +21,29 @@ export const worst_pony = define_module(async mi => {
 			return;
 		}
 
-		if (msg.mentions.has(Application.modules.Discord.client.user)) {
+		if (msg.mentions.has(discord.client.user)) {
 			if (Tools.msg_contains(msg, "i'm sorry") || Tools.msg_contains(msg, "i am sorry") || Tools.msg_contains(msg, "i’m sorry")) {
 				return forgiveUser(msg);
 			}
 		}
 
-		if (Application.modules.Discord.checkUserAccess(msg.author) && Tools.msg_contains(msg, " is worst pony")) {
+		if (discord.check_user_access(msg.author) && Tools.msg_contains(msg, " is worst pony")) {
 			return whoIsWorstPony(msg);
 		}
 	}
 
 	function forgiveUser(msg) {
-		if (Application.modules.Discord.isUserBlocked(msg.author.id)) {
+		if (discord.is_user_blocked(msg.author.id)) {
 			const random = Tools.getRandomIntFromInterval(0, config.forgiveUserAnswer.length - 1);
-			msg.channel.send(Tools.parseReply(config.forgiveUserAnswer[random], [msg.author, Application.modules.Discord.getEmoji("gc_cannilove")]));
+			msg.channel.send(Tools.parseReply(config.forgiveUserAnswer[random], [msg.author, discord.get_emoji("gc_cannilove")]));
 
-			Application.modules.Discord.unblockUser(msg.author.id);
+			discord.unblock_user(msg.author.id);
 		} else {
 			const random = Tools.getRandomIntFromInterval(0, config.notSorryAnswer.length - 1);
 			msg.channel.send(Tools.parseReply(config.notSorryAnswer[random], [msg.author]));
 		}
 
-		Application.modules.Discord.setMessageSent();
+		discord.set_message_sent();
 	}
 
 	function whoIsWorstPony(msg) {
@@ -51,11 +52,11 @@ export const worst_pony = define_module(async mi => {
 		case "canni soda is worst pony": {
 			const cooldownMessage = Tools.parseReply(config.cooldownMessageWorstPony, [msg.author]);
 
-			if (Application.modules.Discord.controlTalkedRecently(msg, config.canniWorstPonyType, true, "individual", cooldownMessage, true, config.blockTimeout)) {
+			if (discord.control_talked_recently(msg, config.canniWorstPonyType, true, "individual", cooldownMessage, true, config.blockTimeout)) {
 				const random = Tools.getRandomIntFromInterval(0, config.canniWorstPonyAnswer.length - 1);
 				msg.channel.send(Tools.parseReply(config.canniWorstPonyAnswer[random], [msg.author]));
 
-				Application.modules.Discord.setMessageSent();
+				discord.set_message_sent();
 			}
 			break;
 		}

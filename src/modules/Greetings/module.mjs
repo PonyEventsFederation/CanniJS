@@ -1,15 +1,15 @@
 import { define_module, stop } from "../../lib/Module.mjs";
-import Application from "../../lib/Application.mjs";
 import * as app from "../../lib/Application.mjs";
-import Module from "../../lib/Module.mjs";
 import Tools from "../../lib/Tools.mjs";
 
 import config from "../../config/Greetings.json" assert { type: "json" };
 
 export const greetings = define_module(async mi => {
-	app.modules
-	Application.modules.Discord.client.on("message", (msg) => {
-		if (Application.modules.Discord.checkUserAccess(msg.author)) {
+	const modules = await app.modules;
+	const discord = await modules.discord;
+
+	discord.client.on("message", (msg) => {
+		if (discord.check_user_access(msg.author)) {
 			handle(msg);
 		}
 	});
@@ -31,11 +31,11 @@ export const greetings = define_module(async mi => {
 	}
 
 	function sendMessage(msg, type, answerType) {
-		if (Application.modules.Discord.controlTalkedRecently(msg, type, false, "channel", undefined, undefined, 90000)) {
+		if (discord.control_talked_recently(msg, type, false, "channel", undefined, undefined, 90000)) {
 			const random = Tools.getRandomIntFromInterval(0, answerType.length - 1);
 			msg.channel.send(Tools.parseReply(answerType[random]));
 
-			Application.modules.Discord.setMessageSent();
+			discord.set_message_sent();
 		}
 	}
 });

@@ -1,9 +1,8 @@
 import { define_module, stop } from "../../lib/Module.mjs";
-import Application from "../../lib/Application.mjs";
 import * as app from "../../lib/Application.mjs";
-import Module from "../../lib/Module.mjs";
 import Tools from "../../lib/Tools.mjs";
 import fs from "fs";
+import path from "path";
 
 import config from "../../config/Ignore.json" assert { type: "json" };
 
@@ -13,14 +12,17 @@ let ignore_ids;
 let guild;
 
 export const ignore = define_module(async mi => {
+	const modules = await app.modules;
+	const discord = await modules.discord;
+
 	if (Tools.test_ENV("MAIN_SERVER")) {
-		guild = Tools.guild_by_id((await app.modules).discord.client, process.env["MAIN_SERVER"]);
+		guild = Tools.guild_by_id(discord.client, process.env["MAIN_SERVER"]);
 	}
 
 	load_ignore_ids();
 
-	(await app.modules).discord.client.on("message", async msg => {
-		if ((await app.modules).discord.check_user_access(msg.author)) {
+	discord.client.on("message", async msg => {
+		if (discord.check_user_access(msg.author)) {
 			handle(msg);
 		}
 	});
@@ -31,18 +33,18 @@ export const ignore = define_module(async mi => {
 
 	function handle(msg) {
 		if (is_ignored(msg)) {
-			if (msg.mentions.has(Application.getClient().user) && guild) {
-				Application.modules.Discord.setMessageSent();
+			if (msg.mentions.has(discord.client.user) && guild) {
+				discord.set_message_sent();
 				return ignored_mentioned(msg);
 			} else {
-				Application.modules.Discord.setMessageSent();
+				discord.set_message_sent();
 				return ignored(msg);
 			}
 		}
 	}
 
 	function ignored(msg) {
-		if (Application.modules.Discord.controlTalkedRecently(msg, config.potato_ignoredType, false, "message", undefined, undefined, 600000)) {
+		if (discord.control_talked_recently(msg, config.potato_ignoredType, false, "message", undefined, undefined, 600000)) {
 			msg.channel.send(Tools.parseReply(config.ans_potato_ignore, [msg.author])).then(() => {
 				// msg.react(potato_emo);
 			});
@@ -50,7 +52,7 @@ export const ignore = define_module(async mi => {
 	}
 
 	function ignored_mentioned(msg) {
-		if (Application.modules.Discord.controlTalkedRecently(msg, config.potato_ignored_mentionedType, false, "message", undefined, undefined, 600000)) {
+		if (discord.control_talked_recently(msg, config.potato_ignored_mentionedType, false, "message", undefined, undefined, 600000)) {
 			msg.channel.send(Tools.parseReply(config.ans_potato_ignored_mentioned, [msg.author])).then(() => {
 				// msg.react(potato_emo);
 			});
@@ -69,7 +71,7 @@ export const ignore = define_module(async mi => {
 	}
 
 	function load_ignore_ids() {
-		idLocation = Application.config.config_path + "/application/ignore_ids.json";
+		idLocation = path.resolve("./src/config/application/ignore_ids.json");
 
 		if (!fs.existsSync(idLocation)) {
 			fs.writeFileSync(idLocation, "[]");

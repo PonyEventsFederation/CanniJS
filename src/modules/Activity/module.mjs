@@ -6,31 +6,32 @@ const probability = 0.25;
 import config from "../../config/Activity.json" assert { type: "json" };
 
 export const activity = define_module(async mi => {
+	const modules = await app.modules;
+	const discord = await modules.discord
+
 	activitySelect();
 
-	(await app.modules).discord.client.on("message", msg => {
-		randomizerActivity(msg);
-	});
+	discord.client.on("message", msg => randomizerActivity(msg));
 
-	return {
-		stop
-	};
+	return { stop };
 
 	async function randomizerActivity(msg) {
 		if (
-			(await app.modules).discord.check_user_access(msg.author)
+			discord.check_user_access(msg.author)
 			&& Tools.chancePercent(probability, true)
 		) {
 			activitySelect();
 		}
 	}
 
-	function activitySelect() {
-		if (!Application.modules.Discord.isReady()) {
+	async function activitySelect() {
+		if (!discord.is_ready()) {
 			return;
 		}
 		const random = Tools.getRandomIntFromInterval(0, config.activity.length - 1);
-		Application.modules.Discord.client.user.setPresence({
+
+		// TODO non-null assert this
+		discord.client.user?.setPresence({
 			status: "online",
 			afk: false,
 			activity: {
