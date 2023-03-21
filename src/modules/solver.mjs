@@ -17,6 +17,7 @@ export const solver = define_module(async mi => {
 	const modules = await app.modules;
 	const discord = await modules.discord;
 
+	// TODO what the fuck did I do here
 	let smileEmoji = discord.client.on("message", async msg => {
 		if (discord.check_user_access(msg.author) && msg.mentions.has(discord.client.user)) {
 			handle(msg);
