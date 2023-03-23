@@ -73,3 +73,11 @@ Application.run();
 process.on("SIGINT", () => Application.stop());
 process.on("SIGTERM", () => Application.stop());
 process.on("exit", () => Application.stop());
+
+process.on("unhandledRejection", (e) => {
+	console.error(e)
+});
+process.on("uncaughtException", (e, ee) => {
+	console.error(ee);
+	console.error(e);
+});
