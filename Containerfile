@@ -8,19 +8,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # RUN useradd -m sani
 # USER sani
 
-ENV PNPM_VERSION 7.13.4
+ENV PNPM_VERSION 8.5.1
 ENV PNPM_HOME /root/.local/share/pnpm
 ENV PATH ${PATH}:/root/.local/share/pnpm
 RUN curl -fsSL https://get.pnpm.io/install.sh | SHELL=`/bin/bash` sh - \
 	&& pnpm -v
 
-ENV NODE_VERSION 14.20.1
-RUN pnpm env use -g ${NODE_VERSION}
-
 WORKDIR /home/sani/app
-
-
 COPY . .
+
+RUN pnpm node -v
 
 RUN pnpm i --frozen-lockfile -P
 
