@@ -9,14 +9,15 @@ const config = {
 	"cooldownTimeout": 60000,
 	"cooldownMessageDefault": "Hello %s! My creators added a 1 minute cooldown to prevent my circuits from overheating. \nPlease let me rest for a moment! %s",
 	"cooldownMessageDev": "Hello %s! My creators added a 1 min...\nHey, wait a minute! You *are* one of my creators! You already knew this. %s",
-	"devs": [],
+	// TODO remove this jsdoc commebt
+	"devs": /** @type {Array<string>} */([]),
 	"master_devs": [
 		"379800645571575810"
 	]
 };
 
 /**
- * @type { Record<string, string> }
+ * @type {Record<string, string>}
  */
 const static_emoji_map = {
 	gc_cannisanta: "<:gc_cannisanta:659017337269256192>",
@@ -67,7 +68,7 @@ export const discord = define_module(async mi => {
 
 
 	/**
-	 * @return { ReadonlyArray<string> }
+	 * @return {ReadonlyArray<string>}
 	 */
 	function get_devs() {
 		let devs = [...config.devs];
@@ -77,7 +78,7 @@ export const discord = define_module(async mi => {
 	}
 
 	/**
-	 * @return { ReadonlyArray<string> }
+	 * @return {ReadonlyArray<string>}
 	 */
 	function get_master_devs() {
 		return config.master_devs;
@@ -86,8 +87,8 @@ export const discord = define_module(async mi => {
 
 	const _dev_ids = [...config.devs];
 	_dev_ids.push(...config.master_devs);
-	const dev_ids = /** @type { ReadonlyArray<string> } */ (_dev_ids);
-	const dev_master_ids = /** @type { ReadonlyArray<string> } */ ([...config.master_devs]);
+	const dev_ids = /** @type {ReadonlyArray<string>} */ (_dev_ids);
+	const dev_master_ids = /** @type {ReadonlyArray<string>} */ ([...config.master_devs]);
 
 	return {
 		stop,
@@ -116,7 +117,7 @@ export const discord = define_module(async mi => {
 	}
 
 	/**
-	 * @param { import("discord.js").Message } msg
+	 * @param {import("discord.js").Message} msg
 	 */
 	function process_message(msg) {
 		if (msg.author.bot) return;
@@ -179,21 +180,21 @@ export const discord = define_module(async mi => {
 	}
 
 	/**
-	 * @param { number | null }cooldown_timeout
+	 * @param {number | null}cooldown_timeout
 	 */
 	function control_talked_recently(msg, type, send_message = true, target = "channel", cooldown_message = null, block_user = false, cooldown_timeout = null) {
 		let cooldown_target;
 
 		switch (target) {
-		case "channel":
-			cooldown_target = msg.channel.id + type;
-			break;
-		case "individual":
-			cooldown_target = msg.author.id;
-			break;
-		case "message":
-			cooldown_target = msg.author.id + type;
-			break;
+			case "channel":
+				cooldown_target = msg.channel.id + type;
+				break;
+			case "individual":
+				cooldown_target = msg.author.id;
+				break;
+			case "message":
+				cooldown_target = msg.author.id + type;
+				break;
 		}
 
 		if (talked_recently.has(cooldown_target)) {

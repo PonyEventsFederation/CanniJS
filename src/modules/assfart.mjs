@@ -21,6 +21,9 @@ export const assfart = define_module(async mi => {
 		stop
 	};
 
+	/**
+	 * @param {import("discord.js").Message} msg
+	 */
 	function handle(msg) {
 		if (
 			discord.check_user_access(msg.author)
@@ -31,6 +34,9 @@ export const assfart = define_module(async mi => {
 		}
 	}
 
+	/**
+	 * @param {import("discord.js").Message} msg
+	 */
 	function assFart(msg) {
 		if (discord.control_talked_recently(msg, config.assfartType)) {
 			const random = Tools.getRandomIntFromInterval(0, config.assfartAnswer.length - 1);

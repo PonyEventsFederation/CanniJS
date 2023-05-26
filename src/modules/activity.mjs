@@ -41,12 +41,15 @@ export const activity = define_module(async mi => {
 
 	return { stop };
 
+	/**
+	 * @param {import("discord.js").Message} msg
+	 */
 	async function randomizerActivity(msg) {
 		if (
 			discord.check_user_access(msg.author)
 			&& Tools.chancePercent(probability, true)
 		) {
-			activitySelect();
+			await activitySelect();
 		}
 	}
 
@@ -57,7 +60,7 @@ export const activity = define_module(async mi => {
 		const random = Tools.getRandomIntFromInterval(0, config.activity.length - 1);
 
 		// TODO non-null assert this
-		discord.client.user?.setPresence({
+		await discord.client.user?.setPresence({
 			status: "online",
 			afk: false,
 			activity: {

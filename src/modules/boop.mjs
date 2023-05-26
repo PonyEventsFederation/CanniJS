@@ -156,9 +156,9 @@ export const boop = define_module(async mi => {
 		wachmann_id = process.env["WACHMANN_ID"];
 	}
 
-	discord.client.on("message", async msg => {
+	discord.client.on("message", msg => {
 		if (discord.check_user_access(msg.author)) {
-			handle(msg);
+			mi.ignore_promise(handle(msg));
 		}
 	});
 
@@ -171,11 +171,11 @@ export const boop = define_module(async mi => {
 			const users = msg.mentions.members?.array() || [];
 
 			if (users.length > config.boopLimit) {
-				setCooldown(msg, users);
+				await setCooldown(msg, users);
 			}
 
 			if (!discord.has_cooldown(msg.author.id, config.boopType)) {
-				processBoops(msg, users);
+				await processBoops(msg, users);
 				// todo
 			}
 		}
@@ -308,17 +308,17 @@ export const boop = define_module(async mi => {
 		}
 	}
 
-	function megaBoopLoader(msg, user) {
+	async function megaBoopLoader(msg, user) {
 		const roll = Tools.getRandomIntFromInterval(0, 100);
 
 		if (roll === 100) {
-			hyperBoop(msg, user);
+			await hyperBoop(msg, user);
 		} else if (roll >= 0 && roll <= 5) {
-			megaBoop(msg, user, "miss");
+			await megaBoop(msg, user, "miss");
 		} else if (roll >= 90 && roll <= 99) {
-			megaBoop(msg, user, "crit");
+			await megaBoop(msg, user, "crit");
 		} else {
-			megaBoop(msg, user);
+			await megaBoop(msg, user);
 		}
 	}
 

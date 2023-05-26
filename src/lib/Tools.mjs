@@ -248,6 +248,10 @@ const Tools = {
 		}
 	},
 
+	/**
+	 * @param {number} min
+	 * @param {number} max
+	 */
 	getRandomIntFromInterval(min, max, precise = false) {
 		if (precise) {
 			return Math.random() * (max - min + 1) + min;
@@ -505,12 +509,11 @@ export default Tools;
 
 // typing for return: https://stackoverflow.com/a/60142095
 /**
+ * `Object.entries` but good
+ *
  * @template T
  * @param {T} o
- * @return { Array<{ [K in keyof T]: [K, T[K]] }[keyof T]> }
- *
- * { [k in K]: typeof o[k] }
- * entries<T>(o: { [s: string]: T } | ArrayLike<T>): [string, T][];
+ * @return {Array<{ [K in keyof T]: [K, T[K]] }[keyof T]>}
  */
 export function entries(o) {
 	// @ts-expect-error
@@ -534,7 +537,8 @@ function get_log_level() {
 }
 
 /**
- * @param { string } name
+ * @param {string} name
+ * @return {tslog.Logger<void>}
  */
 export function get_logger(name) {
 	return new tslog.Logger({
@@ -546,9 +550,26 @@ export function get_logger(name) {
 }
 
 /**
- * @param { number } ms number of ms to sleep for
- * @return { Promise<void> }
+ * @type {{
+ *    (logger: import("./module").ModuleInjects["logger"]):
+ *       import("./module").ModuleInjects["ignore_promise"]
+ * }}
+ */
+export function _ignore_promise(logger) {
+	return promise => {
+		promise.catch(e => {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+			logger.fatal(new Error(e));
+		});
+	};
+}
+
+export const ignore_promise = _ignore_promise(logger);
+
+/**
+ * @param {number} ms number of ms to sleep for
+ * @return {Promise<void>}
  */
 export function sleep(ms) {
-	return new global.Promise(res => setTimeout(res, ms));
+	return new Promise(res => setTimeout(res, ms));
 }

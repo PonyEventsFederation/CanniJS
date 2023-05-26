@@ -45,7 +45,7 @@ export const bap = define_module(async mi => {
 
 	const boopCooldown = new Set();
 	const messageSent = new Set();
-	/** @type { string | undefined } */
+	/** @type {string | undefined} */
 	let wachmann_id = undefined;
 
 	if (process.env["WACHMANN_ID"]) {
@@ -75,7 +75,7 @@ export const bap = define_module(async mi => {
 	}
 
 	/**
-	 * @param { "bap" | "bapeth" } answerType
+	 * @param {"bap" | "bapeth"} answerType
 	 */
 	function processBaps(msg, type, answerType) {
 		console.log(answerType);
@@ -107,7 +107,7 @@ export const bap = define_module(async mi => {
 	}
 
 	/**
-	 * @param { "bap" | "bapeth" | "selfbap" | "selfbapeth" } type
+	 * @param {"bap" | "bapeth" | "selfbap" | "selfbapeth"} type
 	 */
 	function getAnswerType(type) {
 		switch(type) {
@@ -120,6 +120,9 @@ export const bap = define_module(async mi => {
 		case "selfbapeth":
 			return config.selfBapethAnswer;
 		}
+		let err = new Error("?????????");
+		mi.logger.fatal(err);
+		throw err;
 	}
 
 	function bap(msg, user, answerType) {

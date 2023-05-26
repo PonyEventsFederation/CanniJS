@@ -297,12 +297,11 @@ import { time_to_galacon } from "../modules/time_to_galacon.mjs";
 import { user_joined } from "../modules/user_joined.mjs";
 import { worst_pony } from "../modules/worst_pony.mjs";
 
-
 /**
- * @satisfies { Record<
+ * @satisfies {Record<
  *    string,
  *    (mi: import("./module.js").ModuleInjects) => Promise<import("./module.js").Module>
- * > }
+ * >}
  */
 const uninitialised_modules = {
 	activity,
@@ -334,26 +333,33 @@ const uninitialised_modules = {
 	worst_pony
 };
 
-/** @type { () => Promise<void> } */
+/** @type {() => void} */
 let module_start;
-/** @type { () => Promise<void> } */
+/** @type {() => Promise<void>} */
 let module_stop;
 let started = false;
 
 export let modules = create_modules_promise();
 
 /**
- * @return { ReturnType<typeof init_modules<keyof uninitialised_modules, uninitialised_modules>> }
+ * @return {Promise<ReturnType<
+ *    typeof init_modules<keyof uninitialised_modules, uninitialised_modules>
+ * >>}
  */
 function create_modules_promise() {
-	return new Promise(res => {
-		module_start = async () => {
+	/**
+	 * @type {Promise<{
+	 *    [K in keyof typeof uninitialised_modules]: ReturnType<uninitialised_modules[K]>
+	 * }>}
+	 */
+	const promise = new Promise(res => {
+		module_start = () => {
 			started = true;
-			const modules = await init_modules(uninitialised_modules);
+			const modules = init_modules(uninitialised_modules);
 			res(modules);
 		};
 		module_stop = async () => {
-			for (const [_name, module] of tools.entries(await modules)) {
+			for (const [, module] of tools.entries(await modules)) {
 				await (await module).stop();
 			}
 
@@ -361,39 +367,40 @@ function create_modules_promise() {
 			started = false;
 		};
 	});
+	return promise;
 }
 
 /**
- * @template { string } ModuleNames
+ * @template {string} ModuleNames
  * @template {{
  *    [K in ModuleNames]: (mi: import("./module.js").ModuleInjects)
  *       => Promise<import("./module.js").Module>
  * }} T
- * @param { T } modules
- * @return { Promise<{ [K in keyof T]: ReturnType<T[K]> }> }
+ * @param {T} modules
+ * @return {{ [K in keyof T]: ReturnType<T[K]>}}
  */
-async function init_modules(modules) {
+function init_modules(modules) {
 	/** @type {{ [K in keyof T]: ReturnType<T[K]> }} */
-	// @ts-expect-error
+	// @ts-expect-error properties will be added later
 	const initialised_modules = {};
 
 	const entries = tools.entries(modules);
 	for (const [name, module] of entries) {
-		/** @type { import("./module.js").ModuleInjects } */
-		const mi = {
-			logger: tools.get_logger(/** @type { string } */ (name))
-		};
+		const logger = tools.get_logger(/** @type {string} */ (name));
+		const ignore_promise = tools._ignore_promise(logger);
+		/** @type {import("./module.js").ModuleInjects} */
+		const mi = { logger, ignore_promise };
 
-		// @ts-expect-error
+		// @ts-expect-error typescript is complaining
 		initialised_modules[name] = module(mi);
 	}
 
 	return initialised_modules;
 }
 
-export async function start_app() {
+export function start_app() {
 	if (started) return;
-	await module_start();
+	module_start();
 }
 
 export async function stop_app() {
@@ -403,5 +410,5 @@ export async function stop_app() {
 
 export async function restart_app() {
 	if (started) await module_stop();
-	await module_start();
+	module_start();
 }

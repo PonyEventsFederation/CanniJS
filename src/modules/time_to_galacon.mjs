@@ -20,6 +20,7 @@ export const time_to_galacon = define_module(async mi => {
 	const modules = await app.modules;
 	const discord = await modules.discord;
 
+	// @ts-expect-error
 	discord.add_command("when", (msg) => {
 		handleWhen(msg);
 	});
@@ -44,6 +45,9 @@ export const time_to_galacon = define_module(async mi => {
 		stop
 	};
 
+	/**
+	 * @param {import("discord.js").Message} msg
+	 */
 	function handleWhen(msg) {
 		if (discord.check_user_access(msg.author)) {
 			if (active) {
@@ -55,9 +59,13 @@ export const time_to_galacon = define_module(async mi => {
 		}
 	}
 
+	/**
+	 * @param {import("discord.js").Message} msg
+	 */
 	function handleMessage(msg) {
 		if (
 			discord.check_user_access(msg.author)
+				// @ts-expect-error
 				&& msg.mentions.has(discord.client.user)
 		) {
 			if (Tools.msg_contains(msg, "when is galacon")) {
@@ -76,13 +84,16 @@ export const time_to_galacon = define_module(async mi => {
 		const galaconDate = new Temporal.PlainDateTime(y, m, d);
 
 		const berlin_tz = new Temporal.TimeZone("europe/berlin");
-		const local_tz = Temporal.Now.timeZone();
+		const local_tz = Temporal.Now.timeZoneId();
 
 		mi.logger.info("Set galacon date to " + galaconDate.toString({ smallestUnit: "minute" }));
 
 		return { galaconDate, berlin_tz, local_tz };
 	}
 
+	/**
+	 * @param {import("discord.js").Message} msg
+	 */
 	function tellMeWhen(msg) {
 		const duration = getTimeRemaining();
 		const random = Tools.getRandomIntFromInterval(0, config.galaconAnswer.length - 1);
@@ -96,7 +107,9 @@ export const time_to_galacon = define_module(async mi => {
 		const duration = getTimeRemaining();
 		const msg = `Time to Galacon: ${duration.days} days, ${duration.hrs.toString().padStart(2, "0")}:${duration.minutes} left! Hype!`;
 
+		// @ts-expect-error
 		await discord.client.user.setActivity(msg, {
+			// @ts-expect-error i dunno what this is h
 			status: "online",
 			afk: false
 		});

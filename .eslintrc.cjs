@@ -23,6 +23,10 @@ module.exports = {
 		project: path.resolve("./tsconfig.json")
 	},
 	rules: {
+		"@typescript-eslint/consistent-type-definitions": [
+			error,
+			"type"
+		],
 		"arrow-spacing": [
 			error,
 			{ before: true, after: true }

@@ -29,11 +29,15 @@ export const worst_pony = define_module(async mi => {
 		stop
 	};
 
+	/**
+	 * @param {import("discord.js").Message} msg
+	 */
 	function handle(msg) {
 		if (msg.author.bot) {
 			return;
 		}
 
+		// @ts-expect-error
 		if (msg.mentions.has(discord.client.user)) {
 			if (Tools.msg_contains(msg, "i'm sorry") || Tools.msg_contains(msg, "i am sorry") || Tools.msg_contains(msg, "i’m sorry")) {
 				return forgiveUser(msg);
@@ -45,6 +49,9 @@ export const worst_pony = define_module(async mi => {
 		}
 	}
 
+	/**
+	 * @param {import("discord.js").Message} msg
+	 */
 	function forgiveUser(msg) {
 		if (discord.is_user_blocked(msg.author.id)) {
 			const random = Tools.getRandomIntFromInterval(0, config.forgiveUserAnswer.length - 1);
@@ -59,20 +66,29 @@ export const worst_pony = define_module(async mi => {
 		discord.set_message_sent();
 	}
 
+	/**
+	 * @param {import("discord.js").Message} msg
+	 */
 	function whoIsWorstPony(msg) {
 		switch (msg.content.toLowerCase()) {
-		case "canni is worst pony":
-		case "canni soda is worst pony": {
-			const cooldownMessage = Tools.parseReply(config.cooldownMessageWorstPony, [msg.author]);
+			case "canni is worst pony":
+			case "canni soda is worst pony": {
+				const cooldownMessage = Tools.parseReply(config.cooldownMessageWorstPony, [msg.author]);
 
-			if (discord.control_talked_recently(msg, config.canniWorstPonyType, true, "individual", cooldownMessage, true, config.blockTimeout)) {
-				const random = Tools.getRandomIntFromInterval(0, config.canniWorstPonyAnswer.length - 1);
-				msg.channel.send(Tools.parseReply(config.canniWorstPonyAnswer[random], [msg.author]));
+				if (discord.control_talked_recently(msg, config.canniWorstPonyType, true, "individual", cooldownMessage, true, config.blockTimeout)) {
+					const random = Tools.getRandomIntFromInterval(
+						0,
+						config.canniWorstPonyAnswer.length - 1
+					);
+					msg.channel.send(Tools.parseReply(
+						config.canniWorstPonyAnswer[random],
+						[msg.author]
+					));
 
-				discord.set_message_sent();
+					discord.set_message_sent();
+				}
+				break;
 			}
-			break;
-		}
 		}
 	}
 });

@@ -56,8 +56,8 @@ export const gamer_canni = define_module(async mi => {
 	}
 
 	/**
-	 * @param { string | null } flavourText
-	 * @param { "rps" | "rpsls" | null } gameType
+	 * @param {string | null} flavourText
+	 * @param {"rps" | "rpsls" | null} gameType
 	 */
 	function letsPlay(msg, flavourText = null, gameType = null) {
 		mi.logger.debug("started playing game");

@@ -103,7 +103,7 @@ export const compliment = define_module(async mi => {
 	async function compliment_dev(msg) {
 		msg.channel.send(Tools.parseReply(config.ans_compliment_dev, [msg.author])).then(function() {
 			setTimeout(() => {
-				const random = Tools.getRandomIntFromInterval(0, config.ans_compliment_dev_final.length - 1);
+				const random = Tools.getRandomIntFromInterval(0, config.ans_compliment_dev_final.length);
 				msg.channel.send(Tools.parseReply(config.ans_compliment_dev_final[random], [msg.author]));
 			}, config.complimentDevTimeout);
 		});

@@ -19,6 +19,7 @@ export const solver = define_module(async mi => {
 
 	// TODO what the fuck did I do here
 	let smileEmoji = discord.client.on("message", async msg => {
+		// @ts-expect-error
 		if (discord.check_user_access(msg.author) && msg.mentions.has(discord.client.user)) {
 			handle(msg);
 		}
@@ -28,6 +29,9 @@ export const solver = define_module(async mi => {
 		stop
 	};
 
+	/**
+	 * @param {import("discord.js").Message} msg
+	 */
 	function handle(msg) {
 		if (Tools.msg_starts_mentioned(msg, "solve")) {
 			if (Tools.msg_starts_mentioned(msg, "solve multi")) {
@@ -40,11 +44,17 @@ export const solver = define_module(async mi => {
 		}
 	}
 
+	/**
+	 * @param {import("discord.js").Message} msg
+	 */
 	function info(msg) {
 		msg.channel.send(Tools.parseReply(config.solver_info, [msg.author, smileEmoji]));
 		discord.set_message_sent();
 	}
 
+	/**
+	 * @param {import("discord.js").Message} msg
+	 */
 	function simple_parse(msg) {
 		const alg = msg.content.split("solve");
 		if (alg.length > 1 && alg[1] !== "") {
@@ -62,6 +72,9 @@ export const solver = define_module(async mi => {
 		discord.set_message_sent();
 	}
 
+	/**
+	 * @param {import("discord.js").Message} msg
+	 */
 	function simple_multi_parse(msg) {
 		const alg = msg.content.split("multi");
 		if (alg.length > 1 && alg[1] !== "") {
@@ -84,6 +97,9 @@ export const solver = define_module(async mi => {
 		discord.set_message_sent();
 	}
 
+	/**
+	 * @param {Array<string>} pre
+	 */
 	function prepareMulti(pre) {
 		const data = [];
 		let append_string = "";
@@ -117,10 +133,16 @@ export const solver = define_module(async mi => {
 		return data;
 	}
 
+	/**
+	 * @param {string} data
+	 */
 	async function single(data) {
 		return await solveinworker("single", data);
 	}
 
+	/**
+	 * @param {string} data
+	 */
 	async function multi(data) {
 		return await solveinworker("multi", data);
 	}
