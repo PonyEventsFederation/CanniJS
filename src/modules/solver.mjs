@@ -141,7 +141,7 @@ export const solver = define_module(async mi => {
 	}
 
 	/**
-	 * @param {string} data
+	 * @param {Array<string>} data
 	 */
 	async function multi(data) {
 		return await solveinworker("multi", data);

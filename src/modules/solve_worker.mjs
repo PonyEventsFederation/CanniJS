@@ -5,30 +5,43 @@ import Algebrite from "algebrite";
 
 // it is safe to cast this into this type because this module will only ever
 // be required from the main thread so main will always run so we good
-/** @type {(method: "single" | "multi", alg: string) => Promise<string>} */
+
+/**
+ * @typedef {{
+ *    (method: "single", alg: string): Promise<string>
+ *    (method: "multi", alg: Array<string>): Promise<string>
+ * }} ProcessFn
+ */
+
+/**
+ * @type {ProcessFn}
+ */
 export default isMainThread ? main() : /** @type {any} */ (registerworker());
 
 function main() {
 	const numworkers = os.cpus().length;
 	/**
-     * remove worker from array when in use cause yea lol
-     * @type {Array<{
-     *    worker: Worker;
-     *    id: number;
-     * }>}
-     */
+	  * remove worker from array when in use cause yea lol
+	  * @type {Array<{
+	  *    worker: Worker;
+	  *    id: number;
+	  * }>}
+	  */
 	const workers = [];
 
 	/**
-     * @type {{
-     *    [k: string]: {
-     *       worker: Worker;
-     *       resolve(res: string): void;
-     *    }
-     * }}
-     */
+	  * @type {{
+	  *    [k: string]: {
+	  *       worker: Worker;
+	  *       resolve(res: string): void;
+	  *    }
+	  * }}
+	  */
 	const inprogress = {};
 
+	/**
+	 * @param {{ res: string, workerid: number }} processresult
+	 */
 	function processresult({ res, workerid }) {
 		const worker = inprogress[workerid];
 		worker.resolve(res);
@@ -40,12 +53,8 @@ function main() {
 		worker.on("message", processresult);
 	});
 
-	/**
-     * @param {"single" | "multi"} method
-     * @param {string} alg
-     * @returns {Promise<string>}
-     */
-	function process(method, alg) {
+	/** @type {ProcessFn} */
+	const process = (method, alg) => {
 		return new Promise(resolve => {
 			const worker = /** @type {typeof workers[number]} */(workers.shift());
 			inprogress[worker.id] = {
@@ -74,25 +83,30 @@ function registerworker() {
 
 	const parentPort = /** @type {NonNullable<typeof _parentPort>} */ (_parentPort);
 
-	parentPort.on("message", ({ alg, method }) => {
+	/**
+	 * @typedef {{
+	 *    (p: { method: "single", alg: string } | { method: "multi", alg: Array<string> }): void;
+	 * }} CB
+	 * @type {CB}
+	 */
+	let cb = ({ alg, method }) => {
 		switch (method) {
 		case "single":
-			// @ts-expect-error
 			res = Algebrite.run(alg).toString();
 			break;
 		case "multi":
-			// @ts-expect-error
 			alg.forEach(i => res = Algebrite.run(i).toString());
 			break;
 		default:
 			res = "<@379800645571575810> made a mistake in her code";
 		}
 
-		// // @ts-expect-error
 		Algebrite.clearall();
 		parentPort.postMessage({
 			res,
 			workerid
 		});
-	});
+	}
+
+	parentPort.on("message", cb);
 }
