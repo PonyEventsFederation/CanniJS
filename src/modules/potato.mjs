@@ -8,9 +8,7 @@ const config = {
 	"phrase_potato": [
 		"canni is a potato",
 		"canni is potato",
-		"canni = potato",
-		"canni == potato",
-		"canni === potato"
+		...generate_equal_sign_messages()
 	],
 	"phrase_best_potato": [
 		"canni is the best potato",
@@ -80,3 +78,17 @@ export const potato = define_module(async mi => {
 		}
 	}
 });
+
+function generate_equal_sign_messages() {
+	/** @type {(eqs: string) => string} */
+	let joiner = eqs => "canni" + eqs + "potato";
+
+	return ["=", "==", "==="].flatMap(s => {
+		return [
+			joiner(s),
+			joiner(" " + s),
+			joiner(s + " "),
+			joiner(" " + s + " "),
+		];
+	});
+}

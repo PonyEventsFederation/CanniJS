@@ -54,12 +54,15 @@ export const worst_pony = define_module(async mi => {
 	function forgiveUser(msg) {
 		if (discord.is_user_blocked(msg.author.id)) {
 			const random = Tools.getRandomIntFromInterval(0, config.forgiveUserAnswer.length - 1);
-			msg.channel.send(Tools.parseReply(config.forgiveUserAnswer[random], [msg.author, discord.get_emoji("gc_cannilove")]));
+			mi.ignore_promise(msg.channel.send(Tools.parseReply(
+				config.forgiveUserAnswer[random],
+				[msg.author, discord.get_emoji("gc_cannilove")]
+			)));
 
 			discord.unblock_user(msg.author.id);
 		} else {
 			const random = Tools.getRandomIntFromInterval(0, config.notSorryAnswer.length - 1);
-			msg.channel.send(Tools.parseReply(config.notSorryAnswer[random], [msg.author]));
+			mi.ignore_promise(msg.channel.send(Tools.parseReply(config.notSorryAnswer[random], [msg.author])));
 		}
 
 		discord.set_message_sent();
@@ -79,10 +82,10 @@ export const worst_pony = define_module(async mi => {
 						0,
 						config.canniWorstPonyAnswer.length - 1
 					);
-					msg.channel.send(Tools.parseReply(
+					mi.ignore_promise(msg.channel.send(Tools.parseReply(
 						config.canniWorstPonyAnswer[random],
 						[msg.author]
-					));
+					)));
 
 					discord.set_message_sent();
 				}

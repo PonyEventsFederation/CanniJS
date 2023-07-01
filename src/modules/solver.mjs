@@ -4,13 +4,13 @@ import Tools from "../lib/Tools.mjs";
 import solveinworker from "./solve_worker.mjs";
 
 const config = {
-	"simple_solve": "%s The result of your operation is:\n\n%s",
-	"simple_multi_solve": "%s The end result of your operation chain is:\n\n%s",
-	"solver_info": "%s I was upgraded with a simple interface for Algebrite to solve calculations for you.\nUse \"solve (expression)\" to solve a single expression.\nFor multiple expressions use \"solve multi\" and seperate each expression with \",\".\nPlease refer to http://algebrite.org/ to learn about my capabilities. %s",
-	"solver_nothing": "%s There is nothing to solve...",
-	"solver_no_output": "%s Your last operation doesn't return a value.",
-	"single_timeout": 60000,
-	"multi_timeout": 90000
+	simple_solve: "%s The result of your operation is:\n\n%s",
+	simple_multi_solve: "%s The end result of your operation chain is:\n\n%s",
+	solver_info: "%s I was upgraded with a simple interface for Algebrite to solve calculations for you.\nUse \"solve (expression)\" to solve a single expression.\nFor multiple expressions use \"solve multi\" and seperate each expression with \",\".\nPlease refer to http://algebrite.org/ to learn about my capabilities. %s",
+	solver_nothing: "%s There is nothing to solve...",
+	solver_no_output: "%s Your last operation doesn't return a value.",
+	single_timeout: 60000,
+	multi_timeout: 90000
 };
 
 export const solver = define_module(async mi => {

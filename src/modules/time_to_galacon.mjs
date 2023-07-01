@@ -4,13 +4,13 @@ import Tools from "../lib/Tools.mjs";
 import { Temporal } from "@js-temporal/polyfill";
 
 const config = {
-	"timeAnswer": "There are %s days, %s hours, and %s minutes left until the next GalaCon!",
-	"galaconAnswer": [
+	time_answer: "There are %s days, %s hours, and %s minutes left until the next GalaCon!",
+	galacon_answer: [
 		"This is taking forever!",
 		"Donate all your hard earned money bills!"
 	],
-	"galaconDate": "2023-09-16",
-	"updateInterval": 10
+	galacon_date: "2023-09-16",
+	update_interval: 10
 };
 
 // Set to false in case GalaCon is cancelled.
@@ -38,7 +38,7 @@ export const time_to_galacon = define_module(async mi => {
 	await updateGalaconDate();
 	const galaconInterval = setInterval(
 		updateGalaconDate,
-		(config.updateInterval || 60) * 1000
+		(config.update_interval || 60) * 1000
 	);
 
 	return {
@@ -80,7 +80,7 @@ export const time_to_galacon = define_module(async mi => {
 	}
 
 	function initGalaconDate() {
-		const [y, m, d] = config.galaconDate.split("-").map(n => Number.parseInt(n));
+		const [y, m, d] = config.galacon_date.split("-").map(n => Number.parseInt(n));
 		const galaconDate = new Temporal.PlainDateTime(y, m, d);
 
 		const berlin_tz = new Temporal.TimeZone("europe/berlin");
@@ -96,9 +96,9 @@ export const time_to_galacon = define_module(async mi => {
 	 */
 	function tellMeWhen(msg) {
 		const duration = getTimeRemaining();
-		const random = Tools.getRandomIntFromInterval(0, config.galaconAnswer.length - 1);
+		const random = Tools.getRandomIntFromInterval(0, config.galacon_answer.length - 1);
 
-		msg.channel.send(Tools.parseReply(config.timeAnswer, [duration.days, duration.hrs, duration.minutes]) + "\n" + config.galaconAnswer[random]);
+		msg.channel.send(Tools.parseReply(config.time_answer, [duration.days, duration.hrs, duration.minutes]) + "\n" + config.galacon_answer[random]);
 
 		discord.set_message_sent();
 	}
