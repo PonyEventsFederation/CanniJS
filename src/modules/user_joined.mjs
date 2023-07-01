@@ -17,7 +17,7 @@ export const user_joined = define_module(async mi => {
 		mi.logger.debug(`member joined, guild ${member.guild.name} (id ${member.guild.id})`);
 
 		const general_channel = member.guild.channels.resolve(config.generalChannelId);
-		if (general_channel && general_channel.isText()) {
+		if (general_channel?.isText()) {
 			setTimeout(() => {
 				general_channel.send(Tools.parseReply(
 					config.welcomeMessage,

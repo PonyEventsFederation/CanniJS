@@ -63,7 +63,7 @@ function main() {
 			};
 			worker.worker.postMessage({ alg, method });
 		});
-	}
+	};
 
 	// Application.emitter.on("stop", () => {
 	// 	console.log("AAAAA".repeat(500));
@@ -78,6 +78,7 @@ function registerworker() {
 	// worker doesnt export anything cause no need
 
 	/** @type {number} */
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 	const workerid = workerData;
 	let res = "";
 
@@ -89,16 +90,16 @@ function registerworker() {
 	 * }} CB
 	 * @type {CB}
 	 */
-	let cb = ({ alg, method }) => {
+	const cb = ({ alg, method }) => {
 		switch (method) {
-		case "single":
-			res = Algebrite.run(alg).toString();
-			break;
-		case "multi":
-			alg.forEach(i => res = Algebrite.run(i).toString());
-			break;
-		default:
-			res = "<@379800645571575810> made a mistake in her code";
+			case "single":
+				res = Algebrite.run(alg).toString();
+				break;
+			case "multi":
+				alg.forEach(i => res = Algebrite.run(i).toString());
+				break;
+			default:
+				res = "<@379800645571575810> made a mistake in her code";
 		}
 
 		Algebrite.clearall();
@@ -106,7 +107,7 @@ function registerworker() {
 			res,
 			workerid
 		});
-	}
+	};
 
 	parentPort.on("message", cb);
 }

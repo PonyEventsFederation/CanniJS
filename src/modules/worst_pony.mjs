@@ -21,7 +21,7 @@ export const worst_pony = define_module(async mi => {
 	const modules = await app.modules;
 	const discord = await modules.discord;
 
-	discord.client.on("message", async msg => {
+	discord.client.on("message", msg => {
 		handle(msg);
 	});
 
@@ -37,8 +37,7 @@ export const worst_pony = define_module(async mi => {
 			return;
 		}
 
-		// @ts-expect-error
-		if (msg.mentions.has(discord.client.user)) {
+		if (msg.mentions.has(/** @type {import("discord.js").ClientUser} */ (discord.client.user))) {
 			if (Tools.msg_contains(msg, "i'm sorry") || Tools.msg_contains(msg, "i am sorry") || Tools.msg_contains(msg, "i’m sorry")) {
 				return forgiveUser(msg);
 			}

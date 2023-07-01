@@ -86,7 +86,8 @@ export const ignore = define_module(async mi => {
 		}
 
 		try {
-			ignore_ids = Tools.loadCommentedConfigFile(idLocation);
+			let file = fs.readFileSync(idLocation).toString();
+			ignore_ids = JSON.parse(file);
 		} catch (e) {
 			throw new Error("config of module ... contains invalid json data: " + e);
 		}
