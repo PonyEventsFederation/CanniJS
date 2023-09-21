@@ -34,7 +34,7 @@ const modules = [
 	"Potato",
 	"UserJoined",
 	"Help",
-	// "TimeToGalacon",
+	"TimeToGalacon",
 	"Boop",
 	"Bap",
 	"Hug",

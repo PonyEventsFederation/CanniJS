@@ -8,7 +8,7 @@ const moment = require("moment");
 const Tools = require("../../lib/Tools");
 
 // Set to false in case GalaCon is cancelled.
-const active = true;
+const active = false;
 
 module.exports = class CanniTimeToHype extends Module {
 	start() {
@@ -23,13 +23,14 @@ module.exports = class CanniTimeToHype extends Module {
 				this.handleMessage(msg);
 			});
 
-			Application.modules.Discord.client.on("ready", () => {
-				setInterval(() => {
-					this.updateGalaconDate();
-				}, (this.config.updateInterval || 10) * 1000);
-			});
-
-			this.setGalaconDate();
+			if (active) {
+				Application.modules.Discord.client.on("ready", () => {
+					this.setGalaconDate();
+					setInterval(() => {
+						this.updateGalaconDate();
+					}, (this.config.updateInterval || 10) * 1000);
+				});
+			}
 
 			return resolve(this);
 		});
@@ -61,7 +62,6 @@ module.exports = class CanniTimeToHype extends Module {
 
 	setGalaconDate() {
 		this.galaconDate = !this.config.galaconDate ? moment() : moment(this.config.galaconDate);
-		// reactivated for Galacon 2021, deactivate afterwards
 		this.log.info("Set galacon date to " + this.galaconDate.format());
 		this.galaconInterval = setInterval(() => this.updateGalaconDate(), (this.config.updateInterval || 10) * 1000);
 		this.updateGalaconDate();
