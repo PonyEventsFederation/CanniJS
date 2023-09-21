@@ -8,13 +8,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # RUN useradd -m sani
 # USER sani
 
-ENV PNPM_VERSION 7.13.4
+ENV PNPM_VERSION 8.6.12
 ENV PNPM_HOME /root/.local/share/pnpm
 ENV PATH ${PATH}:/root/.local/share/pnpm
 RUN curl -fsSL https://get.pnpm.io/install.sh | SHELL=`/bin/bash` sh - \
 	&& pnpm -v
 
-ENV NODE_VERSION 14.20.1
+ENV NODE_VERSION 14.21.3
 RUN pnpm env use -g ${NODE_VERSION}
 
 WORKDIR /home/sani/app
