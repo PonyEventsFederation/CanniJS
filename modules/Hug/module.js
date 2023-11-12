@@ -5,7 +5,6 @@ const Application = require("../../lib/Application");
 const config = require("../../config/application/config.json");
 const Database = require("../../lib/Database");
 const Module = require("../../lib/Module");
-const Promise = require("bluebird");
 const Tools = require("../../lib/Tools");
 const moment = require("moment");
 const hugDeleteTimeout = 40000;

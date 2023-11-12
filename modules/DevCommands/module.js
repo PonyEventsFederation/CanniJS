@@ -4,7 +4,6 @@
 const Application = require("../../lib/Application");
 const config = require("../../config/application/config.json");
 const Module = require("../../lib/Module");
-const Promise = require("bluebird");
 const Tools = require("../../lib/Tools");
 const fs = require("fs");
 let dLocation;

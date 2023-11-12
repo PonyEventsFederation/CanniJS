@@ -4,7 +4,6 @@
 const Application = require("../../lib/Application");
 
 const Module = require("../../lib/Module");
-const Promise = require("bluebird");
 const Tools = require("../../lib/Tools");
 const solveinworker = require("./solve_worker");
 

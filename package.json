@@ -16,7 +16,6 @@
     "dependencies": {
         "@js-temporal/polyfill": "^0.4.3",
         "algebrite": "^1.4.0",
-        "bluebird": "^3.7.2",
         "discord.js": "^12.5.3",
         "dotenv": "^16.0.1",
         "html-entities": "^2.3.3",

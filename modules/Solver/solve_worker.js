@@ -3,7 +3,6 @@
 const { Worker, parentPort, isMainThread, workerData } = require("worker_threads");
 const os = require("os");
 const Algebrite = require("algebrite");
-const Promise = require("bluebird");
 const Application = require("../../lib/Application");
 
 // it is safe to cast this into this type because this module will only ever

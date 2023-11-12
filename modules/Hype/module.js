@@ -3,7 +3,6 @@
 // @IMPORTS
 const Application = require("../../lib/Application");
 const Module = require("../../lib/Module");
-const Promise = require("bluebird");
 const Tools = require("../../lib/Tools");
 const path = Application.config.rootDir + "/data/hype.gif";
 

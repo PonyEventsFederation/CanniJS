@@ -4,7 +4,6 @@
 const Application = require("../../lib/Application");
 const config = require("../../config/application/config.json");
 const Module = require("../../lib/Module");
-const Promise = require("bluebird");
 const Tools = require("../../lib/Tools");
 const bapDeleteTimeout = 40000;
 let wachmann_id;
