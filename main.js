@@ -75,7 +75,7 @@ process.on("SIGTERM", () => Application.stop());
 process.on("exit", () => Application.stop());
 
 process.on("unhandledRejection", (e) => {
-	console.error(e)
+	console.error(e);
 });
 process.on("uncaughtException", (e, ee) => {
 	console.error(ee);
