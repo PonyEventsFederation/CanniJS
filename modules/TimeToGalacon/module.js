@@ -8,7 +8,7 @@ const moment = require("moment");
 const Tools = require("../../lib/Tools");
 
 // Set to false in case GalaCon is cancelled.
-const active = false;
+const active = true;
 
 module.exports = class CanniTimeToHype extends Module {
 	start() {

@@ -26,7 +26,7 @@ Application.configure({
 // resources
 
 const modules = [
-	"Activity",
+	// "Activity",
 	"Discord",
 	"Overload",
 	"Ignore",
