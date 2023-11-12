@@ -8,15 +8,15 @@ require("events").defaultMaxListeners = 50;
 if (stage == "dev") require("dotenv").config();
 
 Application.configure({
-	rootDir: __dirname,
-	modules_path: __dirname + "/modules",
-	config_path: __dirname + "/config",
+	rootDir: process.cwd(),
+	modules_path: process.cwd() + "/modules",
+	config_path: process.cwd() + "/config",
 	stage: stage,
 	logLevelConsole: stage == "dev" ? "debug" : "info",
 	logLevelFile: stage == "dev" ? "info" : "info",
 	logLevelRemote: stage == "dev" ? "debug" : "info",
 	logformat: "DD.MM.YYYY HH:mm:ss",
-	logDir: __dirname + "/logs",
+	logDir: process.cwd() + "/logs",
 	stages: [
 		"prod",
 		"dev"
