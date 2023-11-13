@@ -2,13 +2,12 @@
 
 const { Worker, parentPort, isMainThread, workerData } = require("worker_threads");
 const os = require("os");
+// @ts-expect-error
 const Algebrite = require("algebrite");
 const Application = require("../../lib/Application");
 
-// it is safe to cast this into this type because this module will only ever
-// be required from the main thread so main will always run so we good
-/** @type {(method: "single" | "multi", alg: string) => Promise<string>} */
-module.exports = isMainThread ? main() : registerworker();
+/** @typedef { (method: "single" | "multi", alg: string) => Promise<string> } ProcessFn */
+module.exports = /** @type { ProcessFn } */ (isMainThread ? main() : registerworker());
 
 function main() {
 	const log = Application.getLogger("Solver worker pool main");
