@@ -11,7 +11,7 @@ const Application = require("../../lib/Application");
 module.exports = isMainThread ? main() : registerworker();
 
 function main() {
-	const numworkers = os.cpus().length;
+	const log = Application.getLogger("Solver worker pool main");
 	/**
      * remove worker from array when in use cause yea lol
      * @type {Array<{
@@ -20,6 +20,7 @@ function main() {
      * }>}
      */
 	const workers = [];
+	let next_id = 1;
 
 	/**
      * @type {{
@@ -31,16 +32,19 @@ function main() {
      */
 	const inprogress = {};
 
-	function processresult({ res, workerid }) {
-		const worker = inprogress[workerid];
+	/**
+	 * @param { object } param
+	 * @param { string } param.res
+	 * @param { number } param.id
+	 */
+	function processresult({ res, id }) {
+		log.debug(`received result from worker ${id}`);
+		const worker = inprogress[id];
 		worker.resolve(res);
-	}
 
-	Array(numworkers).fill(null).forEach((_, i) => {
-		const worker = new Worker(__filename, { workerData: i });
-		workers.push({ worker, id: i });
-		worker.on("message", processresult);
-	});
+		delete inprogress[id];
+		workers.push({ worker: worker.worker, id });
+	}
 
 	/**
      * @param {"single" | "multi"} method
@@ -49,11 +53,22 @@ function main() {
      */
 	function process(method, alg) {
 		return new Promise(resolve => {
-			const worker = workers.shift();
+			let worker = workers.shift();
+
+			if (!worker) {
+				log.debug(`creating a new worker (#${next_id})`);
+
+				let id = next_id++;
+				let new_worker = new Worker(__filename, { workerData: id });
+				new_worker.on("message", processresult);
+				worker = { id, worker: new_worker };
+			}
+
 			inprogress[worker.id] = {
 				worker: worker.worker,
 				resolve
 			};
+
 			worker.worker.postMessage({ alg, method });
 		});
 	}
@@ -67,28 +82,29 @@ function main() {
 }
 
 function registerworker() {
-	// worker doesnt export anything cause no need
 
 	/** @type {number} */
-	const workerid = workerData;
-	let res = "";
+	const id = workerData;
+	const port = /** @type { NonNullable<typeof parentPort> } */ (parentPort);
+	const log = Application.getLogger(`Solver worker pool thread ${id}`);
 
-	parentPort.on("message", ({ alg, method }) => {
+	port.on("message", ({ alg, method }) => {
+		log.debug(`worker ${id} received task`);
+		let res = "";
+
 		switch (method) {
-		case "single":
-			res = Algebrite.run(alg).toString();
-			break;
-		case "multi":
-			alg.forEach(i => res = Algebrite.run(i).toString());
-			break;
-		default:
-			res = "<@379800645571575810> made a mistake in her code";
+			case "single":
+				res = Algebrite.run(alg).toString();
+				break;
+			case "multi":
+				// @ts-expect-error
+				alg.forEach(i => res = Algebrite.run(i).toString());
+				break;
+			default:
+				res = "<@379800645571575810> made a mistake in her code";
 		}
 
 		Algebrite.clearall();
-		parentPort.postMessage({
-			res,
-			workerid
-		});
+		port.postMessage({ res, id });
 	});
 }
