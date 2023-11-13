@@ -26,9 +26,6 @@ module.exports = class CanniTimeToHype extends Module {
 			if (active) {
 				Application.modules.Discord.client.on("ready", () => {
 					this.setGalaconDate();
-					setInterval(() => {
-						this.updateGalaconDate();
-					}, (this.config.updateInterval || 10) * 1000);
 				});
 			}
 
