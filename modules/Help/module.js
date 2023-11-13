@@ -8,6 +8,7 @@ const fs = require("fs");
 let help_list;
 
 module.exports = class Help extends Module {
+	/** @override */
 	start() {
 		return new Promise(resolve => {
 			this.log.debug("Starting...");
@@ -81,12 +82,5 @@ module.exports = class Help extends Module {
 
 		res.push(tmp);
 		return res;
-	}
-
-	stop() {
-		return new Promise(resolve => {
-			this.log.debug("Stopping...");
-			return resolve(this);
-		});
 	}
 };

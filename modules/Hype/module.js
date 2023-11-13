@@ -7,6 +7,7 @@ const Tools = require("../../lib/Tools");
 const path = Application.config.rootDir + "/data/hype.gif";
 
 module.exports = class Hype extends Module {
+	/** @override */
 	start() {
 		return new Promise(resolve => {
 			this.log.debug("Starting...");
@@ -28,12 +29,5 @@ module.exports = class Hype extends Module {
 
 			Application.modules.Discord.setMessageSent();
 		}
-	}
-
-	stop() {
-		return new Promise(resolve => {
-			this.log.debug("Stopping...");
-			return resolve(this);
-		});
 	}
 };

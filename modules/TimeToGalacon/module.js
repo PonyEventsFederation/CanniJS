@@ -10,6 +10,7 @@ const Tools = require("../../lib/Tools");
 const active = true;
 
 module.exports = class CanniTimeToHype extends Module {
+	/** @override */
 	start() {
 		return new Promise(resolve => {
 			this.log.debug("Starting...");
@@ -100,6 +101,7 @@ module.exports = class CanniTimeToHype extends Module {
 		};
 	}
 
+	/** @override */
 	stop() {
 		return new Promise(resolve => {
 			this.log.debug("Stopping...");

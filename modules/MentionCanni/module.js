@@ -6,6 +6,7 @@ const Module = require("../../lib/Module");
 const Tools = require("../../lib/Tools");
 
 module.exports = class MentionCanni extends Module {
+	/** @override */
 	start() {
 		return new Promise(resolve => {
 			this.log.debug("Starting...");
@@ -85,12 +86,5 @@ module.exports = class MentionCanni extends Module {
 		msg.channel.send(Tools.parseReply(this.config.broHoofAnswer[random], [msg.author]));
 
 		Application.modules.Discord.setMessageSent();
-	}
-
-	stop() {
-		return new Promise(resolve => {
-			this.log.debug("Stopping...");
-			return resolve(this);
-		});
 	}
 };

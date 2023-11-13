@@ -13,6 +13,7 @@ let type_delay = 0;
 let overload_on = false;
 
 module.exports = class Overload extends Module {
+	/** @override */
 	start() {
 		return new Promise(resolve => {
 			this.log.debug("Starting...");
@@ -102,12 +103,5 @@ module.exports = class Overload extends Module {
 		total_overload = 0;
 		overload = {};
 		this.load_overloader();
-	}
-
-	stop() {
-		return new Promise(resolve => {
-			this.log.debug("Stopping...");
-			return resolve(this);
-		});
 	}
 };

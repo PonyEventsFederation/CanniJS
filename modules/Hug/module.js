@@ -10,6 +10,7 @@ const moment = require("moment");
 const hugDeleteTimeout = 40000;
 
 module.exports = class Hug extends Module {
+	/** @override */
 	start() {
 		return new Promise(resolve => {
 			this.log.debug("Starting...");
@@ -130,12 +131,5 @@ module.exports = class Hug extends Module {
 		}
 
 		Application.modules.Discord.setMessageSent();
-	}
-
-	stop() {
-		return new Promise(resolve => {
-			this.log.debug("Stopping...");
-			return resolve(this);
-		});
 	}
 };

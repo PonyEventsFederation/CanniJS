@@ -13,6 +13,7 @@ let wachmann_id;
 const boopDeleteTimeout = 40000;
 
 module.exports = class Boop extends Module {
+	/** @override */
 	start() {
 		return new Promise(resolve => {
 			this.log.debug("Starting...");
@@ -367,12 +368,5 @@ module.exports = class Boop extends Module {
 		}
 
 		Application.modules.Discord.setMessageSent();
-	}
-
-	stop() {
-		return new Promise(resolve => {
-			this.log.debug("Stopping...");
-			return resolve(this);
-		});
 	}
 };

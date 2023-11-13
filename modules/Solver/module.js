@@ -8,6 +8,7 @@ const Tools = require("../../lib/Tools");
 const solveinworker = require("./solve_worker");
 
 module.exports = class Solver extends Module {
+	/** @override */
 	start() {
 		return new Promise(resolve => {
 			this.log.debug("Starting...");
@@ -124,12 +125,5 @@ module.exports = class Solver extends Module {
 
 	async multi(data) {
 		return await solveinworker("multi", data);
-	}
-
-	stop() {
-		return new Promise(resolve => {
-			this.log.debug("Stopping...");
-			return resolve(this);
-		});
 	}
 };

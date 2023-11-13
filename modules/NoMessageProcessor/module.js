@@ -8,6 +8,7 @@ const remote_on = false;
 const remote_target = null;
 
 module.exports = class NoMessageProcessor extends Module {
+	/** @override */
 	start() {
 		return new Promise(resolve => {
 			this.log.debug("Starting...");
@@ -38,12 +39,5 @@ module.exports = class NoMessageProcessor extends Module {
 				Application.modules.GamerCanni.letsPlay(msg, this.config.playGameAnswer);
 			}
 		}
-	}
-
-	stop() {
-		return new Promise(resolve => {
-			this.log.debug("Stopping...");
-			return resolve(this);
-		});
 	}
 };

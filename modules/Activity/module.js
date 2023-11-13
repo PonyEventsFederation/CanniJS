@@ -16,6 +16,7 @@ function reset_wait() {
 }
 
 module.exports = class Activity extends Module {
+	/** @override */
 	start() {
 		return new Promise(resolve => {
 			this.log.debug("Starting...");
@@ -46,13 +47,5 @@ module.exports = class Activity extends Module {
 			status: "online",
 			afk: false
 		}).then(() => this.log.info(`set activity to ${activity}`)).catch(console.error);
-	}
-
-
-	stop() {
-		return new Promise(resolve => {
-			this.log.debug("Stopping...");
-			return resolve(this);
-		});
 	}
 };

@@ -11,6 +11,7 @@ let guild;
 const write_to_file = true;
 
 module.exports = class Ignore extends Module {
+	/** @override */
 	start() {
 		return new Promise(resolve => {
 			this.log.debug("Starting...");
@@ -57,13 +58,6 @@ module.exports = class Ignore extends Module {
 				// msg.react(potato_emo);
 			});
 		}
-	}
-
-	stop() {
-		return new Promise(resolve => {
-			this.log.debug("Stopping...");
-			return resolve(this);
-		});
 	}
 
 	is_ignored(msg) {

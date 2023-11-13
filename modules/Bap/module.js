@@ -9,6 +9,7 @@ const bapDeleteTimeout = 40000;
 let wachmann_id;
 
 module.exports = class Boop extends Module {
+	/** @override */
 	start() {
 		return new Promise(resolve => {
 			this.log.debug("Starting...");
@@ -137,12 +138,5 @@ module.exports = class Boop extends Module {
 		}
 
 		Application.modules.Discord.setMessageSent();
-	}
-
-	stop() {
-		return new Promise(resolve => {
-			this.log.debug("Stopping...");
-			return resolve(this);
-		});
 	}
 };

@@ -8,6 +8,7 @@ const fetch = require("node-fetch");
 let config;
 
 module.exports = class Compliment extends Module {
+	/** @override */
 	start() {
 		return new Promise(resolve => {
 			this.log.debug("Starting...");
@@ -98,12 +99,5 @@ module.exports = class Compliment extends Module {
 
 	getCompliment() {
 		return fetch("https://complimentr.com/api").then(res => res.json()).catch(err => console.error(err));
-	}
-
-	stop() {
-		return new Promise(resolve => {
-			this.log.debug("Stopping...");
-			return resolve(this);
-		});
 	}
 };

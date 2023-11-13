@@ -9,6 +9,7 @@ const new_year_date = [1, 1];
 let wachmann_id;
 
 module.exports = class Holiday extends Module {
+	/** @override */
 	start() {
 		return new Promise(resolve => {
 			this.log.debug("Starting...");
@@ -107,13 +108,5 @@ module.exports = class Holiday extends Module {
 			}
 			Application.modules.Discord.setMessageSent();
 		}
-	}
-
-
-	stop() {
-		return new Promise(resolve => {
-			this.log.debug("Stopping...");
-			return resolve(this);
-		});
 	}
 };

@@ -6,6 +6,7 @@ const Module = require("../../lib/Module");
 const Tools = require("../../lib/Tools");
 
 module.exports = class UserJoined extends Module {
+	/** @override */
 	start() {
 		return new Promise(resolve => {
 			this.log.debug("Starting...");
@@ -23,13 +24,6 @@ module.exports = class UserJoined extends Module {
 				}
 			});
 
-			return resolve(this);
-		});
-	}
-
-	stop() {
-		return new Promise(resolve => {
-			this.log.debug("Stopping...");
 			return resolve(this);
 		});
 	}

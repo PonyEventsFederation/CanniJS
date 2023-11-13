@@ -15,6 +15,7 @@ let guild;
 const write_to_file = true;
 
 module.exports = class DevC extends Module {
+	/** @override */
 	start() {
 		return new Promise(resolve => {
 			this.log.debug("Starting...");
@@ -138,13 +139,6 @@ module.exports = class DevC extends Module {
 		}
 		msg.channel.send(Tools.parseReply(this.config.ans_channel_id, [msg.channel.id])).then(message => message.delete(8000));
 		Application.modules.Discord.setMessageSent();
-	}
-
-	stop() {
-		return new Promise(resolve => {
-			this.log.debug("Stopping...");
-			return resolve(this);
-		});
 	}
 
 	load_ids() {

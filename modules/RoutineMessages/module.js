@@ -9,6 +9,7 @@ let inactive = true;
 let interval;
 
 module.exports = class RoutineMessages extends Module {
+	/** @override */
 	start() {
 		return new Promise(resolve => {
 			this.log.debug("Starting...");

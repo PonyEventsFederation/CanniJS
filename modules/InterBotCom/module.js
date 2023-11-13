@@ -7,6 +7,7 @@ const Tools = require("../../lib/Tools");
 let wachmann_id;
 
 module.exports = class InterBotCom extends Module {
+	/** @override */
 	start() {
 		return new Promise(resolve => {
 			this.log.debug("Starting...");
@@ -41,12 +42,5 @@ module.exports = class InterBotCom extends Module {
 				}.bind(this), 2000);
 			}
 		}
-	}
-
-	stop() {
-		return new Promise(resolve => {
-			this.log.debug("Stopping...");
-			return resolve(this);
-		});
 	}
 };

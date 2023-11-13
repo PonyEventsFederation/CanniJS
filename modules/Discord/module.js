@@ -7,6 +7,7 @@ const DiscordJS = require("discord.js");
 const Tools = require("../../lib/Tools");
 
 module.exports = class Discord extends Module {
+	/** @override */
 	init() {
 		return new Promise(resolve => {
 			this.log.debug("Initializing...");
@@ -43,6 +44,7 @@ module.exports = class Discord extends Module {
 		});
 	}
 
+	/** @override */
 	start() {
 		return new Promise(resolve => {
 			this.log.debug("Starting...");
@@ -57,6 +59,7 @@ module.exports = class Discord extends Module {
 		});
 	}
 
+	/** @override */
 	stop() {
 		return new Promise(resolve => {
 			this.log.debug("Stopping...");
