@@ -54,6 +54,7 @@ module.exports = class Boop extends Module {
 		if (this.megaon) {
 			this.processBlocks(msg);
 			// todo?
+			this.processUnblocks(msg);
 		} else if (boop_dev_on) {
 			// todo
 			this.processMegaboops(msg);
@@ -96,6 +97,25 @@ module.exports = class Boop extends Module {
 		}
 	}
 
+	processUnblocks(msg) {
+		if (Application.modules.DevCommands.auth_dev(msg.author.id)) {
+			if (Tools.strStartsWord(msg.content, "devunblock")) {
+				return this.counter(msg, "DevUnblock");
+			} else if (Tools.strStartsWord(msg.content, "devcounter")) {
+				return this.counter(msg, "DevCounter");
+			}
+		}
+
+		if (Tools.strStartsWord(msg.content, "unblock")) {
+			const now = moment();
+			const val = moment().endOf("day");
+			const blockTimeout = val.diff(now, "milliseconds");
+			if (Application.modules.Discord.controlTalkedRecently(msg, this.config.megaBoopType, false, "message", undefined, undefined, blockTimeout)) {
+				return this.counter(msg, "Unblock");
+			}
+		}
+	}
+
 	processMegaboops(msg) {
 		if (Tools.strStartsWord(msg.content, "megaboop")) {
 			if (!msg.mentions.everyone && msg.mentions.users.array().length === 1) {
@@ -123,8 +143,8 @@ module.exports = class Boop extends Module {
 
 	processUltraBoops(msg) {
 		if (Tools.msg_starts(msg, "master chief dev ultra boop") ||
-        Tools.msg_starts(msg, "master chief dev ultraboop") ||
-        Tools.msg_starts(msg, "ultraboop")) {
+				Tools.msg_starts(msg, "master chief dev ultraboop") ||
+				Tools.msg_starts(msg, "ultraboop")) {
 			if (Application.modules.DevCommands.auth_dev_master(msg.author.id) && !msg.mentions.everyone && msg.mentions.users.array().length === 1) {
 				const user = msg.mentions.users.array()[0];
 
@@ -226,6 +246,8 @@ module.exports = class Boop extends Module {
 			delay += 2000;
 		}
 
+		// save the megaboop's damage amount and result so we can restore it after a unblock
+		this.lastMegaBoop = { damage, answer };
 		this.counterWindow(delay + init_delay);
 		setTimeout(function() {
 			if (Array.isArray(answer)) {
@@ -298,8 +320,8 @@ module.exports = class Boop extends Module {
 		Application.modules.Discord.setMessageSent();
 	}
 
-
 	counter(msg, type_pre) {
+		// interrupt the existing megaboop by triggering the interupt.inter flag
 		this.interrupt.inter = true;
 		let ans;
 		let type;
@@ -307,16 +329,25 @@ module.exports = class Boop extends Module {
 			ans = this.config.megaBoopBlock;
 			ans = this.statusgenerator(ans, 35);
 			type = Tools.getRandomIntFromInterval(2000, 5000);
+		} else if (type_pre == "Unblock") {
+			if (!this.lastMegaBoop) {
+				Application.modules.Discord.setMessageSent();
+				return;
+			}
+			ans = this.lastMegaBoop.answer;
+			type = this.lastMegaBoop.damage;
 		} else {
 			ans = this.config.megaBoopDevBlock;
 			type = type_pre;
 		}
+		// schedule a new timeout to send the megaboop after 2 seconds (this means blocking/unblocking can technically delay megaboops. Interesting!)
 		setTimeout(function() {
 			Tools.listSender(msg.channel, ans, [2000], [msg.author, type]);
 		}.bind(this), 2000);
 		Application.modules.Discord.setMessageSent();
 	}
 
+	// Starts a cooldown during which a megaboop can be blocked.
 	counterWindow(time) {
 		this.megaon = true;
 		setTimeout(function() {
