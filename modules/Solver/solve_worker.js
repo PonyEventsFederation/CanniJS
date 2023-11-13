@@ -89,7 +89,7 @@ function registerworker() {
 	const log = Application.getLogger(`Solver worker pool thread ${id}`);
 
 	port.on("message", ({ alg, method }) => {
-		log.debug(`worker ${id} received task`);
+		log.debug(`received task`);
 		let res = "";
 
 		switch (method) {
