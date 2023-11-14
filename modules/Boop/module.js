@@ -9,8 +9,8 @@ const Tools = require("../../lib/Tools");
 const moment = require("moment");
 const path = Application.config.rootDir + "/data/impact.gif";
 let boop_dev_on = true;
-let wachmann_id;
-const boopDeleteTimeout = 40000;
+// /** @type { string } */
+// let wachmann_id;
 
 /** @extends { Module<import("../../config/Boop.json")> } */
 module.exports = class Boop extends Module {
@@ -24,9 +24,9 @@ module.exports = class Boop extends Module {
 			this.interrupt = { inter: false };
 			this.megaon = false;
 
-			if (Tools.test_ENV("WACHMANN_ID")) {
-				wachmann_id = process.env.WACHMANN_ID;
-			}
+			// if (Tools.test_ENV("WACHMANN_ID")) {
+			// 	wachmann_id = process.env["WACHMANN_ID"];
+			// }
 
 			Application.modules.Discord.client.on("message", (msg) => {
 				if (Application.modules.Discord.checkUserAccess(msg.author)) {
@@ -38,6 +38,9 @@ module.exports = class Boop extends Module {
 		});
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	handle(msg) {
 		if (Tools.strStartsWord(msg.content, "boop") && !msg.mentions.everyone && msg.mentions.users.array().length > 0) {
 			const users = msg.mentions.members?.array() || [];
@@ -62,6 +65,10 @@ module.exports = class Boop extends Module {
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 * @param { Array<import("discord.js").GuildMember> } users
+	 */
 	processBoops(msg, users) {
 		for (let i = 0; i < users.length; i++) {
 			if (Application.checkSelf(users[i].id)) {
@@ -69,15 +76,18 @@ module.exports = class Boop extends Module {
 				continue;
 			}
 
-			if (wachmann_id === users[i].id) {
-				this.wachmannBoop(msg, users[i]);
-				continue;
-			}
+			// if (wachmann_id === users[i].id) {
+			// 	this.wachmannBoop(msg, users[i]);
+			// 	continue;
+			// }
 
 			this.boop(msg, users[i]);
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	processBlocks(msg) {
 		if (Application.modules.DevCommands.auth_dev(msg.author.id)) {
 			if (Tools.strStartsWord(msg.content, "devblock")) {
@@ -113,7 +123,7 @@ module.exports = class Boop extends Module {
 						Database.setTimeout(msg.author.id, "megaboop");
 						return this.megaBoopLoader(msg, user);
 					} else {
-						const cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaBoop, [msg.author]);
+						const cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaBoop, msg.author.toString());
 						msg.channel.send(cooldownMessage);
 					}
 				}).catch((err) => {
@@ -125,6 +135,9 @@ module.exports = class Boop extends Module {
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	processUltraBoops(msg) {
 		if (Tools.msg_starts(msg, "master chief dev ultra boop") ||
         Tools.msg_starts(msg, "master chief dev ultraboop") ||
@@ -143,30 +156,44 @@ module.exports = class Boop extends Module {
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 * @param { import("discord.js").GuildMember } user
+	 */
 	boop(msg, user) {
 		setTimeout(() => msg.delete(), config.deleteDelay);
 
 		const random = Tools.getRandomIntFromInterval(0, this.config.boopAnswer.length - 1);
-		msg.channel.send(Tools.parseReply(this.config.boopAnswer[random], [user])).then(message => {
-			message.delete({ timeout: boopDeleteTimeout });
+		msg.channel.send(Tools.parseReply(this.config.boopAnswer[random], user.toString())).then(message => {
+			message.delete({ timeout: this.config.boop_delete_timeout });
 		});
 
 		Application.modules.Overload.overload("boop");
 		Application.modules.Discord.setMessageSent();
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	selfBoop(msg) {
 		if (Tools.chancePercent(5)) {
 			const random = Tools.getRandomIntFromInterval(0, this.config.selfBoopAnswer.length - 1);
-			const answer = Tools.parseReply(this.config.selfBoopAnswer[random], [Application.modules.Discord.getEmoji("gc_canniexcited")]);
+			const answer = Tools.parseReply(
+				this.config.selfBoopAnswer[random],
+				Application.modules.Discord.getEmoji("gc_canniexcited").toString()
+			);
 			msg.channel.send(answer).then(message => {
-				message.delete({ timeout: boopDeleteTimeout });
+				message.delete({ timeout: this.config.boop_delete_timeout });
 			});
 		} else {
 			const random = Tools.getRandomIntFromInterval(0, this.config.canniBoopAnswer.length - 1);
-			const answer = Tools.parseReply(this.config.canniBoopAnswer[random], [msg.author, Application.modules.Discord.getEmoji("gc_cannishy")]);
+			const answer = Tools.parseReply(
+				this.config.canniBoopAnswer[random],
+				msg.author.toString(),
+				Application.modules.Discord.getEmoji("gc_cannishy").toString()
+			);
 			msg.channel.send(answer).then(message => {
-				message.delete({ timeout: boopDeleteTimeout });
+				message.delete({ timeout: this.config.boop_delete_timeout });
 			});
 		}
 
@@ -176,6 +203,10 @@ module.exports = class Boop extends Module {
 		Application.modules.Discord.setMessageSent();
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 * @param { import("discord.js").GuildMember } user
+	 */
 	wachmannBoop(msg, user) {
 		const guard_cooldown_message = Tools.parseReply(this.config.ans_boop_guard_cooldown);
 		if (Application.modules.Discord.controlTalkedRecently(msg, this.config.boop_guard_type, true, "channel", guard_cooldown_message, undefined, 120000)) {
@@ -239,13 +270,13 @@ module.exports = class Boop extends Module {
 		}
 
 		this.counterWindow(delay + init_delay);
-		setTimeout(function() {
+		setTimeout(() => {
 			if (Array.isArray(answer)) {
 				Tools.listSender(msg.channel, answer, [delay, 2000, 1000], [user, damage], this.interrupt);
 			} else {
 				msg.channel.send(Tools.parseReply(answer, user.toString(), damage));
 			}
-		}.bind(this), init_delay);
+		}, init_delay);
 
 		Application.modules.Discord.setMessageSent();
 	}
@@ -255,7 +286,11 @@ module.exports = class Boop extends Module {
 	 */
 	megaSelfBoop(msg) {
 		const random = Tools.getRandomIntFromInterval(0, this.config.megaSelfBoopAnswer.length - 1);
-		msg.channel.send(Tools.parseReply(this.config.megaSelfBoopAnswer[random], [msg.author, Application.modules.Discord.getEmoji("gc_cannihello")]));
+		msg.channel.send(Tools.parseReply(
+			this.config.megaSelfBoopAnswer[random],
+			msg.author.toString(),
+			Application.modules.Discord.getEmoji("gc_cannihello").toString()
+		));
 
 		Application.modules.Overload.overload("boop");
 		Application.modules.Discord.setMessageSent();
@@ -271,7 +306,7 @@ module.exports = class Boop extends Module {
 		if (Array.isArray(ans)) {
 			Tools.listSender(msg.channel, ans, [1000, 2000, 4000, 4000, 2000, 2000, 2000, 2000, 3000], [user]);
 		} else {
-			msg.channel.send(Tools.parseReply(ans, [user]));
+			msg.channel.send(Tools.parseReply(ans, user.toString()));
 		}
 
 		Application.modules.Discord.setMessageSent();
@@ -283,7 +318,7 @@ module.exports = class Boop extends Module {
 	devbooprejection(msg) {
 		if (Application.modules.Discord.controlTalkedRecently(msg, this.config.dev_ultra_boop_rejection_type, false, "message")) {
 			const random = Tools.getRandomIntFromInterval(0, this.config.dev_ultra_boop_rejection.length - 1);
-			msg.channel.send(Tools.parseReply(this.config.dev_ultra_boop_rejection[random], [msg.author]));
+			msg.channel.send(Tools.parseReply(this.config.dev_ultra_boop_rejection[random], msg.author.toString()));
 		}
 
 		Application.modules.Discord.setMessageSent();
@@ -294,7 +329,7 @@ module.exports = class Boop extends Module {
 	 */
 	selfDevBoop(msg) {
 		const random = Tools.getRandomIntFromInterval(0, this.config.dev_self_boop.length - 1);
-		msg.channel.send(Tools.parseReply(this.config.dev_self_boop[random], [msg.author]));
+		msg.channel.send(Tools.parseReply(this.config.dev_self_boop[random], msg.author.toString()));
 
 		Application.modules.Discord.setMessageSent();
 	}
@@ -321,7 +356,7 @@ module.exports = class Boop extends Module {
 			});
 
 		} else {
-			msg.channel.send(Tools.parseReply(ans, [user]));
+			msg.channel.send(Tools.parseReply(ans, user.toString()));
 		}
 
 		Application.modules.Discord.setMessageSent();
@@ -360,7 +395,7 @@ module.exports = class Boop extends Module {
 			const template = miss ? this.config.status_effect_miss_template : this.config.status_effect_template;
 			const random = Tools.getRandomIntFromInterval(0, this.config.status_effects.length - 1);
 			const effect = this.config.status_effects[random];
-			const add = Tools.parseReply(template, [effect]);
+			const add = Tools.parseReply(template, effect);
 
 			let i;
 			let len;
@@ -375,8 +410,16 @@ module.exports = class Boop extends Module {
 		return res;
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 * @param { Array<import("discord.js").GuildMember> } users
+	 */
 	setCooldown(msg, users) {
-		const cooldownMessage = Tools.parseReply(this.config.cooldownMessage, [msg.author, Application.modules.Discord.getEmoji("gc_cannierror")]);
+		const cooldownMessage = Tools.parseReply(
+			this.config.cooldownMessage,
+			msg.author.toString(),
+			Application.modules.Discord.getEmoji("gc_cannierror").toString()
+		);
 
 		if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.boopType)) {
 			Application.modules.Discord.setCooldown(msg.author.id, this.config.boopType, this.config.boopTimeout);
@@ -391,7 +434,7 @@ module.exports = class Boop extends Module {
 			if (!word) return;
 
 			msg.channel.send(
-				Tools.parseReply(this.config.command_use_not_allowed_cooldown_response, [word]),
+				Tools.parseReply(this.config.command_use_not_allowed_cooldown_response, word),
 				{ allowedMentions: { users: [] } }
 			);
 		}

@@ -1,4 +1,5 @@
 {
+    "boop_delete_timeout": 40000,
     "boopAnswer": [
         "( ͡° ͜ʖ (\\  *BOOPS* %s"
     ],

@@ -6,7 +6,7 @@ const config = require("../../config/application/config.json");
 const Module = require("../../lib/Module");
 const Tools = require("../../lib/Tools");
 const fs = require("fs");
-let dLocation;
+
 let idLocation;
 let ids;
 let dev_ids;
@@ -144,7 +144,6 @@ module.exports = class DevC extends Module {
 
 	load_ids() {
 		idLocation = Application.config.config_path + "/application/ids.json";
-		dLocation = Application.config.config_path + "/Discord.json";
 
 		if (!fs.existsSync(idLocation)) {
 			fs.writeFileSync(idLocation, "[[],[]]");
@@ -155,17 +154,11 @@ module.exports = class DevC extends Module {
 			dev_ids = configIds[0];
 			dev_master_ids = configIds[1];
 
-			if (fs.existsSync(dLocation)) {
-				const dconfig = Tools.loadCommentedConfigFile(dLocation);
-
-				if (dconfig.token.toLowerCase() === "env") {
-					if (Tools.test_ENV("MASTER_DEV_ID")) {
-						const masters = process.env.MASTER_DEV_ID.split(",");
-						masters.forEach(this.add_master_dev);
-						ids = [dev_ids, dev_master_ids];
-						fs.writeFile(idLocation, JSON.stringify(ids), function(err) {if (err) throw err;});
-					}
-				}
+			if (Tools.test_ENV("MASTER_DEV_ID")) {
+				const masters = process.env["MASTER_DEV_ID"].split(",");
+				masters.forEach(this.add_master_dev);
+				ids = [dev_ids, dev_master_ids];
+				fs.writeFile(idLocation, JSON.stringify(ids), function(err) {if (err) throw err;});
 			}
 		} catch (e) {
 			throw new Error("config of module ... contains invalid json data: " + e.toString());
