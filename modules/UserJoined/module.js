@@ -14,13 +14,15 @@ module.exports = class UserJoined extends Module {
 
 			Application.modules.Discord.client.on("guildMemberAdd", member => {
 				this.log.info("Member joined on guild " + member.guild.name);
-				if (member.guild.channels.resolve(this.config.generalChannelId)) {
+
+				const channel = member.guild.channels.resolve(this.config.generalChannelId);
+				if (channel && channel.isText()) {
 					setTimeout(() => {
-						member.guild.channels.resolve(this.config.generalChannelId).send(
-							Tools.parseReply(
-								this.config.welcomeMessage,
-								[member, this.config.rulesChannelId]
-							));
+						channel.send(Tools.parseReply(
+							this.config.welcomeMessage,
+							member.toString(),
+							this.config.rulesChannelId
+						));
 					}, this.config.welcomeMessageDelay);
 				}
 			});
