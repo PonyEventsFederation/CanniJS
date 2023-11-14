@@ -1,28 +1,33 @@
 {
-    "bestPonyAnswer1": [
+    "who": "best_pony",
+    "who_answer": [
         "%s %s I am, of course!"
     ],
-    "bestPonyAnswer2": [
+
+    "canni": "canni_best_pony",
+    "canni_answer": [
         "%s I sure am!"
     ],
-    "bestPonyAnswer3": [
+
+    "bizaam": "bizaam_best_pony",
+    "bizaam_answer": [
         "%s A bizaam isn't a pony, silly..."
     ],
-    "bestPonyAnswer4": [
+
+    "assfart": "assfart_best_pony",
+    "assfart_answer": [
         "%s Rude!"
     ],
-    "bestPonyAnswer5": [
+
+    "fanta": "fanta_best_pony",
+    "fanta_answer": [
         "%s Is this a GalaCon thing?",
         "%s I'm fuelled by Fanta. Therefore I am best pony.",
         "%s Fanta is a carbonated soft drink and most definitely not a pony..."
     ],
-    "bestPonyAnswerDefault": [
+
+    "interject": "interject_best_pony",
+    "interject_answer": [
         "%s Nu-uh. I am best pony!"
-    ],
-    "bestPonyType": "bestPony",
-    "canniBestPonyType": "canniBestPony",
-    "bizaamBestPonyType": "bizaamBestPony",
-    "assFartBestPonyType": "assfartBestPony",
-    "fantaBestPonyType:": "fantaBestPony",
-    "interjectType": "interject"
+    ]
 }
