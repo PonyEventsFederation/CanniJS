@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@fluent/bundle':
+    specifier: ^0.18.0
+    version: 0.18.0
   '@js-temporal/polyfill':
     specifier: ^0.4.3
     version: 0.4.3
@@ -95,6 +98,11 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@fluent/bundle@0.18.0:
+    resolution: {integrity: sha512-8Wfwu9q8F9g2FNnv82g6Ch/E1AW1wwljsUOolH5NEtdJdv0sZTuWvfCM7c3teB9dzNaJA8rn4khpidpozHWYEA==}
+    engines: {node: '>=14.0.0', npm: '>=7.0.0'}
+    dev: false
 
   /@humanwhocodes/config-array@0.10.7:
     resolution: {integrity: sha512-MDl6D6sBsaV452/QSdX+4CXIjZhIcI0PELsxUjk4U828yd58vk3bTIvk/6w5FY+4hIy9sLW0sfrV7K7Kc++j/w==}

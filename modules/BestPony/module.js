@@ -1,6 +1,5 @@
 "use strict";
 
-// @IMPORTS
 const Application = require("../../lib/Application");
 const Module = require("../../lib/Module");
 const Tools = require("../../lib/Tools");
@@ -27,26 +26,51 @@ module.exports = class BestPony extends Module {
 	 */
 	handle(msg) {
 		if (Tools.msg_contains(msg, "who is best pony")) {
-			return this.whoIsBestPony(msg, this.config.who, this.config.who_answer, "gc_cannibizaam");
+			return this.whoIsBestPony(
+				msg,
+				this.config.who,
+				["who-answer"],
+				"gc_cannibizaam"
+			);
 		}
 
 		if (Tools.msg_contains(msg, "canni is best pony") || Tools.msg_contains(msg, "canni soda is best pony")) {
-			return this.whoIsBestPony(msg, this.config.canni, this.config.canni_answer);
+			return this.whoIsBestPony(
+				msg,
+				this.config.canni,
+				["canni-answer"]
+			);
 		}
 
 		if (/b+i+z+a+m+ is best pony/i.test(msg.content)) {
-			return this.whoIsBestPony(msg, this.config.bizaam, this.config.bizaam_answer);
+			return this.whoIsBestPony(
+				msg,
+				this.config.bizaam,
+				["bizaam-answer"]
+			);
 		}
 
 		if (Tools.msg_contains(msg, "assfart is best pony")) {
-			return this.whoIsBestPony(msg, this.config.assfart, this.config.assfart_answer);
+			return this.whoIsBestPony(
+				msg,
+				this.config.assfart,
+				["assfart-answer"]
+			);
 		}
 
 		if (Tools.msg_contains(msg, "fanta is best pony")) {
-			return this.whoIsBestPony(msg, this.config.fanta, this.config.fanta_answer);
+			return this.whoIsBestPony(
+				msg,
+				this.config.fanta,
+				[
+					"fanta-answer-1",
+					"fanta-answer-2",
+					"fanta-answer-3"
+				]
+			);
 		}
 
-		this.whoIsBestPony(msg, this.config.interject, this.config.interject_answer);
+		this.whoIsBestPony(msg, this.config.interject, ["interject-answer"]);
 	}
 
 	/**
@@ -57,13 +81,10 @@ module.exports = class BestPony extends Module {
 	 */
 	whoIsBestPony(msg, type, answers, emoji = "") {
 		if (Application.modules.Discord.controlTalkedRecently(msg, type)) {
-			const random = Tools.getRandomIntFromInterval(0, answers.length - 1);
-
-			msg.channel.send(Tools.parseReply(
-				answers[random],
-				msg.author.toString(),
-				Application.modules.Discord.getEmoji(emoji).toString()
-			));
+			msg.channel.send(this.randT(answers, {
+				author: msg.author.toString(),
+				emoji: Application.modules.Discord.getEmoji(emoji).toString()
+			}));
 
 			Application.modules.Discord.setMessageSent();
 		}
