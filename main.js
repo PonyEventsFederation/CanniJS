@@ -1,5 +1,5 @@
 "use strict";
-// @IMPORTS
+
 const Application = require("./lib/Application");
 const stage = (process.env.STAGE || process.env.NODE_ENV || "dev").toLowerCase();
 
@@ -22,51 +22,6 @@ Application.configure({
 		"dev"
 	]
 });
-
-// resources
-
-const modules = [
-	// "Activity",
-	"Discord",
-	"Overload",
-	"Ignore",
-	"Holiday",
-	"Potato",
-	"UserJoined",
-	"Help",
-	"TimeToGalacon",
-	"Boop",
-	"Bap",
-	"Hug",
-	"Fanta",
-	"Bizaam",
-	"Assfart",
-	"BestPony",
-	"WorstPony",
-	"MentionCanni",
-	"DevCommands",
-	"Solver",
-	"GamerCanni",
-	"Greetings",
-	"Compliment",
-	"Hype",
-	"RoutineMessages",
-	"InterBotCom",
-	"NoMessageProcessor"
-];
-
-// remove all disabled modules
-const disabledModules = process.env.DISABLED_MODULES ? process.env.DISABLED_MODULES.split(",").map(m => m.trim()) : [];
-disabledModules.forEach(module => {
-	const i = modules.indexOf(module);
-	i !== -1 && modules.splice(i, 1);
-});
-
-// add all enabled modules
-const enabledModules = process.env.ENABLED_MODULES ? process.env.ENABLED_MODULES.split(",").map(m => m.trim()) : [];
-enabledModules.forEach(module => !modules.includes(module) && modules.push(module));
-
-modules.forEach(module => Application.registerModule(module));
 
 Application.run();
 
