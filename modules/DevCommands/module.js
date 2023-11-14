@@ -42,6 +42,9 @@ module.exports = class DevC extends Module {
 		});
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	handle(msg) {
 		if (Application.modules.Discord.checkUserAccess(msg.author) && msg.mentions.has(Application.getClient().user) && guild) {
 			if (this.auth_dev_master(msg.author.id)) {

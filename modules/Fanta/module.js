@@ -22,6 +22,9 @@ module.exports = class Fanta extends Module {
 		});
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	fanta(msg) {
 		if (Application.modules.Discord.controlTalkedRecently(msg, this.config.fantaType)) {
 			const random = Tools.getRandomIntFromInterval(0, this.config.fantaAnswers.length - 1);

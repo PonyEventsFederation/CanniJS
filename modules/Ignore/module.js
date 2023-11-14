@@ -5,9 +5,6 @@ const Application = require("../../lib/Application");
 const Module = require("../../lib/Module");
 const Tools = require("../../lib/Tools");
 const fs = require("fs");
-let idLocation;
-let ignore_ids;
-let guild;
 const write_to_file = true;
 
 /** @extends { Module<import("../../config/Ignore.json")> } */
@@ -18,7 +15,7 @@ module.exports = class Ignore extends Module {
 			this.log.debug("Starting...");
 
 			if (Tools.test_ENV("MAIN_SERVER")) {
-				guild = Tools.guild_by_id(Application.getClient(), process.env.MAIN_SERVER);
+				this.guild = Tools.guild_by_id(Application.getClient(), process.env["MAIN_SERVER"]);
 			}
 
 			this.load_ignore_ids();
@@ -33,9 +30,12 @@ module.exports = class Ignore extends Module {
 		});
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	handle(msg) {
 		if (this.is_ignored(msg)) {
-			if (msg.mentions.has(Application.getClient().user) && guild) {
+			if (msg.mentions.has(Application.getClient().user) && this.guild) {
 				Application.modules.Discord.setMessageSent();
 				return this.ignored_mentioned(msg);
 			} else {
@@ -45,25 +45,34 @@ module.exports = class Ignore extends Module {
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	ignored(msg) {
 		if (Application.modules.Discord.controlTalkedRecently(msg, this.config.potato_ignoredType, false, "message", undefined, undefined, 600000)) {
-			msg.channel.send(Tools.parseReply(this.config.ans_potato_ignore, [msg.author])).then(() => {
+			msg.channel.send(Tools.parseReply(this.config.ans_potato_ignore, msg.author.toString())).then(() => {
 				// msg.react(potato_emo);
 			});
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	ignored_mentioned(msg) {
 		if (Application.modules.Discord.controlTalkedRecently(msg, this.config.potato_ignored_mentionedType, false, "message", undefined, undefined, 600000)) {
-			msg.channel.send(Tools.parseReply(this.config.ans_potato_ignored_mentioned, [msg.author])).then(() => {
+			msg.channel.send(Tools.parseReply(this.config.ans_potato_ignored_mentioned, msg.author.toString())).then(() => {
 				// msg.react(potato_emo);
 			});
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	is_ignored(msg) {
 		let cond = false;
-		ignore_ids.forEach(function(id) {
+		this.ignore_ids.forEach(id => {
 			if (id.toString() === msg.author.id.toString()) {
 				cond = true;
 			}
@@ -73,24 +82,29 @@ module.exports = class Ignore extends Module {
 	}
 
 	load_ignore_ids() {
-		idLocation = Application.config.config_path + "/application/ignore_ids.json";
+		/** @type { string } */
+		this.id_location = Application.config.config_path + "/application/ignore_ids.json";
 
-		if (!fs.existsSync(idLocation)) {
-			fs.writeFileSync(idLocation, "[]");
+		if (!fs.existsSync(this.id_location)) {
+			fs.writeFileSync(this.id_location, "[]");
 		}
 
 		try {
-			ignore_ids = Tools.loadCommentedConfigFile(idLocation);
+			/** @type { Array<string> } */
+			this.ignore_ids = Tools.loadCommentedConfigFile(this.id_location);
 		} catch (e) {
 			throw new Error("config of module ... contains invalid json data: " + e.toString());
 		}
 	}
 
+	/**
+	 * @param { string } id
+	 */
 	ignore_id_add(id) {
-		if (!ignore_ids.includes(id)) {
-			ignore_ids.push(id);
+		if (!this.ignore_ids.includes(id)) {
+			this.ignore_ids.push(id);
 			if (write_to_file) {
-				fs.writeFile(idLocation, JSON.stringify(ignore_ids), function(err) {
+				fs.writeFile(this.id_location, JSON.stringify(this.ignore_ids), function(err) {
 					if (err) throw err;
 				});
 			}
@@ -99,11 +113,14 @@ module.exports = class Ignore extends Module {
 		return false;
 	}
 
+	/**
+	 * @param { string } id
+	 */
 	ignore_id_remove(id) {
-		if (ignore_ids.includes(id)) {
-			ignore_ids = ignore_ids.filter(item => item !== id);
+		if (this.ignore_ids.includes(id)) {
+			this.ignore_ids = this.ignore_ids.filter(item => item !== id);
 			if (write_to_file) {
-				fs.writeFile(idLocation, JSON.stringify(ignore_ids), function(err) {
+				fs.writeFile(this.id_location, JSON.stringify(this.ignore_ids), function(err) {
 					if (err) throw err;
 				});
 			}

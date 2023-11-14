@@ -15,8 +15,11 @@ module.exports = class Discord extends Module {
 
 			this.commands = [];
 			this.reactions = [];
+			/** @type { Set<string> } */
 			this.channelMessaged = new Set();
+			/** @type { Set<string> } */
 			this.talkedRecently = new Set();
+			/** @type { Set<string> } */
 			this.userBlocked = new Set();
 			this.messageSent = false;
 
@@ -37,8 +40,11 @@ module.exports = class Discord extends Module {
 			// });
 
 			this.authToken = this.config.token;
-			if (this.authToken.toLowerCase() === "env") {
-				this.authToken = process.env.BOT_TOKEN;
+			if (this.authToken === "ENV" && Tools.test_ENV("BOT_TOKEN")) {
+				this.authToken = process.env["BOT_TOKEN"];
+			} else {
+				this.log.fatal("env var BOT_TOKEN is not available, please set it");
+				process.exit(1);
 			}
 
 			return resolve(this);
@@ -71,6 +77,9 @@ module.exports = class Discord extends Module {
 		});
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	processMessage(msg) {
 		// No bots allowed
 		if (msg.author.bot) {
@@ -85,10 +94,6 @@ module.exports = class Discord extends Module {
 				return command.cb(msg);
 			}
 		}
-	}
-
-	isReady() {
-		return this.client.status === DiscordJS.Constants.Status.READY;
 	}
 
 	addCommand(cmd, cb) {
@@ -113,6 +118,11 @@ module.exports = class Discord extends Module {
 		return "";
 	}
 
+	/**
+	 * @param { string } userId
+	 * @param { string } type
+	 * @param { number } cooldownTimeout
+	 */
 	setCooldown(userId, type, cooldownTimeout) {
 		this.talkedRecently.add(userId + type);
 		setTimeout(() => {
@@ -120,11 +130,54 @@ module.exports = class Discord extends Module {
 		}, cooldownTimeout);
 	}
 
+	/**
+	 * @param { string } userId
+	 * @param { string } type
+	 */
 	hasCooldown(userId, type) {
 		return this.talkedRecently.has(userId + type);
 	}
 
+	/**
+	 * @param { object } p
+	 * @param { import("discord.js").Message } p.msg
+	 * @param { string } p.type
+	 * @param { boolean } p.send_message
+	 * @param { "channel" | "individual" | "message" } p.target
+	 * @param { string } p.cooldown_message
+	 * @param { boolean } p.block_user
+	 * @param { number } p.cooldown_timeout
+	 */
+	control_talked_recently2({
+		msg,
+		type,
+		send_message = true,
+		target = "channel",
+		cooldown_message,
+		block_user = false,
+		cooldown_timeout
+	}) {
+		return this.controlTalkedRecently(
+			msg,
+			type,
+			send_message,
+			target,
+			cooldown_message,
+			block_user,
+			cooldown_timeout
+		);
+	}
+
+	/**
+	 * @param { import("discord.js").Message } msg
+	 * @param { string } type
+	 * @param { "channel" | "individual" | "message" } target
+	 * @param { string } cooldownMessage
+	 * @param { number } cooldownTimeout
+	 * @deprecated use control_talked_recently2
+	 */
 	controlTalkedRecently(msg, type, sendMessage = true, target = "channel", cooldownMessage = null, blockUser = false, cooldownTimeout = null) {
+		/** @type { string } */
 		let cooldownTarget;
 
 		switch (target) {
@@ -143,9 +196,17 @@ module.exports = class Discord extends Module {
 			// Set the default cooldown message if none is passed from another module.
 			if (cooldownMessage == null) {
 				if (Application.modules.DevCommands.auth_dev(msg.author.id)) {
-					cooldownMessage = Tools.parseReply(this.config.cooldownMessageDev, [msg.author, this.getEmoji("gc_cannishy")]);
+					cooldownMessage = Tools.parseReply(
+						this.config.cooldownMessageDev,
+						msg.author.toString(),
+						this.getEmoji("gc_cannishy").toString()
+					);
 				} else {
-					cooldownMessage = Tools.parseReply(this.config.cooldownMessageDefault, [msg.author, this.getEmoji("gc_cannierror")]);
+					cooldownMessage = Tools.parseReply(
+						this.config.cooldownMessageDefault,
+						msg.author.toString(),
+						this.getEmoji("gc_cannierror").toString()
+					);
 				}
 			}
 
@@ -167,6 +228,12 @@ module.exports = class Discord extends Module {
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 * @param { string } cooldownTarget
+	 * @param { string } cooldownMessage
+	 * @param { boolean } blockUser
+	 */
 	sendCooldownMessage(msg, cooldownTarget, cooldownMessage, blockUser) {
 		if (blockUser) {
 			this.blockUser(msg.author.id, this.config.blockUserTimeout);
@@ -186,6 +253,10 @@ module.exports = class Discord extends Module {
 		Application.modules.Discord.setMessageSent();
 	}
 
+	/**
+	 * @param { string } userId
+	 * @param { number } blockTimeout
+	 */
 	blockUser(userId, blockTimeout) {
 		this.userBlocked.add(userId);
 		setTimeout(() => {
@@ -193,12 +264,20 @@ module.exports = class Discord extends Module {
 		}, blockTimeout);
 	}
 
+	/**
+	 * @param { import("discord.js").User } user
+	 */
 	checkUserAccess(user) {
-		return !(user.bot
-            || Application.modules.Discord.isUserBlocked(user.id)
-            || Application.modules.Discord.isMessageSent());
+		return !(
+			user.bot
+			|| Application.modules.Discord.isUserBlocked(user.id)
+			|| Application.modules.Discord.isMessageSent()
+		);
 	}
 
+	/**
+	 * @param { string } userId
+	 */
 	unblockUser(userId) {
 		if (this.talkedRecently.has(userId)) {
 			this.talkedRecently.delete(userId);
@@ -211,6 +290,9 @@ module.exports = class Discord extends Module {
 		this.userBlocked.delete(userId);
 	}
 
+	/**
+	 * @param { string } userId
+	 */
 	isUserBlocked(userId) {
 		return this.userBlocked.has(userId);
 	}
@@ -224,10 +306,6 @@ module.exports = class Discord extends Module {
 	}
 
 	firstActivity() {
-		if (!this.isReady()) {
-			return;
-		}
-
 		const msg = "Internal systems fully operational";
 		Application.modules.Discord.client.user.setPresence({
 			status: "online",
