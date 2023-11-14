@@ -125,8 +125,8 @@ module.exports = class Hug extends Module {
 	setCooldown(msg) {
 		const cooldownMessage = Tools.parseReply(this.config.cooldownMessage, [msg.author, Application.modules.Discord.getEmoji("gc_cannierror")]);
 
-		if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.bapType)) {
-			Application.modules.Discord.setCooldown(msg.author.id, this.config.bapType, this.config.bapTimeout);
+		if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.hugType)) {
+			Application.modules.Discord.setCooldown(msg.author.id, this.config.hugType, this.config.hugTimeout);
 			Application.modules.Discord.sendCooldownMessage(msg, msg.author.id + this.config.bapType, cooldownMessage, false);
 			this.log.info(`${msg.author} added to bap cooldown list.`);
 		}
