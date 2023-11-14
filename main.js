@@ -1,7 +1,7 @@
 "use strict";
 
 const Application = require("./lib/Application");
-const stage = (process.env.STAGE || process.env.NODE_ENV || "dev").toLowerCase();
+const stage = (process.env["STAGE"] || process.env["NODE_ENV"] || "dev").toLowerCase();
 
 require("events").defaultMaxListeners = 50;
 

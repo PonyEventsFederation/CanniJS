@@ -6,7 +6,8 @@ const config = require("../../config/application/config.json");
 const Module = require("../../lib/Module");
 const Tools = require("../../lib/Tools");
 const bapDeleteTimeout = 40000;
-let wachmann_id;
+// /** @type { string } */
+// let wachmann_id;
 
 /** @extends { Module<import("../../config/Bap.json")> } */
 module.exports = class Bap extends Module {
@@ -17,9 +18,9 @@ module.exports = class Bap extends Module {
 			this.boopCooldown = new Set();
 			this.messageSent = new Set();
 
-			if (Tools.test_ENV("WACHMANN_ID")) {
-				wachmann_id = process.env.WACHMANN_ID;
-			}
+			// if (Tools.test_ENV("WACHMANN_ID")) {
+			// 	wachmann_id = process.env["WACHMANN_ID"];
+			// }
 
 			Application.modules.Discord.client.on("message", (msg) => {
 				if (Application.modules.Discord.checkUserAccess(msg.author)) {
@@ -31,6 +32,9 @@ module.exports = class Bap extends Module {
 		});
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	handle(msg) {
 		if (!msg.mentions.everyone && msg.mentions.users.array().length > 0) {
 			if (Tools.strStartsWord(msg.content, "bap")) {
@@ -43,6 +47,11 @@ module.exports = class Bap extends Module {
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 * @param { string } type
+	 * @param { string } answerType
+	 */
 	processBaps(msg, type, answerType) {
 		console.log(answerType);
 		const users = msg.mentions.users.array();
@@ -59,10 +68,10 @@ module.exports = class Bap extends Module {
 					continue;
 				}
 
-				if (wachmann_id === users[i].id) {
-					this.wachmannBap(msg, users[i]);
-					continue;
-				}
+				// if (wachmann_id === users[i].id) {
+				// 	this.wachmannBap(msg, users[i]);
+				// 	continue;
+				// }
 
 				const answers = this.getAnswerType(answerType);
 				this.bap(msg, users[i], answers);
@@ -72,6 +81,14 @@ module.exports = class Bap extends Module {
 		}
 	}
 
+	/**
+	 * @param {
+	 *    | "bap"
+	 *    | "bapeth"
+	 *    | "selfbap"
+	 *    | "selfbapeth"
+	 * } type
+	 */
 	getAnswerType(type) {
 		switch(type) {
 		case "bap":
@@ -85,10 +102,15 @@ module.exports = class Bap extends Module {
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 * @param { import("discord.js").User } user
+	 * @param { Array<string> } answerType
+	 */
 	bap(msg, user, answerType) {
 		const random = Tools.getRandomIntFromInterval(0, answerType.length - 1);
 
-		msg.channel.send(Tools.parseReply(answerType[random], [user])).then(message => {
+		msg.channel.send(Tools.parseReply(answerType[random], user.toString())).then(message => {
 			message.delete({ timeout: bapDeleteTimeout });
 		});
 
@@ -96,21 +118,25 @@ module.exports = class Bap extends Module {
 		Application.modules.Discord.setMessageSent();
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 * @param { Array<string> } answerType
+	 */
 	selfBap(msg, answerType) {
 		let response;
 
 		if (Tools.chancePercent(25)) {
 			const random = Tools.getRandomIntFromInterval(0, this.config.selfBapAnswer.length - 1);
-			response = msg.channel.send(Tools.parseReply(this.config.selfBapAnswer[random], [
-				msg.author,
-				Application.modules.Discord.getEmoji("gc_cannierror")
-			]));
+			response = msg.channel.send(Tools.parseReply(this.config.selfBapAnswer[random],
+				msg.author.toString(),
+				Application.modules.Discord.getEmoji("gc_cannierror").toString()
+			));
 		} else {
 			const random = Tools.getRandomIntFromInterval(0, answerType.length - 1);
-			response = msg.channel.send(Tools.parseReply(answerType[random], [
-				msg.author,
-				Application.modules.Discord.getEmoji("gc_cannierror")
-			]));
+			response = msg.channel.send(Tools.parseReply(answerType[random],
+				msg.author.toString(),
+				Application.modules.Discord.getEmoji("gc_cannierror").toString()
+			));
 		}
 
 		response.then(message => {
@@ -121,16 +147,23 @@ module.exports = class Bap extends Module {
 		Application.modules.Discord.setMessageSent();
 	}
 
-	wachmannBap(msg, user) {
-		const guardCooldownMessage = Tools.parseReply(this.config.bapGuardCooldownAnswer);
+	// /**
+	//  * @param { import("discord.js").Message } msg
+	//  * @param { import("discord.js").User } user
+	//  */
+	// wachmannBap(msg, user) {
+	// 	const guardCooldownMessage = Tools.parseReply(this.config.bapGuardCooldownAnswer);
+	//
+	// 	if (Application.modules.Discord.controlTalkedRecently(msg, this.config.bapGuardType, true, "channel", guardCooldownMessage, undefined, 120000)) {
+	// 		this.bap(msg, user);
+	// 	}
+	// }
 
-		if (Application.modules.Discord.controlTalkedRecently(msg, this.config.bapGuardType, true, "channel", guardCooldownMessage, undefined, 120000)) {
-			this.bap(msg, user);
-		}
-	}
-
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	setCooldown(msg) {
-		const cooldownMessage = Tools.parseReply(this.config.cooldownMessage, [msg.author]);
+		const cooldownMessage = Tools.parseReply(this.config.cooldownMessage, msg.author.toString());
 
 		if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.bapType)) {
 			Application.modules.Discord.setCooldown(msg.author.id, this.config.bapType, this.config.bapTimeout);

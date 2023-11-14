@@ -20,16 +20,22 @@ module.exports = class AssFart extends Module {
 		});
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	handle(msg) {
 		if (Application.modules.Discord.checkUserAccess(msg.author) && Tools.msg_contains(msg, "assfart") && !Tools.msg_contains(msg, "is best pony")) {
 			return this.assFart(msg);
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	assFart(msg) {
 		if (Application.modules.Discord.controlTalkedRecently(msg, this.config.assfartType)) {
 			const random = Tools.getRandomIntFromInterval(0, this.config.assfartAnswer.length - 1);
-			msg.channel.send(Tools.parseReply(this.config.assfartAnswer[random], [msg.author]));
+			msg.channel.send(Tools.parseReply(this.config.assfartAnswer[random], msg.author.toString()));
 
 			Application.modules.Discord.setMessageSent();
 		}

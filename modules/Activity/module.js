@@ -33,6 +33,9 @@ module.exports = class Activity extends Module {
 		});
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	randomizerActivity(msg) {
 		if (Application.modules.Discord.checkUserAccess(msg.author) && okay_to_change && Tools.chancePercent(probability, true)) {
 			this.activitySelect();

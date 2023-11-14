@@ -97,6 +97,9 @@ module.exports = class Boop extends Module {
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	processMegaboops(msg) {
 		if (Tools.strStartsWord(msg.content, "megaboop")) {
 			if (!msg.mentions.everyone && msg.mentions.users.array().length === 1) {
@@ -180,6 +183,10 @@ module.exports = class Boop extends Module {
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 * @param { import("discord.js").User } user
+	 */
 	megaBoopLoader(msg, user) {
 		const roll = Tools.getRandomIntFromInterval(0, 100);
 
@@ -194,6 +201,10 @@ module.exports = class Boop extends Module {
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 * @param { import("discord.js").User } user
+	 */
 	megaBoop(msg, user, type = "hit") {
 		let random, damage, answer = "", limit;
 		this.interrupt.inter = false;
@@ -232,13 +243,16 @@ module.exports = class Boop extends Module {
 			if (Array.isArray(answer)) {
 				Tools.listSender(msg.channel, answer, [delay, 2000, 1000], [user, damage], this.interrupt);
 			} else {
-				msg.channel.send(Tools.parseReply(answer, [user, damage]));
+				msg.channel.send(Tools.parseReply(answer, user.toString(), damage));
 			}
 		}.bind(this), init_delay);
 
 		Application.modules.Discord.setMessageSent();
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	megaSelfBoop(msg) {
 		const random = Tools.getRandomIntFromInterval(0, this.config.megaSelfBoopAnswer.length - 1);
 		msg.channel.send(Tools.parseReply(this.config.megaSelfBoopAnswer[random], [msg.author, Application.modules.Discord.getEmoji("gc_cannihello")]));
@@ -247,6 +261,10 @@ module.exports = class Boop extends Module {
 		Application.modules.Discord.setMessageSent();
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 * @param { import("discord.js").User } user
+	 */
 	hyperBoop(msg, user) {
 		const random = Tools.getRandomIntFromInterval(0, this.config.hyperBoopAnswer.length - 1);
 		const ans = this.config.hyperBoopAnswer[random];
@@ -259,6 +277,9 @@ module.exports = class Boop extends Module {
 		Application.modules.Discord.setMessageSent();
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	devbooprejection(msg) {
 		if (Application.modules.Discord.controlTalkedRecently(msg, this.config.dev_ultra_boop_rejection_type, false, "message")) {
 			const random = Tools.getRandomIntFromInterval(0, this.config.dev_ultra_boop_rejection.length - 1);
@@ -268,6 +289,9 @@ module.exports = class Boop extends Module {
 		Application.modules.Discord.setMessageSent();
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	selfDevBoop(msg) {
 		const random = Tools.getRandomIntFromInterval(0, this.config.dev_self_boop.length - 1);
 		msg.channel.send(Tools.parseReply(this.config.dev_self_boop[random], [msg.author]));
@@ -275,6 +299,10 @@ module.exports = class Boop extends Module {
 		Application.modules.Discord.setMessageSent();
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 * @param { import("discord.js").User } user
+	 */
 	devboop(msg, user) {
 		boop_dev_on = false;
 		const random = Tools.getRandomIntFromInterval(0, this.config.dev_ultra_boop.length - 1);

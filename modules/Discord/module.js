@@ -99,6 +99,9 @@ module.exports = class Discord extends Module {
 		this.reactions.push({ text, type, cb });
 	}
 
+	/**
+	 * @param { string } type
+	 */
 	getEmoji(type) {
 		const targetEmoji = this.client.emojis.cache.find(emoji => emoji.name.toLowerCase() === type.toLowerCase());
 

@@ -21,6 +21,9 @@ module.exports = class Greetings extends Module {
 		});
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	handle(msg) {
 		if (Tools.msg_contains_list(msg, this.config.phrase_bye_night)) {
 			return this.sendMessage(msg, this.config.byenightType, this.config.ans_bye_night);
