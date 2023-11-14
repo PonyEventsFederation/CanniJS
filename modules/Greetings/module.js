@@ -5,7 +5,8 @@ const Application = require("../../lib/Application");
 const Module = require("../../lib/Module");
 const Tools = require("../../lib/Tools");
 
-module.exports = class greetings extends Module {
+/** @extends { Module<import("../../config/Greetings.json")> } */
+module.exports = class Greetings extends Module {
 	/** @override */
 	start() {
 		return new Promise(resolve => {

@@ -8,6 +8,7 @@ let target;
 let inactive = true;
 let interval;
 
+/** @extends { Module<import("../../config/RoutineMessages.json")> } */
 module.exports = class RoutineMessages extends Module {
 	/** @override */
 	start() {

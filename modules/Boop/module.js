@@ -12,6 +12,7 @@ let boop_dev_on = true;
 let wachmann_id;
 const boopDeleteTimeout = 40000;
 
+/** @extends { Module<import("../../config/Boop.json")> } */
 module.exports = class Boop extends Module {
 	/** @override */
 	start() {

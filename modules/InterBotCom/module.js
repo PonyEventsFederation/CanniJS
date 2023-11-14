@@ -6,6 +6,7 @@ const Module = require("../../lib/Module");
 const Tools = require("../../lib/Tools");
 let wachmann_id;
 
+/** @extends { Module<import("../../config/InterBotCom.json")> } */
 module.exports = class InterBotCom extends Module {
 	/** @override */
 	start() {

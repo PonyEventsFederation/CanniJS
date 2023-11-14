@@ -5,6 +5,7 @@ const Application = require("../../lib/Application");
 const Module = require("../../lib/Module");
 const Tools = require("../../lib/Tools");
 
+/** @extends { Module<import("../../config/Bizaam.json")> } */
 module.exports = class Bizaam extends Module {
 	/** @override */
 	start() {

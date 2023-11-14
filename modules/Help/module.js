@@ -7,6 +7,7 @@ const Tools = require("../../lib/Tools");
 const fs = require("fs");
 let help_list;
 
+/** @extends { Module<import("../../config/Help.json")> } */
 module.exports = class Help extends Module {
 	/** @override */
 	start() {

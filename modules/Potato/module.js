@@ -5,6 +5,7 @@ const Application = require("../../lib/Application");
 const Module = require("../../lib/Module");
 const Tools = require("../../lib/Tools");
 
+/** @extends { Module<import("../../config/Potato.json")> } */
 module.exports = class Potato extends Module {
 	/** @override */
 	start() {

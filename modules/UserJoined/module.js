@@ -5,6 +5,7 @@ const Application = require("../../lib/Application");
 const Module = require("../../lib/Module");
 const Tools = require("../../lib/Tools");
 
+/** @extends { Module<import("../../config/UserJoined.json")> } */
 module.exports = class UserJoined extends Module {
 	/** @override */
 	start() {

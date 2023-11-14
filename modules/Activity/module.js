@@ -15,6 +15,7 @@ function reset_wait() {
 	timeout.refresh();
 }
 
+/** @extends { Module<import("../../config/Activity.json")> } */
 module.exports = class Activity extends Module {
 	/** @override */
 	start() {

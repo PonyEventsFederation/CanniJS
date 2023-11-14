@@ -12,6 +12,7 @@ let total_delay = 0;
 let type_delay = 0;
 let overload_on = false;
 
+/** @extends { Module<import("../../config/Overload.json")> } */
 module.exports = class Overload extends Module {
 	/** @override */
 	start() {

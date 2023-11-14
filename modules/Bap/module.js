@@ -8,7 +8,8 @@ const Tools = require("../../lib/Tools");
 const bapDeleteTimeout = 40000;
 let wachmann_id;
 
-module.exports = class Boop extends Module {
+/** @extends { Module<import("../../config/Bap.json")> } */
+module.exports = class Bap extends Module {
 	/** @override */
 	start() {
 		return new Promise(resolve => {

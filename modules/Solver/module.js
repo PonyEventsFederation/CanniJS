@@ -7,6 +7,7 @@ const Module = require("../../lib/Module");
 const Tools = require("../../lib/Tools");
 const solveinworker = require("./solve_worker");
 
+/** @extends { Module<import("../../config/Solver.json")> } */
 module.exports = class Solver extends Module {
 	/** @override */
 	start() {

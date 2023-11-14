@@ -5,6 +5,7 @@ const Application = require("../../lib/Application");
 const Module = require("../../lib/Module");
 const Tools = require("../../lib/Tools");
 
+/** @extends { Module<import("../../config/BestPony.json")> } */
 module.exports = class BestPony extends Module {
 	/** @override */
 	start() {

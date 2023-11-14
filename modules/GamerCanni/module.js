@@ -5,7 +5,8 @@ const Application = require("../../lib/Application");
 const Module = require("../../lib/Module");
 const Tools = require("../../lib/Tools");
 
-module.exports = class RockPaperScissors extends Module {
+/** @extends { Module<import("../../config/GamerCanni.json")> } */
+module.exports = class GamerCanni extends Module {
 	/** @override */
 	start() {
 		return new Promise(resolve => {

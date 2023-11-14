@@ -6,6 +6,7 @@ const Module = require("../../lib/Module");
 const Tools = require("../../lib/Tools");
 const path = Application.config.rootDir + "/data/hype.gif";
 
+/** @extends { Module<import("../../config/Hype.json")> } */
 module.exports = class Hype extends Module {
 	/** @override */
 	start() {

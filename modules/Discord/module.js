@@ -6,6 +6,7 @@ const Module = require("../../lib/Module");
 const DiscordJS = require("discord.js");
 const Tools = require("../../lib/Tools");
 
+/** @extends { Module<import("../../config/Discord.json")> } */
 module.exports = class Discord extends Module {
 	/** @override */
 	init() {

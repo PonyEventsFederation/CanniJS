@@ -9,7 +9,8 @@ const Tools = require("../../lib/Tools");
 // Set to false in case GalaCon is cancelled.
 const active = true;
 
-module.exports = class CanniTimeToHype extends Module {
+/** @extends { Module<import("../../config/TimeToGalacon.json")> } */
+module.exports = class TimeToGalacon extends Module {
 	/** @override */
 	start() {
 		return new Promise(resolve => {

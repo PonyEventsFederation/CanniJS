@@ -14,6 +14,7 @@ let dev_master_ids;
 let guild;
 const write_to_file = true;
 
+/** @extends { Module<import("../../config/DevCommands.json")> } */
 module.exports = class DevC extends Module {
 	/** @override */
 	start() {

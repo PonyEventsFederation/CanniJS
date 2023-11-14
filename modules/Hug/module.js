@@ -9,6 +9,7 @@ const Tools = require("../../lib/Tools");
 const moment = require("moment");
 const hugDeleteTimeout = 40000;
 
+/** @extends { Module<import("../../config/Hug.json")> } */
 module.exports = class Hug extends Module {
 	/** @override */
 	start() {

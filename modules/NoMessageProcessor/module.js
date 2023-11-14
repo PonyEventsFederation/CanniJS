@@ -7,6 +7,7 @@ const Tools = require("../../lib/Tools");
 const remote_on = false;
 const remote_target = null;
 
+/** @extends { Module<import("../../config/NoMessageProcessor.json")> } */
 module.exports = class NoMessageProcessor extends Module {
 	/** @override */
 	start() {

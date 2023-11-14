@@ -10,6 +10,7 @@ let ignore_ids;
 let guild;
 const write_to_file = true;
 
+/** @extends { Module<import("../../config/Ignore.json")> } */
 module.exports = class Ignore extends Module {
 	/** @override */
 	start() {

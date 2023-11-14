@@ -7,6 +7,7 @@ const Tools = require("../../lib/Tools");
 const fetch = require("node-fetch");
 let config;
 
+/** @extends { Module<import("../../config/Compliment.json")> } */
 module.exports = class Compliment extends Module {
 	/** @override */
 	start() {
