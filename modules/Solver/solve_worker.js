@@ -1,22 +1,22 @@
 "use strict";
 
 const { Worker, parentPort, isMainThread, workerData } = require("worker_threads");
-const os = require("os");
 // @ts-expect-error
 const Algebrite = require("algebrite");
 const Application = require("../../lib/Application");
 
-/** @typedef { (method: "single" | "multi", alg: string) => Promise<string> } ProcessFn */
-module.exports = /** @type { ProcessFn } */ (isMainThread ? main() : registerworker());
+module.exports = /** @type { ReturnType<typeof main> } */ (
+	isMainThread ? main() : registerworker()
+);
 
 function main() {
 	const log = Application.getLogger("Solver worker pool main");
 	/**
      * remove worker from array when in use cause yea lol
-     * @type {Array<{
+     * @type { Array<{
      *    worker: Worker;
      *    id: number;
-     * }>}
+     * }> }
      */
 	const workers = [];
 	let next_id = 1;
@@ -46,10 +46,20 @@ function main() {
 	}
 
 	/**
-     * @param {"single" | "multi"} method
-     * @param {string} alg
-     * @returns {Promise<string>}
-     */
+	 * @overload
+	 * @param { "single" } method
+	 * @param { string } alg
+	 * @returns { Promise<string> }
+	 *
+	 * @overload
+	 * @param { "multi" } method
+	 * @param { Array<string> } alg
+	 * @returns { Promise<string> }
+	 *
+	 * @param { "single" | "multi" } method
+	 * @param { string | Array<string> } alg
+	 * @return { Promise<string> }
+	 */
 	function process(method, alg) {
 		return new Promise(resolve => {
 			let worker = workers.shift();
@@ -82,7 +92,7 @@ function main() {
 
 function registerworker() {
 
-	/** @type {number} */
+	/** @type { number } */
 	const id = workerData;
 	const port = /** @type { NonNullable<typeof parentPort> } */ (parentPort);
 	const log = Application.getLogger(`Solver worker pool thread ${id}`);
@@ -96,8 +106,11 @@ function registerworker() {
 				res = Algebrite.run(alg).toString();
 				break;
 			case "multi":
-				// @ts-expect-error
-				alg.forEach(i => res = Algebrite.run(i).toString());
+				// // @ts-expect-error
+				alg.forEach(
+					/** @param { string } i */
+					i => res = Algebrite.run(i).toString()
+				);
 				break;
 			default:
 				res = "<@379800645571575810> made a mistake in her code";
