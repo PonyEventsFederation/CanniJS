@@ -4,7 +4,7 @@
 const Application = require("../../lib/Application");
 const Module = require("../../lib/Module");
 const Tools = require("../../lib/Tools");
-const fetch = require("node-fetch");
+const compliment = require("complimenter");
 let config;
 
 /** @extends { Module<import("../../config/Compliment.json")> } */
@@ -99,6 +99,6 @@ module.exports = class Compliment extends Module {
 	}
 
 	getCompliment() {
-		return fetch("https://complimentr.com/api").then(res => res.json()).catch(err => console.error(err));
+		return Promise.resolve({ compliment: compliment() });
 	}
 };

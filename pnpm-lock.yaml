@@ -14,6 +14,9 @@ dependencies:
   algebrite:
     specifier: ^1.4.0
     version: 1.4.0
+  complimenter:
+    specifier: github:grantcodes/complimenter
+    version: github.com/grantcodes/complimenter/267c752c1bd97433b6e240a915ff94068d1c1004
   discord.js:
     specifier: ^12.5.3
     version: 12.5.3
@@ -1225,3 +1228,10 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  github.com/grantcodes/complimenter/267c752c1bd97433b6e240a915ff94068d1c1004:
+    resolution: {tarball: https://codeload.github.com/grantcodes/complimenter/tar.gz/267c752c1bd97433b6e240a915ff94068d1c1004}
+    name: complimenter
+    version: 0.0.0
+    hasBin: true
+    dev: false

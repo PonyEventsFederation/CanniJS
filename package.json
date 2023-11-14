@@ -17,6 +17,7 @@
         "@fluent/bundle": "^0.18.0",
         "@js-temporal/polyfill": "^0.4.3",
         "algebrite": "^1.4.0",
+        "complimenter": "github:grantcodes/complimenter",
         "discord.js": "^12.5.3",
         "dotenv": "^16.0.1",
         "html-entities": "^2.3.3",
