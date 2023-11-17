@@ -22,6 +22,9 @@ module.exports = class GamerCanni extends Module {
 		});
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	handle(msg) {
 		if (msg.mentions.has(Application.modules.Discord.client.user)) {
 			if (Tools.msg_contains(msg, "let's play a game") || Tools.msg_contains(msg, "let's play a game")) {
@@ -32,10 +35,16 @@ module.exports = class GamerCanni extends Module {
 		}
 	}
 
+	/**
+	 * @param { number } milliseconds
+	 */
 	sleep(milliseconds) {
 		return new Promise(resolve => setTimeout(resolve, milliseconds));
 	}
 
+	/**
+	 * @param { string } emoji
+	 */
 	getEmojiName(emoji) {
 		switch (emoji) {
 		case "👊":
@@ -53,18 +62,26 @@ module.exports = class GamerCanni extends Module {
 		}
 	}
 
-	letsPlay(msg, flavourText = null, gameType = null) {
+	/**
+	 * @param { import("discord.js").Message } msg
+	 * @param { string } [flavourText]
+	 * @param { "rps" | "rpsls" } [gameType]
+	 */
+	letsPlay(msg, flavourText, gameType) {
 		this.log.info("started playing game");
 
-		if (flavourText === null) {
+		if (!flavourText) {
 			flavourText = this.config.playGameAnswer;
 		}
 
-		if (gameType === null) {
+		if (!gameType) {
 			gameType = Math.random() < 0.5 ? "rps" : "rpsls";
 		}
 
-		let emojis, gameName;
+		/** @type { Array<string> } */
+		let emojis;
+		/** @type { string } */
+		let gameName;
 		switch (gameType) {
 		case "rps":
 			emojis = ["👊", "🖐", "✌"];
@@ -80,9 +97,14 @@ module.exports = class GamerCanni extends Module {
 
 		const canniChoice = this.getEmojiName(emojis[Math.floor(Math.random() * emojis.length)]);
 
-		msg.channel.send(Tools.parseReply(flavourText, [msg.author, gameName, Application.modules.Discord.getEmoji("gc_canniexcited")])).then(sentEmbed => {
+		msg.channel.send(Tools.parseReply(
+			flavourText,
+			msg.author.toString(),
+			gameName,
+			Application.modules.Discord.getEmoji("gc_canniexcited").toString()
+		)).then(async sentEmbed => {
 			for (let i = 0; i < emojis.length; i++) {
-				sentEmbed.react(emojis[i]);
+				await sentEmbed.react(emojis[i]);
 			}
 
 			const filter = (reaction, user) => {
@@ -93,18 +115,27 @@ module.exports = class GamerCanni extends Module {
 				const reaction = collected.first();
 
 				const userChoice = this.getEmojiName(reaction.emoji.name);
-				this.play(msg, userChoice, canniChoice, emojis);
+				this.play(msg, userChoice, canniChoice);
 				this.log.info("User chose " + userChoice);
 			}).catch(() => {
 				this.log.info("User decided not to play");
-				msg.reply(Tools.parseReply(this.config.didNotPlayAnswer, [Application.modules.Discord.getEmoji("gc_cannishy")]));
+				msg.reply(Tools.parseReply(
+					this.config.didNotPlayAnswer,
+					Application.modules.Discord.getEmoji("gc_cannishy").toString()
+				));
 			});
 		});
 
 		Application.modules.Discord.setMessageSent();
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 * @param { string } userChoice
+	 * @param { string } canniChoice
+	 */
 	play(msg, userChoice, canniChoice) {
+		/** @type { "tie" | "playerWin" | "canniWin" } */
 		let result;
 		if (userChoice === canniChoice) {
 			result = "tie";
@@ -143,16 +174,36 @@ module.exports = class GamerCanni extends Module {
 		return this.resultMessage(msg, canniChoice, result);
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 * @param { string } canniChoice
+	 * @param { "tie" | "playerWin" | "canniWin" } result
+	 */
 	resultMessage(msg, canniChoice, result) {
 		switch (result) {
 		case "tie":
-			msg.channel.send(Tools.parseReply(this.config.tieMessage, [msg.author, canniChoice, Application.modules.Discord.getEmoji("gc_cannihello")]));
+			msg.channel.send(Tools.parseReply(
+				this.config.tieMessage,
+				msg.author.toString(),
+				canniChoice,
+				Application.modules.Discord.getEmoji("gc_cannihello").toString()
+			));
 			break;
 		case "playerWin":
-			msg.channel.send(Tools.parseReply(this.config.playerWinMessage, [msg.author, canniChoice, Application.modules.Discord.getEmoji("gc_cannibizaam")]));
+			msg.channel.send(Tools.parseReply(
+				this.config.playerWinMessage,
+				msg.author.toString(),
+				canniChoice,
+				Application.modules.Discord.getEmoji("gc_cannibizaam").toString()
+			));
 			break;
 		case "canniWin":
-			msg.channel.send(Tools.parseReply(this.config.canniWinMessage, [msg.author, canniChoice, Application.modules.Discord.getEmoji("gc_cannismile")]));
+			msg.channel.send(Tools.parseReply(
+				this.config.canniWinMessage,
+				msg.author.toString(),
+				canniChoice,
+				Application.modules.Discord.getEmoji("gc_cannismile").toString()
+			));
 			break;
 		}
 
