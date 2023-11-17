@@ -49,7 +49,13 @@ module.exports = class Ignore extends Module {
 	 * @param { import("discord.js").Message } msg
 	 */
 	ignored(msg) {
-		if (Application.modules.Discord.controlTalkedRecently(msg, this.config.potato_ignoredType, false, "message", undefined, undefined, 600000)) {
+		if (Application.modules.Discord.control_talked_recently2({
+			msg,
+			type: this.config.potato_ignoredType,
+			send_message: false,
+			target: "message",
+			cooldown_timeout: 600000
+		})) {
 			msg.channel.send(Tools.parseReply(this.config.ans_potato_ignore, msg.author.toString())).then(() => {
 				// msg.react(potato_emo);
 			});

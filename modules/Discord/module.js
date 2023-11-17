@@ -142,11 +142,13 @@ module.exports = class Discord extends Module {
 	 * @param { object } p
 	 * @param { import("discord.js").Message } p.msg
 	 * @param { string } p.type
-	 * @param { boolean } p.send_message
-	 * @param { "channel" | "individual" | "message" } p.target
-	 * @param { string } p.cooldown_message
-	 * @param { boolean } p.block_user
-	 * @param { number } p.cooldown_timeout
+	 * @param { boolean } [p.send_message] default true
+	 * @param { "channel" | "individual" | "message" } [p.target] default "channel"
+	 * @param { string } [p.cooldown_message] provide a custom cooldown message;
+	 *    otherwise the default will be used
+	 * @param { boolean } [p.block_user] default "false"
+	 * @param { number } [p.cooldown_timeout] see config for module Discord for
+	 *    default value
 	 */
 	control_talked_recently2({
 		msg,
@@ -217,7 +219,7 @@ module.exports = class Discord extends Module {
 			return false;
 		} else {
 			this.talkedRecently.add(cooldownTarget);
-			if (cooldownTimeout === null) {
+			if (cooldownTimeout == null) {
 				cooldownTimeout = this.config.cooldownTimeout;
 			}
 			setTimeout(() => {

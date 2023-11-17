@@ -26,6 +26,9 @@ module.exports = class Solver extends Module {
 		});
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	handle(msg) {
 		if (Tools.msg_starts_mentioned(msg, "solve")) {
 			if (Tools.msg_starts_mentioned(msg, "solve multi")) {
@@ -38,11 +41,17 @@ module.exports = class Solver extends Module {
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	info(msg) {
 		msg.channel.send(Tools.parseReply(this.config.solver_info, [msg.author, this.smileEmoji]));
 		Application.modules.Discord.setMessageSent();
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	simple_parse(msg) {
 		const config = this.config;
 		const alg = msg.content.split("solve");
@@ -61,6 +70,9 @@ module.exports = class Solver extends Module {
 		Application.modules.Discord.setMessageSent();
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	simple_multi_parse(msg) {
 		const config = this.config;
 		const alg = msg.content.split("multi");
@@ -87,6 +99,9 @@ module.exports = class Solver extends Module {
 		Application.modules.Discord.setMessageSent();
 	}
 
+	/**
+	 * @param { Array<string> } pre
+	 */
 	prepareMulti(pre) {
 		const data = [];
 		let append_string = "";
@@ -120,11 +135,17 @@ module.exports = class Solver extends Module {
 		return data;
 	}
 
-	async single(data) {
-		return await solveinworker("single", data);
+	/**
+	 * @param { string } alg
+	 */
+	single(alg) {
+		return solveinworker("single", alg);
 	}
 
-	async multi(data) {
-		return await solveinworker("multi", data);
+	/**
+	 * @param { Array<string> } alg
+	 */
+	multi(alg) {
+		return solveinworker("multi", alg);
 	}
 };
