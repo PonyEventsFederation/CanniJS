@@ -224,7 +224,7 @@ module.exports = class Discord extends Module {
 			}
 			setTimeout(() => {
 				this.talkedRecently.delete(cooldownTarget);
-			}, cooldownTimeout);
+			}, cooldownTimeout).unref();
 
 			return true;
 		}
