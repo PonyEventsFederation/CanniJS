@@ -78,9 +78,10 @@ module.exports = class TimeToGalacon extends Module {
 		const duration = this.getTimeRemaining();
 		const msg = `Time to Galacon: ${duration.days} days, ${duration.hrs}:${duration.minutes} left! Hype!`;
 
-		Application.modules.Discord.client.user.setActivity(msg, {
+		Application.modules.Discord.client.user.setPresence({
 			status: "online",
-			afk: false
+			afk: false,
+			activity: { name: msg }
 		}).then().catch(console.error);
 	}
 

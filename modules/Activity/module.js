@@ -47,9 +47,10 @@ module.exports = class Activity extends Module {
 
 		const random = Tools.getRandomIntFromInterval(0, this.config.activity.length - 1);
 		const activity = this.config.activity[random];
-		Application.modules.Discord.client.user.setActivity(activity, {
+		Application.modules.Discord.client.user.setPresence({
 			status: "online",
-			afk: false
+			afk: false,
+			activity: { name: activity }
 		}).then(() => this.log.info(`set activity to ${activity}`)).catch(console.error);
 	}
 };
