@@ -6,5 +6,5 @@
     "playerWinMessage": "%s Yay! You won! I picked %s. %s",
     "canniWinMessage": "%s *giggles* Yay, I won! I picked %s!\nBut don't feel bad. I'm sure you'll win next time. %s",
     "didNotPlayAnswer": "Oh, you don't want to play? That's okay too. %s",
-    "PlayGameType": "playGame"
+    "playGameType": "playGame"
 }
