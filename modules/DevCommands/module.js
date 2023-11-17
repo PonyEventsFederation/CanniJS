@@ -7,10 +7,14 @@ const Module = require("../../lib/Module");
 const Tools = require("../../lib/Tools");
 const fs = require("fs");
 
+/** @type { string } */
 let idLocation;
 let ids;
+/** @type { Array<string> } */
 let dev_ids;
+/** @type { Array<string> } */
 let dev_master_ids;
+/** @type { import("discord.js").Guild } */
 let guild;
 const write_to_file = true;
 
@@ -21,15 +25,21 @@ module.exports = class DevC extends Module {
 		return new Promise(resolve => {
 			this.log.debug("Starting...");
 
+			/**
+			 * @param { string } id
+			 */
 			this.auth_dev_master = function(id) {
 				return dev_master_ids.includes(id);
 			};
+			/**
+			 * @param { string } id
+			 */
 			this.auth_dev = function(id) {
 				return dev_ids.includes(id);
 			};
 
 			if (Tools.test_ENV("MAIN_SERVER")) {
-				guild = Tools.guild_by_id(Application.getClient(), process.env.MAIN_SERVER);
+				guild = Tools.guild_by_id(Application.getClient(), process.env["MAIN_SERVER"]);
 			}
 
 			this.load_ids();
@@ -57,6 +67,9 @@ module.exports = class DevC extends Module {
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	processMasterCommands(msg) {
 		if (Tools.msg_contains(msg, "add dev")) {
 			return this.addDev(msg);
@@ -67,6 +80,9 @@ module.exports = class DevC extends Module {
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	processDevCommands(msg) {
 		if (Tools.msg_contains(msg, "status report")) {
 			return this.sReport(msg);
@@ -88,43 +104,61 @@ module.exports = class DevC extends Module {
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	addDev(msg) {
 		if (!msg.mentions.everyone && msg.mentions.users.array().length === 2) {
 			const user = msg.mentions.users.array().find(x => x.id !== Application.getClientId());
 			this.id_add(user.id);
-			msg.channel.send(Tools.parseReply(this.config.ans_add_dev, [user]));
+			msg.channel.send(Tools.parseReply(this.config.ans_add_dev, user.toString()));
 			Application.modules.Discord.setMessageSent();
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	removeDev(msg) {
 		if (!msg.mentions.everyone && msg.mentions.users.array().length === 2) {
 			const user = msg.mentions.users.array().find(x => x.id !== Application.getClientId());
 			this.id_remove(user.id);
-			msg.channel.send(Tools.parseReply(this.config.ans_remove_dev, [user]));
+			msg.channel.send(Tools.parseReply(this.config.ans_remove_dev, user.toString()));
 			Application.modules.Discord.setMessageSent();
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	sReport(msg) {
-		msg.channel.send(Tools.parseReply(this.config.ans_status_report, [msg.guild.memberCount]));
+		msg.channel.send(Tools.parseReply(this.config.ans_status_report, msg.guild.memberCount.toString()));
 		Application.modules.Discord.setMessageSent();
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	listMasterDevs(msg) {
 		let users = "";
-		dev_master_ids.forEach(item => users += guild.members.find(m => m.id === item) + "\n");
-		msg.channel.send(Tools.parseReply(this.config.ans_list_master_devs, [users]));
+		dev_master_ids.forEach(item => users += guild.members.cache.find(m => m.id === item) + "\n");
+		msg.channel.send(Tools.parseReply(this.config.ans_list_master_devs, users));
 		Application.modules.Discord.setMessageSent();
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	listDevs(msg) {
 		let users = "";
-		dev_ids.forEach(item => users += guild.members.find(m => m.id === item) + "\n");
-		msg.channel.send(Tools.parseReply(this.config.ans_list_dev, [users]));
+		dev_ids.forEach(item => users += guild.members.cache.find(m => m.id === item) + "\n");
+		msg.channel.send(Tools.parseReply(this.config.ans_list_dev, users));
 		Application.modules.Discord.setMessageSent();
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	memberId(msg) {
 		if (msg.channel.type !== "dm") {
 			setTimeout(() => msg.delete(), config.deleteDelay);
@@ -132,16 +166,21 @@ module.exports = class DevC extends Module {
 		let user;
 		if (!msg.mentions.everyone && msg.mentions.users.array().length === 2) {
 			user = msg.mentions.users.array().find(x => x.id !== Application.getClientId());
-			msg.channel.send(Tools.parseReply(this.config.ans_member_id, [user.username, user.id])).then(message => {message.delete(8000);});
+			msg.channel.send(Tools.parseReply(this.config.ans_member_id, user.username, user.id))
+				.then(message => message.delete({ timeout: 8000 }));
 		}
 		Application.modules.Discord.setMessageSent();
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	channelId(msg) {
 		if (msg.channel.type !== "dm") {
 			setTimeout(() => msg.delete(), config.deleteDelay);
 		}
-		msg.channel.send(Tools.parseReply(this.config.ans_channel_id, [msg.channel.id])).then(message => message.delete(8000));
+		msg.channel.send(Tools.parseReply(this.config.ans_channel_id, msg.channel.id))
+			.then(message => message.delete({ timeout: 8000 }));
 		Application.modules.Discord.setMessageSent();
 	}
 
@@ -168,6 +207,9 @@ module.exports = class DevC extends Module {
 		}
 	}
 
+	/**
+	 * @param { string } item
+	 */
 	add_master_dev(item) {
 		if (!dev_master_ids.includes(item)) {
 			dev_master_ids.push(item);
@@ -175,6 +217,9 @@ module.exports = class DevC extends Module {
 		}
 	}
 
+	/**
+	 * @param { string } id
+	 */
 	id_add(id) {
 		if (!dev_ids.includes(id)) {
 			dev_ids.push(id);
@@ -189,6 +234,9 @@ module.exports = class DevC extends Module {
 		return false;
 	}
 
+	/**
+	 * @param { string } id
+	 */
 	id_remove(id) {
 		if (dev_ids.includes(id)) {
 			dev_ids = dev_ids.filter(item => item !== id);
