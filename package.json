@@ -15,7 +15,7 @@
     },
     "dependencies": {
         "@fluent/bundle": "^0.18.0",
-        "@js-temporal/polyfill": "^0.4.3",
+        "@js-temporal/polyfill": "^0.4.4",
         "algebrite": "^1.4.0",
         "complimenter": "github:grantcodes/complimenter",
         "discord.js": "^12.5.3",
