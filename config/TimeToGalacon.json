@@ -5,5 +5,12 @@
         "Donate all your hard earned money bills!"
     ],
     "galaconDate": "2024-07-27",
-    "updateInterval": 10
+    "galacon_date": {
+        "time_zone": "europe/berlin",
+        "year": 2024,
+        "month": 7,
+        "day": 27
+    },
+    "updateInterval": 10,
+    "update_interval": 10
 }
