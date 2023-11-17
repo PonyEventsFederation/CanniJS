@@ -5,6 +5,7 @@ const Application = require("../../lib/Application");
 const Module = require("../../lib/Module");
 const Tools = require("../../lib/Tools");
 const fs = require("fs");
+/** @type { Array<string> } */
 let help_list;
 
 /** @extends { Module<import("../../config/Help.json")> } */
@@ -15,62 +16,80 @@ module.exports = class Help extends Module {
 			this.log.debug("Starting...");
 
 			const path = Application.config.config_path + "/Text/help.txt";
-			const prep = this.prepare_help;
 
-			fs.readFile(path, function(err, buf) {
-				if (err) this.log.error(err);
-				help_list = prep(buf.toString());
-			});
+			// fs.readFile(path, function(err, buf) {
+			// 	if (err) this.log.error(err);
+			// 	help_list = prep(buf.toString());
+			// });
 
-			Application.modules.Discord.addCommand("help", (msg) => {
-				return this.help(msg);
-			});
+			help_list = this.prepare_help(fs.readFileSync(path, "utf8"));
+
+			Application.modules.Discord.addCommand(
+				"help",
+				/** @param { import("discord.js").Message } msg */
+				msg => this.help(msg)
+			);
 
 			return resolve(this);
 		});
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	help(msg) {
-		const recursiveSender = this.recursiveSender;
-		this.recursiveSender(msg, 0, recursiveSender);
+		this.recursiveSender(msg, 0);
 		Application.modules.Discord.setMessageSent();
 	}
 
-	recursiveSender(msg, counter, sender) {
-		msg.author.send(Tools.parseReply(help_list[counter] + "_ _", [msg.author])).then(function() {
+	/**
+	 * @param { import("discord.js").Message } msg
+	 * @param { number } counter
+	 */
+	// TODO: this does not need to be recursive
+	recursiveSender(msg, counter) {
+		msg.author.send(Tools.parseReply(
+			help_list[counter] + "_ _",
+			msg.author.toString()
+		)).then(() => {
 			if (counter < help_list.length - 1) {
-				sender(msg, counter + 1, sender);
+				this.recursiveSender(msg, counter + 1);
 			}
 		}).catch(function(error) {
 			Application.modules.Help.log.error(error);
 		});
 	}
 
+	/**
+	 * @param { string } data_in
+	 */
 	prepare_help(data_in) {
 		const pre = [];
 		let tmp = "";
 
-		data_in = data_in.split("\n\n");
+		let data_arr = data_in.split("\n\n");
 		// handle crlf line endings
-		if (data_in.length === 1) data_in = data_in[0].split("\r\n\r\n");
-		const first = data_in.shift();
+		if (data_arr.length === 1) data_arr = data_arr[0].split("\r\n\r\n");
+		const first = data_arr.shift();
 
-		data_in.forEach(function(item, index, array) {
+		data_arr.forEach((item, index, array) => {
 			tmp += item + "\n";
 			pre.push(tmp);
 
-			if (tmp.length >= 1999) Application.modules.Help.log.error("Help Paragraph too long.");
+			if (tmp.length >= 1999) this.log.error("Help Paragraph too long.");
 
 			tmp = (index === (array.length - 1)) ? "" : "\n";
 		});
 
 		pre.push(tmp);
 		tmp = "";
+
 		let count = 0;
+		/** @type { Array<string> } */
 		const res = [];
 		res.push(first);
 
-		pre.forEach(function(item) {
+		pre.forEach(item => {
 			if (count + item.length < 1999) {
 				tmp += item;
 				count += item.length;
