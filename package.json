@@ -10,6 +10,9 @@
         "url": "git+https://github.com/PonyEventsFederation/CanniJS.git"
     },
     "license": "MIT",
+    "engines": {
+        "node": "14.x"
+    },
     "dependencies": {
         "@fluent/bundle": "^0.18.0",
         "@js-temporal/polyfill": "^0.4.4",

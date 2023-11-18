@@ -3,18 +3,33 @@ FROM debian:bullseye-slim
 RUN apt-get update && apt-get install -y --no-install-recommends \
 		curl \
 		software-properties-common \
-		unzip \
 	&& rm -rf /var/lib/apt/lists/*
 
-ENV BUN_INSTALL /root/.bun
-ENV PATH ${PATH}:/root/.bun/bin
-RUN curl -fsSL https://bun.sh/install | bash
+# RUN useradd -m sani
+# USER sani
 
-WORKDIR /home/canni/app
+ENV PNPM_VERSION 8.6.12
+ENV PNPM_HOME /root/.local/share/pnpm
+ENV PATH ${PATH}:/root/.local/share/pnpm
+RUN curl -fsSL https://get.pnpm.io/install.sh | SHELL=`/bin/bash` sh - \
+	&& pnpm -v
+
+ENV NODE_VERSION 14.21.3
+RUN pnpm env use -g ${NODE_VERSION}
+
+WORKDIR /home/sani/app
+
+
 COPY . .
 
-RUN bun i --frozen-lockfile -p
+RUN pnpm i --frozen-lockfile -P
+
+# RUN pnpm lint
+
+# RUN pnpm prune --prod && pnpm store prune
 
 COPY LICENSE LICENSE
+
 ENV NODE_ENV production
-CMD ["bun", "main.js"]
+
+CMD ["node", "main.js"]
