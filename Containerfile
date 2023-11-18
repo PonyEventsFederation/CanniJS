@@ -8,16 +8,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 ENV BUN_INSTALL /root/.bun
 ENV PATH ${PATH}:/root/.bun/bin
-RUN curl -fsSL https://bun.sh/install | bash \
-	&& ln -s /root/.bun/bin/bun /root/.bun/bin/node
-
-ENV PNPM_HOME /root/.local/share/pnpm
-RUN bun i -g pnpm@8.6.12
+RUN curl -fsSL https://bun.sh/install | bash
 
 WORKDIR /home/canni/app
 COPY . .
 
-RUN pnpm i --frozen-lockfile -P
+RUN bun i --frozen-lockfile -p
 
 COPY LICENSE LICENSE
 ENV NODE_ENV production
