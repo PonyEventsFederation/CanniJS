@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ENV BUN_INSTALL /root/.bun
 ENV PATH ${PATH}:/root/.bun/bin:/root/.bin
 RUN curl -fsSL https://bun.sh/install | bash \
-	&& ln -s /root/.bun/bin/bun /root/.bun/node
+	&& ln -s /root/.bun/bin/bun /root/.bin/node
 
 ENV PNPM_HOME /root/.local/share/pnpm
 RUN bun i -g pnpm@8.6.12
