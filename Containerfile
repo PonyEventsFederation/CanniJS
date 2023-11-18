@@ -3,6 +3,7 @@ FROM debian:bullseye-slim
 RUN apt-get update && apt-get install -y --no-install-recommends \
 		curl \
 		software-properties-common \
+		unzip \
 	&& rm -rf /var/lib/apt/lists/*
 
 ENV BUN_INSTALL /root/.bun
