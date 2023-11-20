@@ -241,6 +241,7 @@ module.exports = class Boop extends Module {
 	 */
 	megaBoop(msg, user, type, commit) {
 		let random;
+		/** @type { number } */
 		let damage;
 		/** @type { string | Array<string> } */
 		let answer = "";
@@ -279,10 +280,22 @@ module.exports = class Boop extends Module {
 		this.counterWindow(delay + init_delay);
 		setTimeout(() => {
 			if (Array.isArray(answer)) {
-				Tools.listSender(msg.channel, answer, [delay, 2000, 1000], [user, damage], this.interrupt)
+				Tools
+					.listSender(
+						msg.channel,
+						answer,
+						[delay, 2000, 1000],
+						[user.toString(), damage.toString()],
+						this.interrupt
+					)
 					.then(commit)
 			} else {
-				msg.channel.send(Tools.parseReply(answer, user.toString(), damage))
+				msg.channel
+					.send(Tools.parseReply(
+						answer,
+						user.toString(),
+						damage.toString()
+					))
 					.then(commit);
 			}
 		}, init_delay);
@@ -314,7 +327,12 @@ module.exports = class Boop extends Module {
 		const random = Tools.getRandomIntFromInterval(0, this.config.hyperBoopAnswer.length - 1);
 		const ans = this.config.hyperBoopAnswer[random];
 		if (Array.isArray(ans)) {
-			Tools.listSender(msg.channel, ans, [1000, 2000, 4000, 4000, 2000, 2000, 2000, 2000, 3000], [user]);
+			Tools.listSender(
+				msg.channel,
+				ans,
+				[1000, 2000, 4000, 4000, 2000, 2000, 2000, 2000, 3000],
+				[user.toString()]
+			);
 		} else {
 			msg.channel.send(Tools.parseReply(ans, user.toString()))
 				.then(commit);
@@ -357,9 +375,9 @@ module.exports = class Boop extends Module {
 		const delay2 = 2000;
 		const config = this.config;
 		if (Array.isArray(ans)) {
-			Tools.listSender(msg.channel, ans, delay, [user]).then(() => {
+			Tools.listSender(msg.channel, ans, delay, [user.toString()]).then(() => {
 				setTimeout(function() {
-					msg.channel.send(Tools.parseReply(config.dev_ultra_boop_impact, [user]), { files:[path] }).then(function() {
+					msg.channel.send(Tools.parseReply(config.dev_ultra_boop_impact, user.toString()), { files: [path] }).then(function() {
 						boop_dev_on = true;
 						msg.channel.send(Tools.parseReply(config.dev_ultra_boop_postimpact));
 					});
@@ -373,10 +391,15 @@ module.exports = class Boop extends Module {
 		Application.modules.Discord.setMessageSent();
 	}
 
-
+	/**
+	 * @param { import("discord.js").Message } msg
+	 * @param { string } type_pre
+	 */
 	counter(msg, type_pre) {
 		this.interrupt.inter = true;
+		/** @type { Array<string> } */
 		let ans;
+		/** @type { string | number } */
 		let type;
 		if (type_pre === "Block") {
 			ans = this.config.megaBoopBlock;
@@ -387,11 +410,14 @@ module.exports = class Boop extends Module {
 			type = type_pre;
 		}
 		setTimeout(function() {
-			Tools.listSender(msg.channel, ans, [2000], [msg.author, type]);
+			Tools.listSender(msg.channel, ans, [2000], [msg.author.toString(), type.toString()]);
 		}.bind(this), 2000);
 		Application.modules.Discord.setMessageSent();
 	}
 
+	/**
+	 * @param { number } time
+	 */
 	counterWindow(time) {
 		this.megaon = true;
 		setTimeout(function() {
@@ -399,6 +425,10 @@ module.exports = class Boop extends Module {
 		}.bind(this), time);
 	}
 
+	/**
+	 * @param { Array<string> } ans
+	 * @param { number } limit
+	 */
 	statusgenerator(ans, limit, miss = false) {
 		let res = [];
 
