@@ -106,7 +106,6 @@ function registerworker() {
 				res = Algebrite.run(alg).toString();
 				break;
 			case "multi":
-				// // @ts-expect-error
 				alg.forEach(
 					/** @param { string } i */
 					i => res = Algebrite.run(i).toString()
