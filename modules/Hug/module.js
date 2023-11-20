@@ -85,8 +85,8 @@ module.exports = class Hug extends Module {
 
 			Database.getTimeout(msg.author.id, "megahug").then((results) => {
 				if (results.length == 0) {
-					Database.setTimeout(msg.author.id, "megahug");
-					return this.megaHug(msg, this.config.megaHugAnswer, user);
+					let commit = Database.set_timeout_with_commit(msg.author.id, "megahug");
+					return this.megaHug(msg, this.config.megaHugAnswer, user, commit);
 				} else {
 					const cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaHug, [msg.author]);
 					msg.channel.send(cooldownMessage);
@@ -99,11 +99,16 @@ module.exports = class Hug extends Module {
 		}
 	}
 
-	megaHug(msg, answerType, target = "") {
+	/**
+	 * @param { import("discord.js").Message } msg
+	 * @param { () => Promise<void> } commit
+	 */
+	megaHug(msg, answerType, target = "", commit) {
 		const random = Tools.getRandomIntFromInterval(0, answerType.length - 1);
 		const answer = Tools.parseReply(answerType[random], [target, this.hugEmoji]);
 
-		msg.channel.send(answer);
+		msg.channel.send(answer)
+			.then(commit);
 
 		Application.modules.Overload.overload("hug");
 		Application.modules.Discord.setMessageSent();

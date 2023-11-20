@@ -120,8 +120,8 @@ module.exports = class Boop extends Module {
 
 				Database.getTimeout(msg.author.id, "megaboop").then((results) => {
 					if (results.length == 0) {
-						Database.setTimeout(msg.author.id, "megaboop");
-						return this.megaBoopLoader(msg, user);
+						let commit = Database.set_timeout_with_commit(msg.author.id, "megaboop");
+						return this.megaBoopLoader(msg, user, commit);
 					} else {
 						const cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaBoop, msg.author.toString());
 						msg.channel.send(cooldownMessage);
@@ -217,27 +217,34 @@ module.exports = class Boop extends Module {
 	/**
 	 * @param { import("discord.js").Message } msg
 	 * @param { import("discord.js").User } user
+	 * @param { () => Promise<void> } commit
 	 */
-	megaBoopLoader(msg, user) {
+	megaBoopLoader(msg, user, commit) {
 		const roll = Tools.getRandomIntFromInterval(0, 100);
 
 		if (roll === 100) {
-			this.hyperBoop(msg, user);
+			this.hyperBoop(msg, user, commit);
 		} else if (roll >= 0 && roll <= 5) {
-			this.megaBoop(msg, user, "miss");
+			this.megaBoop(msg, user, "miss", commit);
 		} else if (roll >= 90 && roll <= 99) {
-			this.megaBoop(msg, user, "crit");
+			this.megaBoop(msg, user, "crit", commit);
 		} else {
-			this.megaBoop(msg, user);
+			this.megaBoop(msg, user, "hit", commit);
 		}
 	}
 
 	/**
 	 * @param { import("discord.js").Message } msg
 	 * @param { import("discord.js").User } user
+	 * @param { "hit" | "miss" | "crit" } type
+	 * @param { () => Promise<void> } commit
 	 */
-	megaBoop(msg, user, type = "hit") {
-		let random, damage, answer = "", limit;
+	megaBoop(msg, user, type, commit) {
+		let random;
+		let damage;
+		/** @type { string | Array<string> } */
+		let answer = "";
+		let limit;
 		this.interrupt.inter = false;
 		switch (type) {
 		case "miss":
@@ -251,7 +258,7 @@ module.exports = class Boop extends Module {
 			answer = this.config.megaBoopCritAnswer[random];
 			limit = 90;
 			break;
-		default:
+		case "hit":
 			random = Tools.getRandomIntFromInterval(0, this.config.megaBoopAnswer.length - 1);
 			damage = Tools.getRandomIntFromInterval(9000, 12000);
 			answer = this.config.megaBoopAnswer[random];
@@ -272,9 +279,11 @@ module.exports = class Boop extends Module {
 		this.counterWindow(delay + init_delay);
 		setTimeout(() => {
 			if (Array.isArray(answer)) {
-				Tools.listSender(msg.channel, answer, [delay, 2000, 1000], [user, damage], this.interrupt);
+				Tools.listSender(msg.channel, answer, [delay, 2000, 1000], [user, damage], this.interrupt)
+					.then(commit)
 			} else {
-				msg.channel.send(Tools.parseReply(answer, user.toString(), damage));
+				msg.channel.send(Tools.parseReply(answer, user.toString(), damage))
+					.then(commit);
 			}
 		}, init_delay);
 
@@ -299,14 +308,16 @@ module.exports = class Boop extends Module {
 	/**
 	 * @param { import("discord.js").Message } msg
 	 * @param { import("discord.js").User } user
+	 * @param { () => Promise<void> } commit
 	 */
-	hyperBoop(msg, user) {
+	hyperBoop(msg, user, commit) {
 		const random = Tools.getRandomIntFromInterval(0, this.config.hyperBoopAnswer.length - 1);
 		const ans = this.config.hyperBoopAnswer[random];
 		if (Array.isArray(ans)) {
 			Tools.listSender(msg.channel, ans, [1000, 2000, 4000, 4000, 2000, 2000, 2000, 2000, 3000], [user]);
 		} else {
-			msg.channel.send(Tools.parseReply(ans, user.toString()));
+			msg.channel.send(Tools.parseReply(ans, user.toString()))
+				.then(commit);
 		}
 
 		Application.modules.Discord.setMessageSent();
