@@ -33,19 +33,23 @@ module.exports = class Hug extends Module {
 	 */
 	handle(msg) {
 		// Politely asking for a hug from Canni.
-		if (msg.mentions.has(Application.modules.Discord.client.user)) {
-			if (Tools.msg_contains_list(msg, this.config.phrase_askHug)) {
-				return this.hug(msg, this.config.requestHugAnswer, msg.author.toString());
-			}
-		}
+		let canni_hug = msg.mentions.has(Application.modules.Discord.client.user)
+			|| Tools.msg_contains_list(msg, this.config.phrase_askHug);
+		let hug = Tools.strStartsWord(msg.content, "hug");
+		let megahug = Tools.strStartsWord(msg.content, "megahug");
 
-		if (Tools.strStartsWord(msg.content, "hug")) {
+		if (canni_hug) {
+			this.hug(msg, this.config.requestHugAnswer, msg.author.toString());
+		} else if (hug) {
 			this.processHugs(msg);
+		} else if (megahug) {
+			this.processMegaHugs(msg);
+		} else {
+			// none matched, return early
+			return;
 		}
 
-		if (Tools.strStartsWord(msg.content, "megahug")) {
-			this.processMegaHugs(msg);
-		}
+		setTimeout(() => msg.delete(), config.deleteDelay);
 	}
 
 	/**
@@ -136,7 +140,6 @@ module.exports = class Hug extends Module {
 			message.delete({ timeout: hugDeleteTimeout });
 		});
 
-		setTimeout(() => msg.delete(), config.deleteDelay);
 		Application.modules.Overload.overload("hug");
 		Application.modules.Discord.setMessageSent();
 	}
