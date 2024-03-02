@@ -28,11 +28,14 @@ module.exports = class Hug extends Module {
 		});
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	handle(msg) {
 		// Politely asking for a hug from Canni.
 		if (msg.mentions.has(Application.modules.Discord.client.user)) {
 			if (Tools.msg_contains_list(msg, this.config.phrase_askHug)) {
-				return this.hug(msg, this.config.requestHugAnswer, msg.author);
+				return this.hug(msg, this.config.requestHugAnswer, msg.author.toString());
 			}
 		}
 
@@ -45,6 +48,9 @@ module.exports = class Hug extends Module {
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	processHugs(msg) {
 		if (!msg.mentions.everyone && msg.mentions.users.array().length > 0) {
 			const users = msg.mentions.users.array();
@@ -65,12 +71,15 @@ module.exports = class Hug extends Module {
 						continue;
 					}
 
-					this.hug(msg, this.config.hugAnswer, users[i]);
+					this.hug(msg, this.config.hugAnswer, users[i].toString());
 				}
 			}
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	processMegaHugs(msg) {
 		const now = moment();
 		const val = moment().endOf("day");
@@ -80,15 +89,15 @@ module.exports = class Hug extends Module {
 			const user = msg.mentions.users.array()[0];
 
 			if (Application.checkSelf(user.id)) {
-				return this.megaHug(msg, this.config.megaSelfHugAnswer, msg.author);
+				return this.megaHug(msg, this.config.megaSelfHugAnswer, msg.author.toString());
 			}
 
 			Database.getTimeout(msg.author.id, "megahug").then((results) => {
 				if (results.length == 0) {
 					let commit = Database.set_timeout_with_commit(msg.author.id, "megahug");
-					return this.megaHug(msg, this.config.megaHugAnswer, user, commit);
+					return this.megaHug(msg, this.config.megaHugAnswer, user.toString(), commit);
 				} else {
-					const cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaHug, [msg.author]);
+					const cooldownMessage = Tools.parseReply(this.config.cooldownMessageMegaHug, msg.author.toString());
 					msg.channel.send(cooldownMessage);
 				}
 			}).catch((err) => {
@@ -101,11 +110,12 @@ module.exports = class Hug extends Module {
 
 	/**
 	 * @param { import("discord.js").Message } msg
-	 * @param { () => Promise<void> } commit
+	 * @param { Array<string> } answerType
+	 * @param { () => Promise<void> } [commit]
 	 */
 	megaHug(msg, answerType, target = "", commit) {
 		const random = Tools.getRandomIntFromInterval(0, answerType.length - 1);
-		const answer = Tools.parseReply(answerType[random], [target, this.hugEmoji]);
+		const answer = Tools.parseReply(answerType[random], target, this.hugEmoji.toString());
 
 		msg.channel.send(answer)
 			.then(commit);
@@ -114,9 +124,13 @@ module.exports = class Hug extends Module {
 		Application.modules.Discord.setMessageSent();
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 * @param { Array<string> } answerType
+	 */
 	hug(msg, answerType, target = "") {
 		const random = Tools.getRandomIntFromInterval(0, answerType.length - 1);
-		const answer = Tools.parseReply(answerType[random], [target, msg.author, this.hugEmoji]);
+		const answer = Tools.parseReply(answerType[random], target, msg.author.toString(), this.hugEmoji.toString());
 
 		msg.channel.send(answer).then(message => {
 			message.delete({ timeout: hugDeleteTimeout });
@@ -127,8 +141,15 @@ module.exports = class Hug extends Module {
 		Application.modules.Discord.setMessageSent();
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	setCooldown(msg) {
-		const cooldownMessage = Tools.parseReply(this.config.cooldownMessage, [msg.author, Application.modules.Discord.getEmoji("gc_cannierror")]);
+		const cooldownMessage = Tools.parseReply(
+			this.config.cooldownMessage,
+			msg.author.toString(),
+			Application.modules.Discord.getEmoji("gc_cannierror").toString()
+		);
 
 		if (!Application.modules.Discord.hasCooldown(msg.author.id, this.config.hugType)) {
 			Application.modules.Discord.setCooldown(msg.author.id, this.config.hugType, this.config.hugTimeout);
