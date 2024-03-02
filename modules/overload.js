@@ -6,7 +6,9 @@ const Module = require("../lib/Module");
 const Tools = require("../lib/Tools");
 
 let total_overload = 0;
+/** @type { Record<string, number> } */
 let overload = {};
+/** @type { Array<string> } */
 let types = [];
 let total_delay = 0;
 let type_delay = 0;
@@ -19,6 +21,9 @@ module.exports = class Overload extends Module {
 		return new Promise(resolve => {
 			this.log.debug("Starting...");
 
+			/**
+			 * @param { string } type
+			 */
 			this.overload = function(type, num = 1) {
 				return Overload.add_to_overload(type, num);
 				// use Application.modules.Overload.overload('type');
@@ -38,6 +43,9 @@ module.exports = class Overload extends Module {
 		});
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	check_overload(msg) {
 		if (overload_on) {
 			return true;
@@ -47,10 +55,16 @@ module.exports = class Overload extends Module {
 		}
 	}
 
+	/**
+	 * @param { number } limit
+	 */
 	check_total(limit) {
 		return total_overload >= limit;
 	}
 
+	/**
+	 * @param { number } limit
+	 */
 	check_types(limit) {
 		let cond = false;
 		types.forEach(type => {
@@ -70,6 +84,9 @@ module.exports = class Overload extends Module {
 		total_delay = this.config.total_delay;
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	activate_overload(msg) {
 		overload_on = true;
 		const downtime_ms = this.config.downtime * 60000;
@@ -77,7 +94,7 @@ module.exports = class Overload extends Module {
 		const answer = this.config.ans_overload;
 		this.reset_all();
 		Application.getClient().user.setStatus("idle");
-		Tools.listSender(msg.channel, answer, [2000, 4000, 4000], [this.config.downtime]).then(function() {
+		Tools.listSender(msg.channel, answer, [2000, 4000, 4000], [this.config.downtime.toString()]).then(function() {
 			Application.getClient().user.setStatus("dnd");
 			setTimeout(function() {
 				Application.getClient().user.setPresence({ status: "online" });
@@ -87,6 +104,9 @@ module.exports = class Overload extends Module {
 		});
 	}
 
+	/**
+	 * @param { string } type
+	 */
 	static add_to_overload(type, num = 1) {
 		if (overload[type] || overload[type] === 0) {
 			overload[type] += num;
@@ -95,9 +115,7 @@ module.exports = class Overload extends Module {
 			}, type_delay);
 		}
 		total_overload += num;
-		setTimeout(function() {
-			total_overload -= num;
-		}, total_delay);
+		setTimeout(() => total_overload -= num, total_delay);
 	}
 
 	reset_all() {
