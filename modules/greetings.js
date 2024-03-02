@@ -36,6 +36,11 @@ module.exports = class Greetings extends Module {
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 * @param { string } type
+	 * @param { Array<string> } answerType
+	 */
 	sendMessage(msg, type, answerType) {
 		if (Application.modules.Discord.controlTalkedRecently(msg, type, false, "channel", undefined, undefined, 90000)) {
 			const random = Tools.getRandomIntFromInterval(0, answerType.length - 1);

@@ -13,8 +13,14 @@ module.exports = class Discord extends Module {
 		return new Promise(resolve => {
 			this.log.debug("Initializing...");
 
+			/**
+			 * @type { Array<{
+			 *    cmd: string;
+			 *    cb: (msg: import("discord.js").Message) => void;
+			 * }> }
+			 */
 			this.commands = [];
-			this.reactions = [];
+			// this.reactions = [];
 			/** @type { Set<string> } */
 			this.channelMessaged = new Set();
 			/** @type { Set<string> } */
@@ -96,13 +102,17 @@ module.exports = class Discord extends Module {
 		}
 	}
 
+	/**
+	 * @param { string } cmd
+	 * @param { (msg: import("discord.js").Message) => void } cb
+	 */
 	addCommand(cmd, cb) {
 		this.commands.push({ cmd, cb });
 	}
 
-	addReaction(text, type, cb) {
-		this.reactions.push({ text, type, cb });
-	}
+	// addReaction(text, type, cb) {
+	// 	this.reactions.push({ text, type, cb });
+	// }
 
 	/**
 	 * @param { string } type

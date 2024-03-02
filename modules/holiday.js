@@ -10,7 +10,7 @@ const christmas_date = [12, 25];
 const new_year_date = [1, 1];
 // let wachmann_id;
 
-/** @extends { Module<import("./holiday-config.json*/
+/** @extends { Module<import("./holiday-config.json")> } */
 module.exports = class Holiday extends Module {
 	/** @override */
 	start() {

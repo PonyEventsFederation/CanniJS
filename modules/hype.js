@@ -24,9 +24,18 @@ module.exports = class Hype extends Module {
 		});
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	hype(msg) {
 		if (Application.modules.Discord.controlTalkedRecently(msg, this.config.hypeType, false, undefined, undefined, undefined, 120000)) {
-			msg.channel.send(Tools.parseReply(this.config.ans_hype, [this.bizaamEmoji]), { files:[path] });
+			msg.channel.send(
+				Tools.parseReply(
+					this.config.ans_hype,
+					this.bizaamEmoji.toString()
+				),
+				{ files: [path] }
+			);
 
 			Application.modules.Discord.setMessageSent();
 		}

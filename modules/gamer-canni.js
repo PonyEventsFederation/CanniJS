@@ -107,11 +107,10 @@ module.exports = class GamerCanni extends Module {
 				await sentEmbed.react(emojis[i]);
 			}
 
-			const filter = (reaction, user) => {
-				return emojis.includes(reaction.emoji.name) && user.id === msg.author.id;
-			};
-
-			sentEmbed.awaitReactions(filter, { max: 1, time: 30000, errors: ["time"] }).then(collected => {
+			sentEmbed.awaitReactions(
+				(react, user) => emojis.includes(react.emoji.name) && user.id === msg.author.id,
+				{ max: 1, time: 30000, errors: ["time"] }
+			).then(collected => {
 				const reaction = collected.first();
 
 				const userChoice = this.getEmojiName(reaction.emoji.name);

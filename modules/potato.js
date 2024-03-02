@@ -24,6 +24,9 @@ module.exports = class Potato extends Module {
 		});
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	handle(msg) {
 		if (Tools.msg_contains_list(msg, this.config.phrase_potato)) {
 			return this.potato(msg, this.config.potatoType, this.config.ans_potato);
@@ -34,16 +37,24 @@ module.exports = class Potato extends Module {
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 * @param { string } type
+	 * @param { Array<string> } answerType
+	 */
 	potato(msg, type, answerType) {
 		if (Application.modules.Discord.controlTalkedRecently(msg, type)) {
 			const random = Tools.getRandomIntFromInterval(0, answerType.length - 1);
-			msg.channel.send(Tools.parseReply(answerType[random], [msg.author])).then(sentEmbed => {
+			msg.channel.send(Tools.parseReply(answerType[random], msg.author.toString())).then(sentEmbed => {
 				this.potatofy(sentEmbed);
 			});
 			Application.modules.Discord.setMessageSent();
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	potatofy(msg) {
 		if (Application.modules.Discord.checkUserAccess(msg.author)) {
 			msg.react(this.smartato_emo);

@@ -24,10 +24,16 @@ module.exports = class Bizaam extends Module {
 		});
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	bizaam(msg) {
 		if (Application.modules.Discord.controlTalkedRecently(msg, this.config.bizaamType)) {
 			const random = Tools.getRandomIntFromInterval(0, this.config.bizaamAnswer.length - 1);
-			msg.channel.send(Tools.parseReply(this.config.bizaamAnswer[random], [this.bizaamEmoji])).then(sentEmbed => {
+			msg.channel.send(Tools.parseReply(
+				this.config.bizaamAnswer[random],
+				this.bizaamEmoji.toString()
+			)).then(sentEmbed => {
 				sentEmbed.react(this.bizaamEmoji);
 			});
 

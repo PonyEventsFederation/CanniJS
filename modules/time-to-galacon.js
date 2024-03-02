@@ -35,6 +35,9 @@ module.exports = class TimeToGalacon extends Module {
 		});
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	handleWhen(msg) {
 		if (Application.modules.Discord.checkUserAccess(msg.author)) {
 			if (active) {
@@ -46,6 +49,9 @@ module.exports = class TimeToGalacon extends Module {
 		}
 	}
 
+	/**
+	 * @param { import("discord.js").Message } msg
+	 */
 	handleMessage(msg) {
 		if (Application.modules.Discord.checkUserAccess(msg.author) && msg.mentions.has(Application.modules.Discord.client.user)) {
 			if (Tools.msg_contains(msg, "when is galacon")) {
@@ -123,7 +129,12 @@ module.exports = class TimeToGalacon extends Module {
 		const duration = this.getTimeRemaining();
 		const random = Tools.getRandomIntFromInterval(0, this.config.galaconAnswer.length - 1);
 
-		msg.channel.send(Tools.parseReply(this.config.timeAnswer, [duration.days, duration.hrs, duration.minutes]) + "\n" + this.config.galaconAnswer[random]);
+		msg.channel.send(Tools.parseReply(
+			this.config.timeAnswer,
+			duration.days.toString(),
+			duration.hrs,
+			duration.minutes
+		) + "\n" + this.config.galaconAnswer[random]);
 
 		Application.modules.Discord.setMessageSent();
 	}
@@ -140,13 +151,19 @@ module.exports = class TimeToGalacon extends Module {
 	}
 
 	getTimeRemaining() {
+		// i dunno what's going on here
+		// but it works so i'm not touching it :p ~vt
+
 		const duration = this.galaconDate.diff(moment());
+		// @ts-expect-error
 		let seconds = parseInt(duration) / 1000;
 		const days = Math.floor(seconds / (3600 * 24));
 		seconds -= days * 3600 * 24;
 		const hrs = Tools.padTime(Math.floor(seconds / 3600));
+		// @ts-expect-error
 		seconds -= hrs * 3600;
 		const minutes = Tools.padTime(Math.floor(seconds / 60));
+		// @ts-expect-error
 		seconds -= minutes * 60;
 
 		return {
