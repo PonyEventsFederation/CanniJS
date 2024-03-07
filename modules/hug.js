@@ -34,7 +34,7 @@ module.exports = class Hug extends Module {
 	handle(msg) {
 		// Politely asking for a hug from Canni.
 		let canni_hug = msg.mentions.has(Application.modules.Discord.client.user)
-			|| Tools.msg_contains_list(msg, this.config.phrase_askHug);
+			&& Tools.msg_contains_list(msg, this.config.phrase_askHug);
 		let hug = Tools.strStartsWord(msg.content, "hug");
 		let megahug = Tools.strStartsWord(msg.content, "megahug");
 
