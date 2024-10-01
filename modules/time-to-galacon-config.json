@@ -4,12 +4,12 @@
         "This is taking forever!",
         "Donate all your hard earned money bills!"
     ],
-    "galaconDate": "2024-07-27",
+    "galaconDate": "2025-09-06",
     "galacon_date": {
         "time_zone": "europe/berlin",
-        "year": 2024,
-        "month": 7,
-        "day": 27
+        "year": 2025,
+        "month": 9,
+        "day": 6
     },
     "updateInterval": 10,
     "update_interval": 10

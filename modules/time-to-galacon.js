@@ -8,7 +8,7 @@ const Tools = require("../lib/Tools");
 const { Temporal } = require("@js-temporal/polyfill");
 
 // Set to false in case GalaCon is cancelled.
-const active = false;
+const active = true;
 
 /** @extends { Module<import("./time-to-galacon-config.json")> } */
 module.exports = class TimeToGalacon extends Module {
