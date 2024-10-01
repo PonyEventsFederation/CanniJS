@@ -27,7 +27,8 @@ module.exports = class TimeToGalacon extends Module {
 
 			if (active) {
 				Application.modules.Discord.client.on("ready", () => {
-					this.setGalaconDate();
+					// this.setGalaconDate();
+					this.set_galacon_date2();
 				});
 			}
 
