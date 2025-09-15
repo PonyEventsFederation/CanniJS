@@ -85,8 +85,8 @@ module.exports = class TimeToGalacon extends Module {
 			year: this.config.galacon_date.year,
 			month: this.config.galacon_date.month,
 			day: this.config.galacon_date.day,
-			hour: 0,
-			minute: 0
+			hour: this.config.galacon_date.hour,
+			minute: this.config.galacon_date.minute
 		});
 		this.galacon_date_2 = gc_date;
 

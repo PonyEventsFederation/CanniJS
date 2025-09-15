@@ -9,7 +9,9 @@
         "time_zone": "europe/berlin",
         "year": 2026,
         "month": 9,
-        "day": 5
+        "day": 5,
+        "hour": 10,
+        "minute": 0
     },
     "updateInterval": 10,
     "update_interval": 10
