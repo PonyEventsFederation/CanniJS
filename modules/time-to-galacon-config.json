@@ -7,9 +7,9 @@
     "galaconDate": "2026-09-05",
     "galacon_date": {
         "time_zone": "europe/berlin",
-        "year": 2025,
+        "year": 2026,
         "month": 9,
-        "day": 6
+        "day": 5
     },
     "updateInterval": 10,
     "update_interval": 10
