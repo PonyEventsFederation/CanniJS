@@ -2,7 +2,7 @@ FROM debian:13-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
 		curl \
-		software-properties-common \
+		# software-properties-common \
 	&& rm -rf /var/lib/apt/lists/*
 
 ENV PNPM_VERSION 9.6.0
