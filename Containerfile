@@ -7,8 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ENV PNPM_VERSION 12.14.0
 ENV PNPM_HOME /root/.local/share/pnpm
 ENV PATH ${PATH}:/root/.local/share/pnpm/bin
-RUN wget -qO- https://get.pnpm.io | env ENV="$HOME/.shrc" SHELL="$(which sh)" sh - \
-	&& pnpm -v
+RUN wget -qO- https://get.pnpm.io | env ENV="$HOME/.shrc" SHELL="$(which sh)" sh -
 
 ENV NODE_VERSION 14.21.3
 RUN pnpm rt set -g node ${NODE_VERSION}
