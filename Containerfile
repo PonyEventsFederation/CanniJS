@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 ENV PNPM_VERSION 12.14.0
 ENV PNPM_HOME /root/.local/share/pnpm
-ENV PATH ${PATH}:/root/.local/share/pnpm
+ENV PATH ${PATH}:/root/.local/share/pnpm/bin
 RUN wget -qO- https://get.pnpm.io | env ENV="$HOME/.bashrc" SHELL="$(which bash)" bash - \
 	&& pnpm -v
 
