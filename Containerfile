@@ -1,5 +1,9 @@
 FROM debian:13-slim
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+		wget \
+	&& rm -rf /var/lib/apt/lists/*
+
 ENV PNPM_VERSION 12.14.0
 ENV PNPM_HOME /root/.local/share/pnpm
 ENV PATH ${PATH}:/root/.local/share/pnpm
